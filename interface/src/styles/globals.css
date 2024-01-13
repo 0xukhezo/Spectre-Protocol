@@ -61,3 +61,18 @@
     background: linear-gradient(90deg, #d2c3f6, transparent);
     border: 0;
 }
+
+.imgNavbar {
+    animation: fadeInOutNavbarImage 0.8s ease-out forwards;
+}
+
+@keyframes fadeInOutNavbarImage {
+    from {
+        transform: translate(0%, 50%);
+    }
+
+    to {
+        transform: translate(0%, -15%);
+    }
+}
+
