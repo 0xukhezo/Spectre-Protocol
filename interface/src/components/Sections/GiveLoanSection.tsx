@@ -29,24 +29,21 @@ export default function GiveLoanSection() {
   }, [search]);
 
   useEffect(() => {
-    const marketplace = document.getElementById("marketplace");
-    if (marketplace) {
-      const handleScroll = () => {
-        if (marketplace.scrollTop > 30) {
-          setScrolled(true);
-        } else {
-          setScrolled(false);
-        }
-      };
+    const handleScroll = () => {
+      if (window.scrollY > 370) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
+    };
 
-      marketplace.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll);
 
-      return () => {
-        marketplace.removeEventListener("scroll", handleScroll);
-      };
-    }
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, []);
-
+  console.log(scrolled);
   return (
     <main className="grid grid-cols-4 pb-10 navbarTextOpacity">
       <div className="border-r-1 border-main my-4"></div>
@@ -55,7 +52,7 @@ export default function GiveLoanSection() {
           placeholder="Search"
           classMain={`${
             scrolled ? "border-b-1 border-main" : ""
-          } col-span-full sticky top-0 bg-black pt-10 pb-4 z-50 scroll-border px-[16px]`}
+          } col-span-full sticky top-0 bg-black pt-10 pb-4 z-50 px-[16px]`}
           getInfo={getInfo}
           query={search}
         />
@@ -64,8 +61,7 @@ export default function GiveLoanSection() {
             nftsCopy.length > 0
               ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4  gap-[36px] overflow-auto"
               : ""
-          }  px-[16px] pt-10`}
-          id="marketplace"
+          }  px-[24px] pt-10`}
         >
           {nftsCopy.length > 0 ? (
             <>

@@ -37,15 +37,51 @@ export const navigatioHeader: navigatioHeaderType = {
 export const nfts = [
   {
     image: Specter.src,
+    name: "Bored ghost #1",
+    symbol: "Bored ghost",
+    owner: "0x10490b471658AF1e95571f15cAD949B0e63A4629",
+  },
+  {
+    image: Specter.src,
+    name: "Bored ghost #2",
+    symbol: "Bored ghost",
+    owner: "0x43DdF2bF7B0d2bb2D3904298763bcA2D3F2b40E0",
+  },
+  {
+    image: Specter.src,
     name: "Bored ape #1",
     symbol: "Bored APE",
     owner: "0x10490b471658AF1e95571f15cAD949B0e63A4629",
   },
   {
     image: Specter.src,
-    name: "Bored ape #2",
-    symbol: "Bored APE",
-    owner: "0x43DdF2bF7B0d2bb2D3904298763bcA2D3F2b40E0",
+    name: "Bored ghost #3",
+    symbol: "Bored ghost",
+    owner: "0x10490b471658AF1e95571f15cAD949B0e63A4629",
+  },
+  {
+    image: Specter.src,
+    name: "Bored ghost #4",
+    symbol: "Bored ghost",
+    owner: "0x10490b471658AF1e95571f15cAD949B0e63A4629",
+  },
+  {
+    image: Specter.src,
+    name: "Bored ghost #5",
+    symbol: "Bored ghost",
+    owner: "0x10490b471658AF1e95571f15cAD949B0e63A4629",
+  },
+  {
+    image: Specter.src,
+    name: "Bored ghost #6",
+    symbol: "Bored ghost",
+    owner: "0x10490b471658AF1e95571f15cAD949B0e63A4629",
+  },
+  {
+    image: Specter.src,
+    name: "Bored ghost #7",
+    symbol: "Bored ghost",
+    owner: "0x10490b471658AF1e95571f15cAD949B0e63A4629",
   },
   {
     image: Specter.src,
@@ -55,6 +91,32 @@ export const nfts = [
   },
   {
     image: Specter.src,
+    name: "Bored ghost #8",
+    symbol: "Bored ghost",
+    owner: "0x10490b471658AF1e95571f15cAD949B0e63A4629",
+  },
+  {
+    image: Specter.src,
+    name: "Bored ghost #9",
+    symbol: "Bored ghost",
+    owner: "0x10490b471658AF1e95571f15cAD949B0e63A4629",
+  },
+  {
+    image: Specter.src,
+    name: "Bored ghost #10",
+    symbol: "Bored ghost",
+    owner: "0x10490b471658AF1e95571f15cAD949B0e63A4629",
+  },
+
+  {
+    image: Specter.src,
+    name: "Bored ape #2",
+    symbol: "Bored APE",
+    owner: "0x10490b471658AF1e95571f15cAD949B0e63A4629",
+  },
+
+  {
+    image: Specter.src,
     name: "Bored ape #4",
     symbol: "Bored APE",
     owner: "0x10490b471658AF1e95571f15cAD949B0e63A4629",
@@ -62,66 +124,6 @@ export const nfts = [
   {
     image: Specter.src,
     name: "Bored ape #5",
-    symbol: "Bored APE",
-    owner: "0x10490b471658AF1e95571f15cAD949B0e63A4629",
-  },
-  {
-    image: Specter.src,
-    name: "Bored ape #6",
-    symbol: "Bored APE",
-    owner: "0x10490b471658AF1e95571f15cAD949B0e63A4629",
-  },
-  {
-    image: Specter.src,
-    name: "Bored ape #7",
-    symbol: "Bored APE",
-    owner: "0x10490b471658AF1e95571f15cAD949B0e63A4629",
-  },
-  {
-    image: Specter.src,
-    name: "Bored ape #8",
-    symbol: "Bored APE",
-    owner: "0x10490b471658AF1e95571f15cAD949B0e63A4629",
-  },
-  {
-    image: Specter.src,
-    name: "Bored ape #9",
-    symbol: "Bored APE",
-    owner: "0x10490b471658AF1e95571f15cAD949B0e63A4629",
-  },
-  {
-    image: Specter.src,
-    name: "Bored ape #10",
-    symbol: "Bored APE",
-    owner: "0x10490b471658AF1e95571f15cAD949B0e63A4629",
-  },
-  {
-    image: Specter.src,
-    name: "Bored ape #11",
-    symbol: "Bored APE",
-    owner: "0x10490b471658AF1e95571f15cAD949B0e63A4629",
-  },
-  {
-    image: Specter.src,
-    name: "Bored ape #12",
-    symbol: "Bored APE",
-    owner: "0x10490b471658AF1e95571f15cAD949B0e63A4629",
-  },
-  {
-    image: Specter.src,
-    name: "Bored ape #13",
-    symbol: "Bored APE",
-    owner: "0x10490b471658AF1e95571f15cAD949B0e63A4629",
-  },
-  {
-    image: Specter.src,
-    name: "Bored ape #14",
-    symbol: "Bored APE",
-    owner: "0x10490b471658AF1e95571f15cAD949B0e63A4629",
-  },
-  {
-    image: Specter.src,
-    name: "Bored ape #15",
     symbol: "Bored APE",
     owner: "0x10490b471658AF1e95571f15cAD949B0e63A4629",
   },
