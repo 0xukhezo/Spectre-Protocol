@@ -1,12 +1,33 @@
-import Navbar from "@/components/Layout/Navbar";
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
+import { WagmiConfig, createConfig, mainnet } from "wagmi";
+import { ConnectKitProvider, getDefaultConfig } from "connectkit";
+import Navbar from "@/components/Layout/Navbar";
+
+const chains = [mainnet];
+
+const config = createConfig(
+  getDefaultConfig({
+    alchemyId: process.env.NEXT_PUBLIC_ALCHEMY_ID || "",
+    walletConnectProjectId:
+      process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || "",
+    chains,
+    appName: "GHO Minted",
+    appDescription: "NFT vault to mint GHO",
+    appUrl: "https://family.co",
+    appIcon: "https://family.co/logo.png",
+  })
+);
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <main className="bg-black lg:px-[120px] md:px-[60px] sm:px-[40px] px-[20px] text-white">
-      <Navbar />
-      <Component {...pageProps} />
-    </main>
+    <WagmiConfig config={config}>
+      <ConnectKitProvider>
+        <main className="bg-black lg:px-[120px] md:px-[60px] sm:px-[40px] px-[20px] text-white">
+          <Navbar />
+          <Component {...pageProps} />
+        </main>
+      </ConnectKitProvider>
+    </WagmiConfig>
   );
 }
