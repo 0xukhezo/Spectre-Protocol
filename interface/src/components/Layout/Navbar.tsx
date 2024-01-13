@@ -11,10 +11,22 @@ import Cross from "../../../public/Cross.svg";
 // Components
 import WalletButton from "../Buttons/WalletButton";
 import { navigatioHeader, navigation } from "../../../constants/constants";
+import { useEffect } from "react";
 
 export default function Navbar() {
   const router = useRouter();
 
+  useEffect(() => {
+    const imageNavbar = document.getElementById("imageNavbar");
+
+    if (imageNavbar) {
+      imageNavbar.classList.remove("imgNavbar");
+      setTimeout(() => {
+        imageNavbar.classList.add("imgNavbar");
+      }, 10);
+    }
+  }, [router]);
+  console.log(navigatioHeader[router.asPath].title);
   return (
     <Disclosure as="nav" id="navbar" className="primary-navigation">
       {({ open }) => (
@@ -94,24 +106,31 @@ export default function Navbar() {
             <div className="space-y-1 px-2 pb-3 pt-2">
               <Disclosure.Button
                 as="a"
-                href={"/"}
+                href={router.route !== "/" ? "/#home" : "#home"}
                 className="block rounded-md bg-gray-900 px-3 py-2 text-base font-medium text-white"
               >
-                Get Loan
+                Home
               </Disclosure.Button>
               <Disclosure.Button
                 as="a"
-                href={"/give/loan"}
+                href={router.route !== "/" ? "/#products" : "#products"}
                 className="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
               >
-                Give Loan
+                Products
               </Disclosure.Button>
               <Disclosure.Button
                 as="a"
-                href={"/profile"}
+                href={router.route !== "/" ? "/#why" : "#why"}
                 className="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
               >
-                Profile
+                Why
+              </Disclosure.Button>
+              <Disclosure.Button
+                as="a"
+                href={router.route !== "/" ? "/#faq" : "#faq"}
+                className="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
+              >
+                FAQ
               </Disclosure.Button>
             </div>
           </Disclosure.Panel>
@@ -130,14 +149,16 @@ export default function Navbar() {
               alt="Navigation Image"
               width={350}
               height={350}
-              className="hidden lg:block absolute -bottom-2/3 right-0"
+              id="imageNavbar"
+              className="hidden lg:block absolute -bottom-2/3 right-0 imgNavbar"
             />
             <Image
               src={navigatioHeader[router.asPath].image}
               alt="Navigation Image"
               width={250}
               height={250}
-              className="hidden sm:block lg:hidden absolute -bottom-[120px] right-0"
+              id="imageNavbar"
+              className="hidden sm:block lg:hidden absolute -bottom-[120px] right-0 imgNavbar"
             />
           </div>
         </>
