@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import NftCard from "@/components/Cards/NftCard";
 import SearchBar from "../Filters/SearchBar";
 import { nfts } from "../../../constants/constants";
+import Image from "next/image";
+import SadSpectre from "../../../public/SadSpectre.svg";
 
 export default function GiveLoanSection() {
   const [search, setSearch] = useState<string>("");
@@ -46,7 +48,7 @@ export default function GiveLoanSection() {
   }, []);
 
   return (
-    <main className="grid grid-cols-4 pb-10">
+    <main className="grid grid-cols-4 pb-10 navbarTextOpacity">
       <div className="border-r-1 border-main my-4"></div>
       <div className="col-span-3 mx-4">
         <SearchBar
@@ -58,7 +60,11 @@ export default function GiveLoanSection() {
           query={search}
         />
         <div
-          className="relative grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4  gap-[36px] overflow-auto h-screen px-[16px] pt-10"
+          className={`relative min-h-[500px] ${
+            nftsCopy.length > 0
+              ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4  gap-[36px] overflow-auto"
+              : ""
+          }  px-[16px] pt-10`}
           id="marketplace"
         >
           {nftsCopy.length > 0 ? (
@@ -68,8 +74,15 @@ export default function GiveLoanSection() {
               ))}
             </>
           ) : (
-            <div className="max-h-[300px] col-span-full -mt-[300px] text-5xl navbarTitle max-w-[600px] text-center mx-auto">
-              Looks like NFTs are playing ghost.
+            <div className="col-span-full text-5xl navbarTitle max-w-[600px] text-center mx-auto pt-40 flex items-center flex-col font-extralight">
+              <h1>Looks like NFTs are playing ghost.</h1>
+              <Image
+                src={SadSpectre.src}
+                alt="SadSpectre Image"
+                width={200}
+                height={200}
+                className="min-h-[150px] mb-5 "
+              />
             </div>
           )}
         </div>

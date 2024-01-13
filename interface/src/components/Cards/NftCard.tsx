@@ -26,7 +26,7 @@ export default function NftCard({ nftInfo, index, nftsCopy }: NftCardProps) {
           alt={`${nftInfo.name} image`}
           width={150}
           height={150}
-          className="min-h-[150px] mb-5"
+          className="min-h-[150px] mb-5 float"
         />
         <div className="mainBackground w-full h-full rounded-b-xl text-white">
           <h1 className="pb-2 pt-8 text-sm text-main font-medium">

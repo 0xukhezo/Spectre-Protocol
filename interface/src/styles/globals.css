@@ -66,6 +66,22 @@
     animation: fadeInOutNavbarImage 0.8s ease-out forwards;
 }
 
+.navbarTextOpacity {
+    opacity: 0;
+    animation: fadeIn 0.8s ease-in-out forwards;
+
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
 @keyframes fadeInOutNavbarImage {
     from {
         transform: translate(0%, 50%);
@@ -89,6 +105,22 @@
 
 .shadow2:hover {
     box-shadow: 0 0 20px #d2c3f6;
+}
+
+.float{
+    animation: floatAnimation 2s infinite ease-in-out;
+}
+
+@keyframes floatAnimation {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-8px);
+    }
 }
 
 /* Modal */

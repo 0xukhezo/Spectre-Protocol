@@ -18,13 +18,17 @@ export default function Navbar() {
 
   useEffect(() => {
     const imageNavbar = document.getElementById("imageNavbar");
+    const textNavbar = document.getElementById("textNavbar");
 
-    if (imageNavbar) {
+    if (imageNavbar && textNavbar) {
       imageNavbar.classList.remove("imgNavbar");
-
+      textNavbar.classList.add("navbarTextOpacity");
       setTimeout(() => {
         imageNavbar.classList.add("imgNavbar");
       }, 10);
+      setTimeout(() => {
+        textNavbar.classList.remove("navbarTextOpacity");
+      }, 810);
     }
   }, [router]);
 
@@ -137,7 +141,7 @@ export default function Navbar() {
           </Disclosure.Panel>
 
           <div className="py-10 relative overflow-hidden border-b-main border-b-1">
-            <div>
+            <div className="navbarTextOpacity" id="textNavbar">
               <h1 className="text-6xl navbarTitle">
                 {navigatioHeader[router.asPath].title}
               </h1>
