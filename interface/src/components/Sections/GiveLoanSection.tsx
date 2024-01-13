@@ -58,7 +58,7 @@ export default function GiveLoanSection() {
           query={search}
         />
         <div
-          className="relative grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4  gap-[36px] overflow-auto h-screen px-[16px] mt-1"
+          className="relative grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4  gap-[36px] overflow-auto h-screen px-[16px] pt-10"
           id="marketplace"
         >
           {nftsCopy.length > 0 ? (

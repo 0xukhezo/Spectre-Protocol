@@ -21,12 +21,13 @@ export default function Navbar() {
 
     if (imageNavbar) {
       imageNavbar.classList.remove("imgNavbar");
+
       setTimeout(() => {
         imageNavbar.classList.add("imgNavbar");
       }, 10);
     }
   }, [router]);
-  console.log(navigatioHeader[router.asPath].title);
+
   return (
     <Disclosure as="nav" id="navbar" className="primary-navigation">
       {({ open }) => (
