@@ -76,3 +76,17 @@
     }
 }
 
+/* General */
+
+.mainBackground {
+    background: rgba(255, 255, 255, 0.052);
+    backdrop-filter: blur(0.8571px);
+}
+
+.shadow:hover {
+    box-shadow: 0 0 10px #d2c3f6;
+}
+
+.shadow2:hover {
+    box-shadow: 0 0 20px #d2c3f6;
+}

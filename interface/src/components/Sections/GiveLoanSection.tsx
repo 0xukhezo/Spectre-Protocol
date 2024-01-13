@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import NftCard from "@/components/Cards/NftCard";
 import SearchBar from "../Filters/SearchBar";
 import { nfts } from "../../../constants/constants";
 
@@ -63,7 +64,7 @@ export default function GiveLoanSection() {
           {nftsCopy.length > 0 ? (
             <>
               {nftsCopy.map((nft: any, index: number) => (
-                <div>{nft.name}</div>
+                <NftCard nftInfo={nft} index={index} nftsCopy={nftsCopy} />
               ))}
             </>
           ) : (
