@@ -60,7 +60,7 @@ export default function Navbar() {
               </div>
               <div className="flex items-center">
                 <div className="hidden sm:ml-6 md:block">
-                  <div className="flex xl:space-x-[88px] lg:space-x-[54px] space-x-[40px] font-bold text-xl">
+                  <div className="flex xl:space-x-[88px] lg:space-x-[54px] space-x-[40px] font-bold text-xl ">
                     {navigation.map((link: any) => (
                       <Link href={link.href}>
                         <span

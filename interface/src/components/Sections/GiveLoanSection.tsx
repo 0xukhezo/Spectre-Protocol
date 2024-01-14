@@ -4,19 +4,35 @@ import SearchBar from "../Filters/SearchBar";
 import { nfts } from "../../../constants/constants";
 import Image from "next/image";
 import SadSpectre from "../../../public/SadSpectre.svg";
+import SortBy from "../Filters/SortBy";
+import {
+  ChevronDoubleLeftIcon,
+  ChevronDoubleRightIcon,
+} from "@heroicons/react/24/outline";
 
 export default function GiveLoanSection() {
   const [search, setSearch] = useState<string>("");
   const [nftsCopy, setNftsCopy] = useState<any[]>([...nfts]);
-  const [scrolled, setScrolled] = useState(false);
+  const [symbols, setSymbols] = useState<string[]>([]);
+  const [scrolled, setScrolled] = useState<boolean>(false);
+  const [clearFilters, setClearFilters] = useState<boolean>(false);
+  const [showFilterPage, setShowFilterPage] = useState<boolean>(true);
+  const [selectedSymbols, setSelectedFilters] = useState<string[]>([]);
 
   const getInfo = (query: string) => {
     setSearch(query);
   };
 
+  const getFilters = (selectedSymbols: string[]) => {
+    setSelectedFilters(selectedSymbols);
+  };
+
   useEffect(() => {
     let copy = [...nfts];
 
+    if (selectedSymbols.length !== 0) {
+      copy = copy.filter((nft: any) => selectedSymbols.includes(nft.symbol));
+    }
     if (search.length !== 0) {
       copy = copy.filter(
         (nfts: any) =>
@@ -26,7 +42,7 @@ export default function GiveLoanSection() {
     }
 
     setNftsCopy(copy);
-  }, [search]);
+  }, [search, selectedSymbols]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -37,22 +53,88 @@ export default function GiveLoanSection() {
       }
     };
 
+    const uniqueSymbols = Array.from(
+      new Set(nfts.map((nft: any) => nft.symbol))
+    );
+
+    setSymbols(uniqueSymbols);
+
     window.addEventListener("scroll", handleScroll);
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
-  console.log(scrolled);
+
+  const handleClearFilters = () => {
+    setClearFilters(true);
+    setTimeout(() => {
+      setClearFilters(false);
+    }, 200);
+  };
+
   return (
-    <main className="grid grid-cols-4 pb-10 navbarTextOpacity">
-      <div className="border-r-1 border-main my-4"></div>
-      <div className="col-span-3 mx-4">
+    <main
+      className={`grid  ${
+        showFilterPage ? "grid-cols-4" : "grid-cols-16"
+      } pb-10 navbarTextOpacity`}
+    >
+      {showFilterPage ? (
+        <div className="border-r-1 border-main my-4 flex flex-col items-end">
+          <button
+            className="mr-[20px]"
+            onClick={() => setShowFilterPage(false)}
+          >
+            <ChevronDoubleLeftIcon height={20} width={20} className="mr-1.5" />
+          </button>
+          {symbols.length > 0 && (
+            <SortBy
+              symbols={symbols}
+              getFilters={getFilters}
+              clearFilters={clearFilters}
+            />
+          )}
+        </div>
+      ) : (
+        <div className="border-r-1 border-main my-4 flex flex-col items-end">
+          <button className="mr-[20px]" onClick={() => setShowFilterPage(true)}>
+            <ChevronDoubleRightIcon height={20} width={20} className="mr-1.5" />
+          </button>
+        </div>
+      )}
+      <div className={`${showFilterPage ? "col-span-3" : "col-span-15"} mx-4`}>
+        {selectedSymbols.length !== 0 && (
+          <div className="mt-10 mb-2 col-span-full mx-[16px] mainBackground p-4 rounded-xl">
+            <h1 className="text-2xl mb-4">Applied Filters</h1>
+            <div className="flex justify-between">
+              <div>
+                {selectedSymbols.map((symbol: string, index: number) => (
+                  <span
+                    className={`bg-main rounded-full px-3 py-2 text-xs text-black font-medium ${
+                      index !== 0 && "ml-3"
+                    }`}
+                  >
+                    {symbol}
+                  </span>
+                ))}
+              </div>
+              <button
+                className="bg-main rounded-full px-3 py-2 text-xs text-black font-medium"
+                onClick={handleClearFilters}
+              >
+                Clean Filters
+              </button>
+            </div>
+          </div>
+        )}
+
         <SearchBar
           placeholder="Search"
           classMain={`${
             scrolled ? "border-b-1 border-main" : ""
-          } col-span-full sticky top-0 bg-black pt-10 pb-4 z-50 px-[16px]`}
+          } col-span-full sticky top-0 bg-black ${
+            selectedSymbols.length === 0 ? "pt-10" : ""
+          } pb-4 z-50 px-[16px]`}
           getInfo={getInfo}
           query={search}
         />

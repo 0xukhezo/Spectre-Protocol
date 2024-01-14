@@ -108,7 +108,7 @@
 }
 
 .float{
-    animation: floatAnimation 2s infinite ease-in-out;
+    animation: floatAnimation 1s infinite ease-in-out;
 }
 
 @keyframes floatAnimation {
