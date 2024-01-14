@@ -7,7 +7,7 @@ export default function WalletButton() {
 
   return (
     <main
-      className={`flex space-x-9 text-neutral6 items-center ${
+      className={`max-w-fit flex space-x-9 text-neutral6 items-center ${
         !isConnected && "bg-main rounded-xl p-0.5"
       } `}
     >

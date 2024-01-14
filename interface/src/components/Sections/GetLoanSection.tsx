@@ -11,9 +11,12 @@ import {
 } from "@heroicons/react/24/outline";
 import { useAccount } from "wagmi";
 import useNFTData from "@/hooks/useNFTData";
+import Loader from "../Loader/Loader";
+import { ConnectKitButton } from "connectkit";
+import WalletButton from "../Buttons/WalletButton";
 
 export default function GetLoanSection() {
-  const { address } = useAccount();
+  const { address, isConnected } = useAccount();
   const { nftData: data } = useNFTData(address as `0x${string}`);
 
   const [search, setSearch] = useState<string>("");
@@ -87,38 +90,51 @@ export default function GetLoanSection() {
         showFilterPage ? "grid-cols-4" : "grid-cols-16"
       } pb-10 navbarTextOpacity`}
     >
-      {showFilterPage ? (
-        <div className="border-r-1 border-main my-4 flex flex-col items-end">
-          <button
-            className="mr-[20px]"
-            onClick={() => setShowFilterPage(false)}
-          >
-            <ChevronDoubleLeftIcon
-              height={20}
-              width={20}
-              className="mr-1.5 hover:text-main"
-            />
-          </button>
-          {symbols.length > 0 && (
-            <SortBy
-              symbols={symbols}
-              getFilters={getFilters}
-              clearFilters={clearFilters}
-            />
+      {isConnected && (
+        <>
+          {" "}
+          {showFilterPage ? (
+            <div className="border-r-1 border-main my-4 flex flex-col items-end">
+              <button
+                className="mr-[20px]"
+                onClick={() => setShowFilterPage(false)}
+              >
+                <ChevronDoubleLeftIcon
+                  height={20}
+                  width={20}
+                  className="mr-1.5 hover:text-main"
+                />
+              </button>
+              {symbols.length > 0 && (
+                <SortBy
+                  symbols={symbols}
+                  getFilters={getFilters}
+                  clearFilters={clearFilters}
+                />
+              )}
+            </div>
+          ) : (
+            <div className="border-r-1 border-main my-4 flex flex-col items-end">
+              <button
+                className="mr-[20px]"
+                onClick={() => setShowFilterPage(true)}
+              >
+                <ChevronDoubleRightIcon
+                  height={20}
+                  width={20}
+                  className="mr-1.5 hover:text-main"
+                />
+              </button>
+            </div>
           )}
-        </div>
-      ) : (
-        <div className="border-r-1 border-main my-4 flex flex-col items-end">
-          <button className="mr-[20px]" onClick={() => setShowFilterPage(true)}>
-            <ChevronDoubleRightIcon
-              height={20}
-              width={20}
-              className="mr-1.5 hover:text-main"
-            />
-          </button>
-        </div>
+        </>
       )}
-      <div className={`${showFilterPage ? "col-span-3" : "col-span-15"} mx-4`}>
+
+      <div
+        className={`${!isConnected && "col-span-16"} ${
+          showFilterPage ? "col-span-3" : "col-span-15"
+        } mx-4`}
+      >
         {selectedSymbols.length !== 0 && (
           <div className="mt-10 mb-2 col-span-full mx-[16px] mainBackground p-4 rounded-xl">
             <h1 className="text-2xl mb-4">Applied Filters</h1>
@@ -144,45 +160,62 @@ export default function GetLoanSection() {
           </div>
         )}
 
-        <SearchBar
-          placeholder="Search"
-          classMain={`${
-            scrolled ? "border-b-1 border-main" : ""
-          } col-span-full sticky top-0 bg-black ${
-            selectedSymbols.length === 0 ? "pt-10" : ""
-          } pb-4 z-50 px-[16px]`}
-          getInfo={getInfo}
-          query={search}
-        />
-        {nftsCopy ? (
-          <div
-            className={`relative min-h-[500px] ${
-              nftsCopy.length > 0
-                ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3  gap-[36px] overflow-auto"
-                : ""
-            }  px-[24px] pb-10`}
-          >
-            {nftsCopy.length > 0 ? (
-              <>
-                {nftsCopy.map((nft: any, index: number) => (
-                  <NftCard nftInfo={nft} index={index} nftsCopy={nftsCopy} />
-                ))}
-              </>
-            ) : (
-              <div className="col-span-full text-5xl navbarTitle max-w-[600px] text-center mx-auto pt-40 flex items-center flex-col font-extralight">
-                <h1>Looks like NFTs are playing ghost.</h1>
-                <Image
-                  src={SadSpectre.src}
-                  alt="SadSpectre Image"
-                  width={200}
-                  height={200}
-                  className="min-h-[150px] mb-5 "
-                />
-              </div>
-            )}
+        {!isConnected ? (
+          <div className="h-[700px] flex justify-center items-center flex-col">
+            <h1 className="font-extralight mb-10 text-3xl">
+              You need to be connected to get a loan
+            </h1>
+            <WalletButton />
           </div>
         ) : (
-          <div className="h-[500px]">Loader</div>
+          <>
+            <SearchBar
+              placeholder="Search"
+              classMain={`${
+                scrolled ? "border-b-1 border-main" : ""
+              } col-span-full sticky top-0 bg-black ${
+                selectedSymbols.length === 0 ? "pt-10" : ""
+              } pb-4 z-50 px-[16px]`}
+              getInfo={getInfo}
+              query={search}
+            />
+            {nftsCopy ? (
+              <div
+                className={`relative min-h-[500px] ${
+                  nftsCopy.length > 0
+                    ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3  gap-[36px] overflow-auto"
+                    : ""
+                }  px-[24px] pb-10`}
+              >
+                {nftsCopy.length > 0 ? (
+                  <>
+                    {nftsCopy.map((nft: any, index: number) => (
+                      <NftCard
+                        nftInfo={nft}
+                        index={index}
+                        nftsCopy={nftsCopy}
+                      />
+                    ))}
+                  </>
+                ) : (
+                  <div className="col-span-full text-5xl navbarTitle max-w-[600px] text-center mx-auto pt-40 flex items-center flex-col font-extralight">
+                    <h1>Looks like NFTs are playing ghost.</h1>
+                    <Image
+                      src={SadSpectre.src}
+                      alt="SadSpectre Image"
+                      width={200}
+                      height={200}
+                      className="min-h-[150px] mb-5 "
+                    />
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="h-[500px] flex align-center justify-center items-center">
+                <Loader />
+              </div>
+            )}
+          </>
         )}
       </div>
     </main>
