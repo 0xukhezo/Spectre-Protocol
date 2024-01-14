@@ -140,32 +140,34 @@ export default function Navbar() {
             </div>
           </Disclosure.Panel>
 
-          <div className="py-10 relative overflow-hidden border-b-main border-b-1">
-            <div className="navbarTextOpacity" id="textNavbar">
-              <h1 className="text-6xl navbarTitle">
-                {navigatioHeader[router.asPath].title}
-              </h1>
-              <h2 className="text-xl md:w-2/3 sm:w-1/2 lg:h-[50px] sm:h-[80px] my-5">
-                {navigatioHeader[router.asPath].text}
-              </h2>
+          {navigatioHeader[router.asPath] && (
+            <div className="py-10 relative overflow-hidden border-b-main border-b-1">
+              <div className="navbarTextOpacity" id="textNavbar">
+                <h1 className="text-6xl navbarTitle">
+                  {navigatioHeader[router.asPath].title}
+                </h1>
+                <h2 className="text-xl md:w-2/3 sm:w-1/2 lg:h-[50px] sm:h-[80px] my-5">
+                  {navigatioHeader[router.asPath].text}
+                </h2>
+              </div>
+              <Image
+                src={navigatioHeader[router.asPath].image}
+                alt="Navigation Image"
+                width={400}
+                height={400}
+                id="imageNavbar"
+                className="hidden lg:block absolute -bottom-2/3 right-0 imgNavbar"
+              />
+              <Image
+                src={navigatioHeader[router.asPath].image}
+                alt="Navigation Image"
+                width={250}
+                height={250}
+                id="imageNavbar"
+                className="hidden sm:block lg:hidden absolute -bottom-[120px] right-0 imgNavbar"
+              />
             </div>
-            <Image
-              src={navigatioHeader[router.asPath].image}
-              alt="Navigation Image"
-              width={400}
-              height={400}
-              id="imageNavbar"
-              className="hidden lg:block absolute -bottom-2/3 right-0 imgNavbar"
-            />
-            <Image
-              src={navigatioHeader[router.asPath].image}
-              alt="Navigation Image"
-              width={250}
-              height={250}
-              id="imageNavbar"
-              className="hidden sm:block lg:hidden absolute -bottom-[120px] right-0 imgNavbar"
-            />
-          </div>
+          )}
         </>
       )}
     </Disclosure>
