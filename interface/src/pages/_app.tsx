@@ -22,7 +22,12 @@ const config = createConfig(
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <WagmiConfig config={config}>
-      <ConnectKitProvider>
+      <ConnectKitProvider
+        customTheme={{
+          "--ck-accent-color": "#d2c3f6",
+          "--ck-accent-text-color": "#ffffff",
+        }}
+      >
         <main className="bg-black lg:px-[120px] md:px-[60px] sm:px-[40px] px-[20px] text-white">
           <Navbar />
           <Component {...pageProps} />

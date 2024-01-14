@@ -9,10 +9,15 @@ import {
   ChevronDoubleLeftIcon,
   ChevronDoubleRightIcon,
 } from "@heroicons/react/24/outline";
+import { useAccount } from "wagmi";
+import useNFTData from "@/hooks/useNFTData";
 
-export default function GiveLoanSection() {
+export default function GetLoanSection() {
+  const { address } = useAccount();
+  const { nftData: data } = useNFTData(address as `0x${string}`);
+
   const [search, setSearch] = useState<string>("");
-  const [nftsCopy, setNftsCopy] = useState<any[]>([...nfts]);
+  const [nftsCopy, setNftsCopy] = useState<any[] | null>(data);
   const [symbols, setSymbols] = useState<string[]>([]);
   const [scrolled, setScrolled] = useState<boolean>(false);
   const [clearFilters, setClearFilters] = useState<boolean>(false);
@@ -28,23 +33,24 @@ export default function GiveLoanSection() {
   };
 
   useEffect(() => {
-    let copy = [...nfts];
-
-    if (selectedSymbols.length !== 0) {
-      copy = copy.filter((nft: any) =>
-        selectedSymbols.includes(nft.collection)
-      );
-    }
-    if (search.length !== 0) {
-      copy = copy.filter(
-        (nfts: any) =>
-          nfts.name.toLowerCase().includes(search.toLowerCase()) ||
-          nfts.collection.toLowerCase() === search.toLowerCase()
-      );
+    let copy = data;
+    if (copy) {
+      if (selectedSymbols.length !== 0) {
+        copy = copy.filter((nft: any) =>
+          selectedSymbols.includes(nft.collection)
+        );
+      }
+      if (search.length !== 0) {
+        copy = copy.filter(
+          (nfts: any) =>
+            nfts.name.toLowerCase().includes(search.toLowerCase()) ||
+            nfts.collection.toLowerCase() === search.toLowerCase()
+        );
+      }
     }
 
     setNftsCopy(copy);
-  }, [search, selectedSymbols]);
+  }, [search, selectedSymbols, data]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -56,7 +62,7 @@ export default function GiveLoanSection() {
     };
 
     const uniqueSymbols = Array.from(
-      new Set(nfts.map((nft: any) => nft.collection))
+      new Set(data?.map((nft: any) => nft.collection))
     );
 
     setSymbols(uniqueSymbols);
@@ -66,7 +72,7 @@ export default function GiveLoanSection() {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, []);
+  }, [data]);
 
   const handleClearFilters = () => {
     setClearFilters(true);
@@ -148,32 +154,36 @@ export default function GiveLoanSection() {
           getInfo={getInfo}
           query={search}
         />
-        <div
-          className={`relative min-h-[500px] ${
-            nftsCopy.length > 0
-              ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-[36px] overflow-auto"
-              : ""
-          }  px-[24px] pb-10`}
-        >
-          {nftsCopy.length > 0 ? (
-            <>
-              {nftsCopy.map((nft: any, index: number) => (
-                <NftCard nftInfo={nft} index={index} nftsCopy={nftsCopy} />
-              ))}
-            </>
-          ) : (
-            <div className="col-span-full text-5xl navbarTitle max-w-[600px] text-center mx-auto pt-40 flex items-center flex-col font-extralight">
-              <h1>Looks like NFTs are playing ghost.</h1>
-              <Image
-                src={SadSpectre.src}
-                alt="SadSpectre Image"
-                width={200}
-                height={200}
-                className="min-h-[150px] mb-5 "
-              />
-            </div>
-          )}
-        </div>
+        {nftsCopy ? (
+          <div
+            className={`relative min-h-[500px] ${
+              nftsCopy.length > 0
+                ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3  gap-[36px] overflow-auto"
+                : ""
+            }  px-[24px] pb-10`}
+          >
+            {nftsCopy.length > 0 ? (
+              <>
+                {nftsCopy.map((nft: any, index: number) => (
+                  <NftCard nftInfo={nft} index={index} nftsCopy={nftsCopy} />
+                ))}
+              </>
+            ) : (
+              <div className="col-span-full text-5xl navbarTitle max-w-[600px] text-center mx-auto pt-40 flex items-center flex-col font-extralight">
+                <h1>Looks like NFTs are playing ghost.</h1>
+                <Image
+                  src={SadSpectre.src}
+                  alt="SadSpectre Image"
+                  width={200}
+                  height={200}
+                  className="min-h-[150px] mb-5 "
+                />
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className="h-[500px]">Loader</div>
+        )}
       </div>
     </main>
   );

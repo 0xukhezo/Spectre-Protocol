@@ -32,7 +32,8 @@
     position: relative;
     display: inline-block;
     transition: all 0.4s ease-in-out;
-    color: #d2c3f6
+    color: #d2c3f6;
+    scale:0.95
 }
 
 .underline-hover::before {
