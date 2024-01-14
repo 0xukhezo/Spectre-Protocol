@@ -31,13 +31,15 @@ export default function GiveLoanSection() {
     let copy = [...nfts];
 
     if (selectedSymbols.length !== 0) {
-      copy = copy.filter((nft: any) => selectedSymbols.includes(nft.symbol));
+      copy = copy.filter((nft: any) =>
+        selectedSymbols.includes(nft.collection)
+      );
     }
     if (search.length !== 0) {
       copy = copy.filter(
         (nfts: any) =>
           nfts.name.toLowerCase().includes(search.toLowerCase()) ||
-          nfts.symbol.toLowerCase() === search.toLowerCase()
+          nfts.collection.toLowerCase() === search.toLowerCase()
       );
     }
 
@@ -54,7 +56,7 @@ export default function GiveLoanSection() {
     };
 
     const uniqueSymbols = Array.from(
-      new Set(nfts.map((nft: any) => nft.symbol))
+      new Set(nfts.map((nft: any) => nft.collection))
     );
 
     setSymbols(uniqueSymbols);
@@ -85,7 +87,11 @@ export default function GiveLoanSection() {
             className="mr-[20px]"
             onClick={() => setShowFilterPage(false)}
           >
-            <ChevronDoubleLeftIcon height={20} width={20} className="mr-1.5" />
+            <ChevronDoubleLeftIcon
+              height={20}
+              width={20}
+              className="mr-1.5 hover:text-main"
+            />
           </button>
           {symbols.length > 0 && (
             <SortBy
@@ -98,7 +104,11 @@ export default function GiveLoanSection() {
       ) : (
         <div className="border-r-1 border-main my-4 flex flex-col items-end">
           <button className="mr-[20px]" onClick={() => setShowFilterPage(true)}>
-            <ChevronDoubleRightIcon height={20} width={20} className="mr-1.5" />
+            <ChevronDoubleRightIcon
+              height={20}
+              width={20}
+              className="mr-1.5 hover:text-main"
+            />
           </button>
         </div>
       )}
@@ -113,6 +123,7 @@ export default function GiveLoanSection() {
                     className={`bg-main rounded-full px-3 py-2 text-xs text-black font-medium ${
                       index !== 0 && "ml-3"
                     }`}
+                    key={symbol}
                   >
                     {symbol}
                   </span>
@@ -141,14 +152,19 @@ export default function GiveLoanSection() {
         <div
           className={`relative min-h-[500px] ${
             nftsCopy.length > 0
-              ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4  gap-[36px] overflow-auto"
+              ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[36px] overflow-auto"
               : ""
-          }  px-[24px] pt-10`}
+          }  px-[24px] pb-10`}
         >
           {nftsCopy.length > 0 ? (
             <>
               {nftsCopy.map((nft: any, index: number) => (
-                <NftCard nftInfo={nft} index={index} nftsCopy={nftsCopy} />
+                <NftCard
+                  nftInfo={nft}
+                  index={index}
+                  nftsCopy={nftsCopy}
+                  key={index}
+                />
               ))}
             </>
           ) : (

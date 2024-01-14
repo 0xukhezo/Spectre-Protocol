@@ -1,3 +1,9 @@
+import GetLoanSection from "@/components/Sections/GetLoanSection";
+
 export default function HomePage() {
-  return <main>Get Loan</main>;
+  return (
+    <main>
+      <GetLoanSection />
+    </main>
+  );
 }

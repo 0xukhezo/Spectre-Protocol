@@ -115,7 +115,7 @@ export default function NftModal({
               <li className="text-lg">{`${nftsCopy[currentNftIndex].name}`}</li>
               <li className="text-lg text-xs">
                 Created by{" "}
-                <span className="text-main text-lg">{`${nftsCopy[currentNftIndex].symbol}`}</span>
+                <span className="text-main text-lg">{`${nftsCopy[currentNftIndex].collection}`}</span>
               </li>
               <li className="text-lg mb-3 text-xs">
                 Owner{" "}
@@ -153,7 +153,7 @@ export default function NftModal({
                   alt={`${nftsCopy[currentNftIndex].name} image`}
                   width={300}
                   height={300}
-                  className={`h-[600px] w-[600px] z-10 ${
+                  className={`h-[400px] w-[400px] rounded-xl z-10 ${
                     !isAnimating && buttonClicked === "previous"
                       ? "animate-transition-initial-next"
                       : ""
