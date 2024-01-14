@@ -18,15 +18,20 @@ export default function Navbar() {
 
   useEffect(() => {
     const imageNavbar = document.getElementById("imageNavbar");
+    const textNavbar = document.getElementById("textNavbar");
 
-    if (imageNavbar) {
+    if (imageNavbar && textNavbar) {
       imageNavbar.classList.remove("imgNavbar");
+      textNavbar.classList.add("navbarTextOpacity");
       setTimeout(() => {
         imageNavbar.classList.add("imgNavbar");
       }, 10);
+      setTimeout(() => {
+        textNavbar.classList.remove("navbarTextOpacity");
+      }, 810);
     }
   }, [router]);
-  console.log(navigatioHeader[router.asPath].title);
+
   return (
     <Disclosure as="nav" id="navbar" className="primary-navigation">
       {({ open }) => (
@@ -55,7 +60,7 @@ export default function Navbar() {
               </div>
               <div className="flex items-center">
                 <div className="hidden sm:ml-6 md:block">
-                  <div className="flex xl:space-x-[88px] lg:space-x-[54px] space-x-[40px] font-bold text-xl">
+                  <div className="flex xl:space-x-[88px] lg:space-x-[54px] space-x-[40px] font-bold text-xl ">
                     {navigation.map((link: any) => (
                       <Link href={link.href}>
                         <span
@@ -136,7 +141,7 @@ export default function Navbar() {
           </Disclosure.Panel>
 
           <div className="py-10 relative overflow-hidden border-b-main border-b-1">
-            <div>
+            <div className="navbarTextOpacity" id="textNavbar">
               <h1 className="text-6xl navbarTitle">
                 {navigatioHeader[router.asPath].title}
               </h1>

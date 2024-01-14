@@ -20,6 +20,14 @@ const config: Config = {
         main: "#d2c3f6",
         navbarActive: " linear-gradient(to bottom, #ffffff 40%, #d2c3f6)",
       },
+      gridTemplateColumns: {
+        "15": "repeat(15, minmax(0, 1fr))",
+        "16": "repeat(16, minmax(0, 1fr))",
+      },
+      gridColumn: {
+        "span-15": "span 15 / span 15",
+        "span-16": "span 16 / span 16",
+      },
     },
   },
   plugins: [],

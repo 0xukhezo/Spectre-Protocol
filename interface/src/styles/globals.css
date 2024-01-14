@@ -66,6 +66,22 @@
     animation: fadeInOutNavbarImage 0.8s ease-out forwards;
 }
 
+.navbarTextOpacity {
+    opacity: 0;
+    animation: fadeIn 0.8s ease-in-out forwards;
+
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
 @keyframes fadeInOutNavbarImage {
     from {
         transform: translate(0%, 50%);
@@ -76,3 +92,300 @@
     }
 }
 
+/* General */
+
+.mainBackground {
+    background: rgba(255, 255, 255, 0.052);
+    backdrop-filter: blur(0.8571px);
+}
+
+.shadow:hover {
+    box-shadow: 0 0 10px #d2c3f6;
+}
+
+.shadow2:hover {
+    box-shadow: 0 0 20px #d2c3f6;
+}
+
+.float{
+    animation: floatAnimation 1s infinite ease-in-out;
+}
+
+@keyframes floatAnimation {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
+/* Modal */
+
+.overlay {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    animation: fadeInOverlay 0.4s ease-out forwards;
+}
+
+.overlay.open {
+    display: block;
+}
+
+.imageModal {
+    position: fixed;
+    top: 50%;
+    left: 40%;
+    opacity: 0;
+    animation: fadeInOutModal 0.8s ease-out forwards;
+}
+
+.textModal {
+    margin: 100px 0;
+    position: fixed;
+    top: 40%;
+    left: 93%;
+    opacity: 0;
+    width: 25%;
+    height: 90%;
+    animation: fadeInOutTextModal 0.8s ease-out forwards;
+    z-index: 1000;
+}
+
+.imagenModalMove {
+    width: 66%;
+}
+
+.imageModal.closing {
+    animation: fadeOutModal 0.8s ease-out forwards;
+}
+
+.textModal.closing {
+    animation: fadeOutTextModal 0.8s ease-out forwards;
+}
+
+.image-transition {
+    position: relative;
+    overflow: hidden;
+}
+
+.animate-transition-prev {
+    animation: moveAndAppearPrev 0.4s ease-out forwards;
+}
+
+.animate-transition-next {
+    animation: moveAndAppearNext 0.4s ease-out forwards;
+}
+
+.animate-transition-initial-prev {
+    animation: moveNextAndAppearCenter 0.4s ease-out forwards;
+}
+
+.animate-transition-initial-next {
+    animation: movePrevAndAppearCenter 0.4s ease-out forwards;
+}
+
+.modalAnimatedLine {
+    transform: scaleX(0);
+    width: 100%;
+    transform-origin: 0 0;
+    animation: showModalAnimatedLine 0.4s ease-out 0.4s forwards;
+    margin: px 0;
+    height: 2px;
+    background: linear-gradient(90deg, #d2c3f6, transparent);
+    border: 0;
+}
+
+.modalAnimatedText {
+    opacity: 0;
+    animation: showModalAnimatedText 0.4s ease-out 0.4s forwards;
+}
+
+.modalNftImage {
+    animation: floatModalImageAnimation 2s infinite ease-in-out;
+}
+
+@keyframes floatModalImageAnimation {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+@keyframes showModalAnimatedText {
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes showModalAnimatedLine {
+    to {
+        transform: scaleX(1);
+    }
+}
+
+@keyframes moveNextAndAppearCenter {
+    0% {
+        opacity: 0;
+        transform: translateX(300%);
+        scale: 0.75
+    }
+
+    50% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+        scale: 1
+    }
+}
+
+@keyframes movePrevAndAppearCenter {
+    0% {
+        opacity: 0;
+        transform: translateX(-300%);
+        scale: 0.75
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+        scale: 1
+    }
+}
+
+@keyframes moveAndAppearNext {
+    0% {
+        opacity: 1;
+        transform: translateX(0);
+        scale: 1
+    }
+
+    75% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateX(300%);
+        scale: 0.75
+    }
+}
+
+@keyframes moveAndAppearPrev {
+    0% {
+        opacity: 1;
+        transform: translateX(0);
+        scale: 1
+    }
+
+    50% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateX(-300%);
+        scale: 0.75
+    }
+}
+
+@keyframes fadeInOutTextModal {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -50%);
+    }
+
+    to {
+        opacity: 1;
+        transform: translate(-80%, -50%);
+    }
+}
+
+@keyframes fadeOutTextModal {
+    from {
+        opacity: 1;
+        transform: translate(-80%, -50%);
+    }
+
+    to {
+        opacity: 0;
+        transform: translate(-50%, -50%);
+    }
+}
+
+@keyframes fadeInOverlay {
+    from {
+        background: rgba(0, 0, 0, 0);
+    }
+
+    to {
+        background: rgba(0, 0, 0, 0.998);
+    }
+}
+
+@keyframes fadeInOutModal {
+    from {
+        opacity: 0;
+        transform: translate(-50%, 50%);
+    }
+
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}
+
+@keyframes fadeOutModal {
+    from {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+
+    to {
+        opacity: 0;
+        transform: translate(-50%, 50%);
+    }
+}
+
+@keyframes animate {
+    0% {
+        background-position: 0 0;
+    }
+
+    50% {
+        background-position: 300% 0;
+    }
+
+    100% {
+        background-position: 0 0;
+    }
+}
+
+@keyframes scale {
+    from {
+        opacity: 0;
+        scale: 20%
+    }
+
+    to {
+        opacity: 1;
+        scale: 100%
+    }
+}
