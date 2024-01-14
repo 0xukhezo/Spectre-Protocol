@@ -62,7 +62,7 @@ export default function Navbar() {
                 <div className="hidden sm:ml-6 md:block">
                   <div className="flex xl:space-x-[88px] lg:space-x-[54px] space-x-[40px] font-bold text-xl">
                     {navigation.map((link: any) => (
-                      <Link href={link.href}>
+                      <Link href={link.href} key={link.href}>
                         <span
                           className={`${
                             link.href !== router.asPath ? "underline-hover" : ""

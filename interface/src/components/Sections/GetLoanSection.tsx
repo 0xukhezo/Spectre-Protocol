@@ -142,6 +142,7 @@ export default function GetLoanSection() {
               <div>
                 {selectedSymbols.map((symbol: string, index: number) => (
                   <span
+                    key={symbol}
                     className={`bg-main rounded-full px-3 py-2 text-xs text-black font-medium ${
                       index !== 0 && "ml-3"
                     }`}
@@ -183,7 +184,7 @@ export default function GetLoanSection() {
               <div
                 className={`relative min-h-[500px] ${
                   nftsCopy.length > 0
-                    ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3  gap-[36px] overflow-auto"
+                    ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  gap-[36px] overflow-auto"
                     : ""
                 }  px-[24px] pb-10`}
               >
@@ -192,6 +193,7 @@ export default function GetLoanSection() {
                     {nftsCopy.map((nft: any, index: number) => (
                       <NftCard
                         nftInfo={nft}
+                        key={index}
                         index={index}
                         nftsCopy={nftsCopy}
                       />
