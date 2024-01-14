@@ -131,8 +131,8 @@ export default function GetLoanSection() {
       )}
 
       <div
-        className={`${!isConnected && "col-span-16"} ${
-          showFilterPage ? "col-span-3" : "col-span-15"
+        className={` ${showFilterPage ? "col-span-3" : "col-span-15"} ${
+          !isConnected && "col-span-4"
         } mx-4`}
       >
         {selectedSymbols.length !== 0 && (
