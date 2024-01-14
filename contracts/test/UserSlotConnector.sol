@@ -17,20 +17,4 @@ contract UserSlotTest is Test {
         forkHelper = new ForkHelper();
         forkHelper.fork(vm);
     }
-
-    function test_AliceOpenRequestLoan() public {}
-
-    function test_BobSupplyRequestOnBehalOfAlice() public {}
-
-    function test_AliceBorrow() public {}
-
-    function test_RepayDebt() public {}
-
-    function test_CompleteLoanOwnerWithRepay() public {}
-
-    function test_CompleteLoanOwnerWithoutRepay() public {}
-
-    function test_CompleteLoanSupplierWithRepay() public {}
-
-    function test_CompleteLoanSupplierWithoutRepayDebt() public {}
 }
