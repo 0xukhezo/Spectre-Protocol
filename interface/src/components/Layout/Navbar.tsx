@@ -152,18 +152,18 @@ export default function Navbar() {
             <Image
               src={navigatioHeader[router.asPath].image}
               alt="Navigation Image"
-              width={500}
-              height={500}
+              width={400}
+              height={400}
               id="imageNavbar"
-              className="hidden lg:block absolute -bottom-2/3 -right-20 imgNavbar"
+              className="hidden lg:block absolute -bottom-2/3 right-0 imgNavbar"
             />
             <Image
               src={navigatioHeader[router.asPath].image}
               alt="Navigation Image"
-              width={350}
-              height={350}
+              width={250}
+              height={250}
               id="imageNavbar"
-              className="hidden sm:block lg:hidden absolute -bottom-[120px] -right-20 imgNavbar"
+              className="hidden sm:block lg:hidden absolute -bottom-[120px] right-0 imgNavbar"
             />
           </div>
         </>

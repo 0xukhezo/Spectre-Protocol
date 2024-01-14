@@ -1,5 +1,5 @@
 import Specter from "../public/Specter.svg";
-import Ronin from "../public/Ronin.png";
+import Ronin from "../public/Ronin.svg";
 import { navigatioHeaderType } from "../types/types";
 
 export const navigation = [
