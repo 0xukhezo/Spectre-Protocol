@@ -60,7 +60,7 @@ export default function Navbar() {
               </div>
               <div className="flex items-center">
                 <div className="hidden sm:ml-6 md:block">
-                  <div className="flex xl:space-x-[88px] lg:space-x-[54px] space-x-[40px] font-bold text-xl ">
+                  <div className="flex xl:space-x-[88px] lg:space-x-[54px] space-x-[40px] font-bold text-xl">
                     {navigation.map((link: any) => (
                       <Link href={link.href}>
                         <span
@@ -152,18 +152,18 @@ export default function Navbar() {
             <Image
               src={navigatioHeader[router.asPath].image}
               alt="Navigation Image"
-              width={350}
-              height={350}
+              width={500}
+              height={500}
               id="imageNavbar"
-              className="hidden lg:block absolute -bottom-2/3 right-0 imgNavbar"
+              className="hidden lg:block absolute -bottom-2/3 -right-20 imgNavbar"
             />
             <Image
               src={navigatioHeader[router.asPath].image}
               alt="Navigation Image"
-              width={250}
-              height={250}
+              width={350}
+              height={350}
               id="imageNavbar"
-              className="hidden sm:block lg:hidden absolute -bottom-[120px] right-0 imgNavbar"
+              className="hidden sm:block lg:hidden absolute -bottom-[120px] -right-20 imgNavbar"
             />
           </div>
         </>

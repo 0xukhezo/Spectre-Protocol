@@ -61,17 +61,18 @@ export default function FilterCard({
         </h1>
       </button>
       {active && (
-        <div className="mt-4 xl:min-w-[500px]" id="text-container">
+        <div className="mt-4" id="text-container">
           {filters.map((filter: string, index: number) => (
             <div key={index} className="mb-4" id="fade-in-text">
-              <label className="inline-flex items-center">
+              <label className="flex items-center justify-between flex">
+                <span className="mr-2">{filter}</span>{" "}
                 <input
                   type="checkbox"
-                  className="form-checkbox h-5 w-5 text-main"
+                  id="miCheckbox"
+                  className="h-5 w-5 bg-red-400 "
                   checked={selectedFilters.includes(filter)}
                   onChange={() => handleCheckboxChange(filter)}
                 />
-                <span className="ml-2">{filter}</span>
               </label>
             </div>
           ))}
