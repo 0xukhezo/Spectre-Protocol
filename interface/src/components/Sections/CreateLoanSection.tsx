@@ -7,12 +7,35 @@ import SelectTokenModal from "../Modals/SelectTokenModal";
 import { tokens } from "../../../constants/constants";
 import GHO from "../../../public/GHO.svg";
 import WalletButton from "../Buttons/WalletButton";
+import Steps from "../Steps/Steps";
 
 export default function CreateLoanSection() {
   const { address, isConnected } = useAccount();
   const { nftData: data } = useNFTData(address as `0x${string}`);
 
   const [connected, setConnected] = useState(false);
+  const [steps, setSteps] = useState([
+    {
+      name: "Select NFT",
+      description: "Vitae sed mi luctus laoreet.",
+      status: "current",
+    },
+    {
+      name: "Select Token",
+      description: "Cursus semper viverra facilisis et et some more.",
+      status: "upcoming",
+    },
+    {
+      name: "Supply amount",
+      description: "Penatibus eu quis ante.",
+      status: "upcoming",
+    },
+    {
+      name: "Rewards amount",
+      description: "Faucibus nec enim leo et.",
+      status: "upcoming",
+    },
+  ]);
 
   const [openNFTModal, setOpenNFTModal] = useState(false);
   const [openTokenModal, setOpenTokenModal] = useState(false);
@@ -28,7 +51,7 @@ export default function CreateLoanSection() {
   const [amountSupply, setAmountSupply] = useState<number | undefined>(
     undefined
   );
-  const [rewards, setRewards] = useState<number | undefined>(0);
+  const [rewards, setRewards] = useState<number | undefined>(undefined);
 
   const [approveTx, setApproveTx] = useState<boolean | undefined>(false);
 
@@ -56,6 +79,110 @@ export default function CreateLoanSection() {
     setConnected(isConnected);
   }, [isConnected]);
 
+  useEffect(() => {
+    if (nftContract && tokenContract === null)
+      setSteps([
+        {
+          name: "Select NFT",
+          description: "Vitae sed mi luctus laoreet.",
+          status: "complete",
+        },
+        {
+          name: "Select Token",
+          description: "Cursus semper viverra facilisis et et some more.",
+          status: "current",
+        },
+        {
+          name: "Supply amount",
+          description: "Penatibus eu quis ante.",
+          status: "upcoming",
+        },
+        {
+          name: "Rewards amount",
+          description: "Faucibus nec enim leo et.",
+          status: "upcoming",
+        },
+      ]);
+  }, [nftContract]);
+
+  useEffect(() => {
+    if (tokenContract && amountSupply === undefined)
+      setSteps([
+        {
+          name: "Select NFT",
+          description: "Vitae sed mi luctus laoreet.",
+          status: "complete",
+        },
+        {
+          name: "Select Token",
+          description: "Cursus semper viverra facilisis et et some more.",
+          status: "complete",
+        },
+        {
+          name: "Supply amount",
+          description: "Penatibus eu quis ante.",
+          status: "current",
+        },
+        {
+          name: "Rewards amount",
+          description: "Faucibus nec enim leo et.",
+          status: "upcoming",
+        },
+      ]);
+  }, [tokenContract]);
+
+  useEffect(() => {
+    if (rewards === undefined && amountSupply !== undefined)
+      setSteps([
+        {
+          name: "Select NFT",
+          description: "Vitae sed mi luctus laoreet.",
+          status: "complete",
+        },
+        {
+          name: "Select Token",
+          description: "Cursus semper viverra facilisis et et some more.",
+          status: "complete",
+        },
+        {
+          name: "Supply amount",
+          description: "Penatibus eu quis ante.",
+          status: "complete",
+        },
+        {
+          name: "Rewards amount",
+          description: "Faucibus nec enim leo et.",
+          status: "current",
+        },
+      ]);
+  }, [amountSupply]);
+
+  useEffect(() => {
+    if (rewards !== undefined && amountSupply !== undefined)
+      setSteps([
+        {
+          name: "Select NFT",
+          description: "Vitae sed mi luctus laoreet.",
+          status: "complete",
+        },
+        {
+          name: "Select Token",
+          description: "Cursus semper viverra facilisis et et some more.",
+          status: "complete",
+        },
+        {
+          name: "Supply amount",
+          description: "Penatibus eu quis ante.",
+          status: "complete",
+        },
+        {
+          name: "Rewards amount",
+          description: "Faucibus nec enim leo et.",
+          status: "complete",
+        },
+      ]);
+  }, [rewards]);
+
   return (
     <main className="py-10 navbarTextOpacity">
       {!connected ? (
@@ -72,17 +199,16 @@ export default function CreateLoanSection() {
               <h1 className="text-3xl navbarTitle pb-2">Fill your Slot</h1>{" "}
               <hr className="modalAnimatedLine" />
             </div>
-            <div className="px-10">
-              {" "}
-              <div className="flex justify-between mt-4">
-                <div className="flex items-center">
-                  <span className="mr-[24px]">1. Select your NFT</span>
-                </div>
+
+            <div className="px-10 grid grid-cols-2">
+              <Steps steps={steps} />
+              <div className="flex flex-col items-end">
+                {" "}
                 <button
                   onClick={() => {
                     setOpenNFTModal(true);
                   }}
-                  className="bg-main text-black font-light px-4 py-2 rounded-xl hover:bg-secondary min-w-[140px]"
+                  className="bg-main text-black font-light px-4 py-2 rounded-xl hover:bg-secondary max-w-fit mb-4"
                 >
                   {nftContract ? (
                     <div className="flex items-center">
@@ -101,20 +227,13 @@ export default function CreateLoanSection() {
                   ) : (
                     "Select NFT"
                   )}
-                </button>
-              </div>
-              <div className="flex justify-between my-8">
-                <div className="flex items-center">
-                  <span className="mr-[24px]">
-                    2. Select the token you want as supply in AAVE
-                  </span>
-                </div>
+                </button>{" "}
                 <button
                   onClick={() => {
                     setOpenTokenModal(true);
                   }}
                   disabled={nftContract === null}
-                  className="bg-main text-black font-light px-4 py-2 rounded-xl hover:bg-secondary min-w-[140px]"
+                  className="bg-main text-black font-light px-4 py-2 rounded-xl hover:bg-secondary max-w-fit my-4"
                 >
                   {tokenContract ? (
                     <div className="flex items-center">
@@ -134,14 +253,7 @@ export default function CreateLoanSection() {
                     "Select Token"
                   )}
                 </button>
-              </div>
-              <div className="flex justify-between">
-                <div className="flex items-center">
-                  <span className="mr-[24px]">
-                    3. Tell your sponsor how much you wawwant as supply
-                  </span>
-                </div>{" "}
-                <div className="flex items-center">
+                <div className="flex items-center my-4">
                   <input
                     type="number"
                     value={amountSupply}
@@ -160,15 +272,7 @@ export default function CreateLoanSection() {
                     />
                   )}
                 </div>{" "}
-              </div>
-              <div className="flex justify-between mt-8">
-                <div className="flex items-center">
-                  <span className="mr-[24px]">
-                    {" "}
-                    4. Select the amout of rewards you will give
-                  </span>
-                </div>
-                <div className="flex items-center">
+                <div className="flex items-center mt-4">
                   <input
                     type="number"
                     value={rewards}
@@ -187,6 +291,34 @@ export default function CreateLoanSection() {
                   />
                 </div>
               </div>
+
+              {/* <div className="flex justify-between mt-4">
+                <div className="flex items-center">
+                  <span className="mr-[24px]">1. Select your NFT</span>
+                </div>
+              </div>
+              <div className="flex justify-between my-8">
+                <div className="flex items-center">
+                  <span className="mr-[24px]">
+                    2. Select the token you want as supply in AAVE
+                  </span>
+                </div>
+              </div>
+              <div className="flex justify-between">
+                <div className="flex items-center">
+                  <span className="mr-[24px]">
+                    3. Tell your sponsor how much you wawwant as supply
+                  </span>
+                </div>{" "}
+              </div>
+              <div className="flex justify-between mt-8">
+                <div className="flex items-center">
+                  <span className="mr-[24px]">
+                    {" "}
+                    4. Select the amout of rewards you will give
+                  </span>
+                </div>
+              </div> */}
             </div>
 
             {openNFTModal && data && (
@@ -206,6 +338,7 @@ export default function CreateLoanSection() {
               />
             )}
           </div>
+
           {nftContract && tokenContract && amountSupply && rewards ? (
             <button className="bg-main text-black font-light px-24 py-4 rounded-xl hover:bg-secondary flex mx-auto mb-4">
               Approve {nftTitle}
