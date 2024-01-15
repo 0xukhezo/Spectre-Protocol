@@ -96,6 +96,7 @@ export default function SelectNftModal({
                         selectAsset={getAsset}
                         closeModal={() => closeModal()}
                         roundedImage="rounded-lg"
+                        key={index}
                       />
                     );
                   })}

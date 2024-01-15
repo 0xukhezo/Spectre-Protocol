@@ -96,6 +96,7 @@ export default function SelectTokenModal({
                         selectAsset={getAsset}
                         closeModal={() => closeModal()}
                         roundedImage="rounded-full"
+                        key={index}
                       />
                     );
                   })}
