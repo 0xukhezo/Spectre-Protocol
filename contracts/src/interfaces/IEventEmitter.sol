@@ -14,7 +14,7 @@ interface IEventEmitter {
         uint256 loanDeadline
     );
     event SuppliedLoan(address indexed slot, address supplier, uint64 chainSelector);
-    event CompleteLoan(address indexed slot, uint64 chainSelector);
+    event CompleteLoan(address indexed slot, bool successfull, uint256 amountWithdraw);
 
     //OnlyFactory
     event SlotUserCreated(address indexed owner, address indexed slot);
@@ -30,5 +30,5 @@ interface IEventEmitter {
         uint256 loanDeadline
     ) external;
     function emitSuppliedLoan(address supplier, uint64 chainSelector) external;
-    function emitCompleteLoan(uint64 chainSelector) external;
+    function emitCompleteLoan(bool successfull, uint256 amountWithdraw) external;
 }
