@@ -22,6 +22,7 @@ contract UserSlot is IUserSlot, Ownable, ERC721Holder {
     IPoolDataProvider immutable protocolDataProvider;
     ICCIPConnector immutable connector;
     IEventEmitter immutable eventEmitter;
+    
 
     Position public position;
 
@@ -69,7 +70,7 @@ contract UserSlot is IUserSlot, Ownable, ERC721Holder {
         uint256 amountRequest,
         address tokenToBorrow,
         uint256 rewards,
-        uint256 loanDeadline
+        uint256 loanDuration
     ) external payable onlyOwner {
         if (_isLoanActive()) {
             revert LoanActive();
