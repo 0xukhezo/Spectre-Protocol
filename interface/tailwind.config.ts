@@ -18,7 +18,10 @@ const config: Config = {
       },
       colors: {
         main: "#d2c3f6",
-        navbarActive: " linear-gradient(to bottom, #ffffff 40%, #d2c3f6)",
+        secondary: "#ac8cfb",
+        navbarActive: "linear-gradient(to bottom, #ffffff 40%, #d2c3f6)",
+        transparentLine:
+          "linear-gradient(to right, transparent, #d2c3f6, transparent)",
       },
       gridTemplateColumns: {
         "15": "repeat(15, minmax(0, 1fr))",

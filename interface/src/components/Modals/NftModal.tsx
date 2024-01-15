@@ -5,6 +5,7 @@ import Arrow from "../../../public/Arrow.svg";
 import WalletButton from "../Buttons/WalletButton";
 import { useAccount, useEnsName } from "wagmi";
 import { formatAddress } from "../../../utils/utils";
+
 type NftModalProps = {
   getShowMenu: (open: boolean) => void;
   nftIndex: any;
@@ -105,14 +106,14 @@ export default function NftModal({
           <Dialog.Panel
             className={`textModal mainBackground text-white z-50 ${
               isClosing ? "closing" : ""
-            } rounded-lg bg-white px-4 pb-4 py-10 text-left sm:p-10 overflow-auto absolute`}
+            } rounded-lg px-4 pb-4 py-10 text-left sm:p-10 overflow-auto absolute`}
           >
             <h1 className="text-3xl modalAnimatedText pb-1 navbarTitle">
               Nft Information
             </h1>
             <hr className="modalAnimatedLine" />
             <ul className="mt-6">
-              <li className="text-lg">{`${nftsCopy[currentNftIndex].name}`}</li>
+              <li className="text-2xl mb-3">{`${nftsCopy[currentNftIndex].name}`}</li>
               <li className="text-lg text-xs">
                 Created by{" "}
                 <span className="text-main text-lg">{`${nftsCopy[currentNftIndex].collection}`}</span>
@@ -125,7 +126,7 @@ export default function NftModal({
                     : `${formatAddress(nftsCopy[currentNftIndex].owner)}`}
                 </span>
               </li>
-              <li className="mb-2  flex">
+              <li className="mb-2 mt-3 flex">
                 <span className="bg-main rounded-full px-6">ERC 721</span>
                 <span className="bg-main rounded-full px-6 ml-8">Listed</span>
               </li>
