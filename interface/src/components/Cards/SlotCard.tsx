@@ -2,6 +2,7 @@ import Image from "next/image";
 import React, { useState } from "react";
 import Specter from "../../../public/Specter.svg";
 import Link from "next/link";
+import SadSpectre from "../../../public/SadSpectre.svg";
 
 export default function SlotCard() {
   const [isHovered, setIsHovered] = useState(false);
@@ -21,7 +22,7 @@ export default function SlotCard() {
   };
   return (
     <button
-      className="shadow2 flex items-center rounded-xl border-2 border-main hover:border-gray-100 xl:min-h-[400px] min-h-[450px]"
+      className="shadow2 flex items-center rounded-xl border-2 border-main hover:border-gray-100 xl:min-h-[300px] min-h-[350px]"
       onClick={() => {
         handleUnhover();
       }}
@@ -55,9 +56,14 @@ export default function SlotCard() {
           className="w-full h-full flex flex-col justify-center items-center rounded-xl text-3xl"
           href="/loan/create"
         >
-          <h1>
-            Create <br></br>loan
-          </h1>
+          <h1>Nft missing...</h1>{" "}
+          <Image
+            src={SadSpectre.src}
+            alt="SadSpectre Image"
+            width={200}
+            height={200}
+            className="min-h-[150px] mb-5 "
+          />
         </Link>
       )}
     </button>

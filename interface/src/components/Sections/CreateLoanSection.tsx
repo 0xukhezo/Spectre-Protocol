@@ -25,8 +25,9 @@ export default function CreateLoanSection() {
   const [amountSupply, setAmountSupply] = useState<number | undefined>(
     undefined
   );
-
   const [rewards, setRewards] = useState<number | undefined>(0);
+
+  const [approveTx, setApproveTx] = useState<boolean | undefined>(false);
 
   const getShowMenuNft = (state: boolean) => {
     setOpenNFTModal(state);
@@ -52,14 +53,14 @@ export default function CreateLoanSection() {
     <main className="py-10 navbarTextOpacity">
       <div className="w-full flex flex-col px-24 rounded-xl mainBackground py-6 mx-auto max-w-[1000px] my-10">
         <div className="mb-6">
-          <h1 className="text-3xl navbarTitle pb-2">Create your loan</h1>{" "}
+          <h1 className="text-3xl navbarTitle pb-2">Fill your Slot</h1>{" "}
           <hr className="modalAnimatedLine" />
         </div>
         <div className="px-10">
           {" "}
           <div className="flex justify-between mt-4">
             <div className="flex items-center">
-              <span className="mr-[24px]">1. Select your NFT:</span>
+              <span className="mr-[24px]">1. Select your NFT</span>
             </div>
             <button
               onClick={() => {
@@ -89,7 +90,7 @@ export default function CreateLoanSection() {
           <div className="flex justify-between my-8">
             <div className="flex items-center">
               <span className="mr-[24px]">
-                2. Select the token you want as supply in AAVE:
+                2. Select the token you want as supply in AAVE
               </span>
             </div>
             <button
@@ -121,7 +122,7 @@ export default function CreateLoanSection() {
           <div className="flex justify-between">
             <div className="flex items-center">
               <span className="mr-[24px]">
-                3. Tell your sponsor how much you wawwant as supply:
+                3. Tell your sponsor how much you wawwant as supply
               </span>
             </div>{" "}
             <div className="flex items-center">
@@ -148,7 +149,7 @@ export default function CreateLoanSection() {
             <div className="flex items-center">
               <span className="mr-[24px]">
                 {" "}
-                4. Select the amout of rewards you will give:
+                4. Select the amout of rewards you will give
               </span>
             </div>
             <div className="flex items-center">
@@ -171,6 +172,7 @@ export default function CreateLoanSection() {
             </div>
           </div>
         </div>
+
         {openNFTModal && data && (
           <SelectNftModal
             getShowMenu={getShowMenuNft}
@@ -188,6 +190,30 @@ export default function CreateLoanSection() {
           />
         )}
       </div>
+      {nftContract && tokenContract && amountSupply && rewards ? (
+        <button className="bg-main text-black font-light px-24 py-4 rounded-xl hover:bg-secondary flex mx-auto mb-4">
+          Approve {nftTitle}
+        </button>
+      ) : (
+        <button
+          className="flex flex-col px-24 rounded-xl mainBackground py-4 mx-auto mb-4 opacity-50"
+          disabled
+        >
+          Approve NFT
+        </button>
+      )}
+      {approveTx ? (
+        <button className="bg-main text-black font-light px-24 py-4 rounded-xl hover:bg-secondary flex mx-auto">
+          Create Loan
+        </button>
+      ) : (
+        <button
+          className="flex flex-col px-24 rounded-xl mainBackground py-4 mx-auto opacity-50"
+          disabled
+        >
+          Create Loan
+        </button>
+      )}
     </main>
   );
 }
