@@ -5,6 +5,7 @@ import SelectNftModal from "../Modals/SelectNftModal";
 import Image from "next/image";
 import SelectTokenModal from "../Modals/SelectTokenModal";
 import { tokens } from "../../../constants/constants";
+import GHO from "../../../public/GHO.svg";
 
 export default function CreateLoanSection() {
   const { address } = useAccount();
@@ -13,11 +14,11 @@ export default function CreateLoanSection() {
   const [openNFTModal, setOpenNFTModal] = useState(false);
   const [openTokenModal, setOpenTokenModal] = useState(false);
 
-  const [nftTitle, setNftTitle] = useState<string>("Select your NFT");
+  const [nftTitle, setNftTitle] = useState<string | null>(null);
   const [nftContract, setNftContract] = useState<string | null>(null);
   const [nftImage, setNftImage] = useState<string | null>(null);
 
-  const [tokenSymbol, setTokenSymbol] = useState<string>("Select your Token");
+  const [tokenSymbol, setTokenSymbol] = useState<string | null>(null);
   const [tokenContract, setTokenContract] = useState<string | null>(null);
   const [tokenImage, setTokenImage] = useState<string | null>(null);
 
@@ -49,25 +50,6 @@ export default function CreateLoanSection() {
 
   return (
     <main className="py-10 navbarTextOpacity">
-      <div className="mainBackground p-6 rounded-xl flex justify-between text-lg max-w-[1000px] mx-auto">
-        <div className="w-full">
-          <span>
-            You need to create a slot in order to can have a loan in one of your
-            NFTs.
-          </span>
-          <div className="w-full my-4 gap-x-[24px] text-start">
-            <ul>1. Select your NFT.</ul>
-            <ul className="my-1">
-              2. Select the token you want as supply in AAVE.
-            </ul>
-            <ul>3. Tell your sponsor how much you want as supply.</ul>
-            <ul className="my-1">
-              4. Select the amout of rewards you will give.
-            </ul>{" "}
-          </div>{" "}
-        </div>{" "}
-      </div>
-
       <div className="w-full flex flex-col px-24 rounded-xl mainBackground py-6 mx-auto max-w-[1000px] my-10">
         <div className="mb-6">
           <h1 className="text-3xl navbarTitle pb-2">Create your loan</h1>{" "}
@@ -77,90 +59,116 @@ export default function CreateLoanSection() {
           {" "}
           <div className="flex justify-between mt-4">
             <div className="flex items-center">
-              {nftContract && <span className="mr-[24px]">Nft Selected:</span>}
-              <span>{nftTitle}</span>
-              {nftImage && (
-                <Image
-                  src={nftImage}
-                  alt={`${nftTitle} image`}
-                  width={50}
-                  height={50}
-                  id="nftCardImage"
-                  className="rounded-lg h-[50px] min-w-[50px] ml-[24px]"
-                />
-              )}
+              <span className="mr-[24px]">1. Select your NFT:</span>
             </div>
             <button
               onClick={() => {
                 setOpenNFTModal(true);
               }}
-              className="bg-main text-black font-light px-4 py-2 rounded-xl max-h-[44px] hover:bg-secondary min-w-[140px]"
+              className="bg-main text-black font-light px-4 py-2 rounded-xl hover:bg-secondary min-w-[140px]"
             >
-              {nftContract ? "Change" : "Select NFT"}
+              {nftContract ? (
+                <div className="flex items-center">
+                  <span>{nftTitle}</span>
+                  {nftImage && (
+                    <Image
+                      src={nftImage}
+                      alt={`${nftTitle} image`}
+                      width={40}
+                      height={40}
+                      id="nftCardImage"
+                      className="rounded-lg h-[40px] min-w-[40px] ml-[24px]"
+                    />
+                  )}
+                </div>
+              ) : (
+                "Select NFT"
+              )}
             </button>
           </div>
           <div className="flex justify-between my-8">
             <div className="flex items-center">
-              {tokenContract && (
-                <span className="mr-[24px]">Token Selected:</span>
-              )}
-              <span>{tokenSymbol}</span>
-              {tokenImage && (
-                <Image
-                  src={tokenImage}
-                  alt={`${tokenSymbol} image`}
-                  width={50}
-                  height={50}
-                  id="nftCardImage"
-                  className="rounded-lg h-[50px] min-w-[50px] ml-[24px]"
-                />
-              )}
+              <span className="mr-[24px]">
+                2. Select the token you want as supply in AAVE:
+              </span>
             </div>
             <button
               onClick={() => {
                 setOpenTokenModal(true);
               }}
-              className="bg-main text-black font-light px-4 py-2 rounded-xl max-h-[44px] hover:bg-secondary min-w-[140px]"
+              disabled={nftContract === null}
+              className="bg-main text-black font-light px-4 py-2 rounded-xl hover:bg-secondary min-w-[140px]"
             >
-              {nftContract ? "Change" : "Select Token"}
+              {tokenContract ? (
+                <div className="flex items-center">
+                  <span>{tokenSymbol}</span>
+                  {tokenImage && (
+                    <Image
+                      src={tokenImage}
+                      alt={`${tokenSymbol} image`}
+                      width={40}
+                      height={40}
+                      id="nftCardImage"
+                      className="rounded-lg h-[40px] min-w-[40px] ml-[24px]"
+                    />
+                  )}
+                </div>
+              ) : (
+                "Select Token"
+              )}
             </button>
           </div>
           <div className="flex justify-between">
             <div className="flex items-center">
-              {amountSupply !== undefined ? (
-                <span className="mr-[24px]">Total supply:</span>
-              ) : (
-                <span className="mr-[24px]">Sponsor supply:</span>
+              <span className="mr-[24px]">
+                3. Tell your sponsor how much you wawwant as supply:
+              </span>
+            </div>{" "}
+            <div className="flex items-center">
+              <input
+                type="number"
+                value={amountSupply}
+                onChange={(e) => setAmountSupply(Number(e.target.value))}
+                className="rounded-lg px-4 py-1 text-black"
+                disabled={tokenContract === null}
+              />{" "}
+              {tokenImage && (
+                <Image
+                  src={tokenImage}
+                  alt={`${tokenSymbol} image`}
+                  width={40}
+                  height={40}
+                  id="nftCardImage"
+                  className="rounded-lg h-[40px] min-w-[40px] ml-[24px] ml-3"
+                />
               )}
-              {amountSupply !== undefined && <span>{amountSupply}</span>}
-              {tokenSymbol !== "Select your Token" &&
-                amountSupply !== undefined && (
-                  <span className="ml-3">{tokenSymbol}</span>
-                )}
-            </div>
-            <input
-              type="number"
-              value={amountSupply}
-              onChange={(e) => setAmountSupply(Number(e.target.value))}
-              className="rounded-lg px-4 py-1 text-black"
-            />{" "}
+            </div>{" "}
           </div>
           <div className="flex justify-between mt-8">
             <div className="flex items-center">
-              {rewards !== undefined ? (
-                <span className="mr-[24px]">Total rewards:</span>
-              ) : (
-                <span className="mr-[24px]">Sponsor supply:</span>
-              )}
-              {rewards !== undefined && <span>{rewards}</span>}
-              <span className="ml-3">GHO</span>
+              <span className="mr-[24px]">
+                {" "}
+                4. Select the amout of rewards you will give:
+              </span>
             </div>
-            <input
-              type="number"
-              value={rewards}
-              onChange={(e) => setRewards(Number(e.target.value))}
-              className="rounded-lg px-4 py-1 text-black"
-            />{" "}
+            <div className="flex items-center">
+              <input
+                type="number"
+                value={rewards}
+                onChange={(e) => setRewards(Number(e.target.value))}
+                className="rounded-lg px-4 py-1 text-black"
+                disabled={amountSupply === undefined}
+              />
+
+              <Image
+                src={GHO.src}
+                alt={`GHO image`}
+                width={40}
+                height={40}
+                id="nftCardImage"
+                className="rounded-lg h-[40px] min-w-[40px] ml-[24px] ml-3"
+              />
+            </div>
           </div>
         </div>
         {openNFTModal && data && (
