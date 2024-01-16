@@ -287,7 +287,6 @@ export default function CreateLoanSection() {
                           alt={`${nftTitle} image`}
                           width={40}
                           height={40}
-                          id="nftCardImage"
                           className="rounded-lg h-[40px] min-w-[40px]"
                         />
                       )}
@@ -314,7 +313,6 @@ export default function CreateLoanSection() {
                           alt={`${tokenSymbol} image`}
                           width={40}
                           height={40}
-                          id="nftCardImage"
                           className="rounded-lg h-[40px] min-w-[40px] ml-[24px]"
                         />
                       )}
@@ -349,7 +347,6 @@ export default function CreateLoanSection() {
                       alt={`${tokenSymbol} image`}
                       width={40}
                       height={40}
-                      id="nftCardImage"
                       className="rounded-lg h-[40px] min-w-[40px] ml-[24px] ml-3"
                     />
                   )}
@@ -380,7 +377,6 @@ export default function CreateLoanSection() {
                     alt={`GHO image`}
                     width={40}
                     height={40}
-                    id="nftCardImage"
                     className="rounded-lg h-[40px] min-w-[40px] ml-[24px] ml-3"
                   />
                 </div>{" "}
@@ -399,7 +395,7 @@ export default function CreateLoanSection() {
                     disabled={rewards === undefined}
                   />
                   <span className="rounded-lg  min-w-[40px] ml-[24px] ml-3 text-center ">
-                    d
+                    days
                   </span>
                 </div>{" "}
                 {loanDurationToContrat && loanDurationToContrat !== 0 && (
@@ -429,7 +425,11 @@ export default function CreateLoanSection() {
             )}
           </div>
 
-          {nftContract && tokenContract && amountSupply && rewards ? (
+          {nftContract &&
+          tokenContract &&
+          amountSupply &&
+          rewards &&
+          loanDuration ? (
             <button className="bg-main text-black font-light px-24 py-4 rounded-xl hover:bg-secondary flex mx-auto mb-4">
               Approve {nftTitle}
             </button>

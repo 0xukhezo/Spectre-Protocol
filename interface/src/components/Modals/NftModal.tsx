@@ -15,12 +15,16 @@ type NftModalProps = {
   getShowMenu: (open: boolean) => void;
   nftIndex: any;
   nftsCopy: any;
+  isLoan: boolean;
+  isPortfolio: boolean;
 };
 
 export default function NftModal({
   getShowMenu,
   nftIndex,
   nftsCopy,
+  isLoan,
+  isPortfolio,
 }: NftModalProps) {
   const [open, setOpen] = useState(true);
   const [image, setImage] = useState(nftsCopy[nftIndex].image);
@@ -122,14 +126,14 @@ export default function NftModal({
           <Dialog.Panel
             className={`textModal mainBackground text-white z-50 ${
               isClosing ? "closing" : ""
-            } rounded-lg px-4 pb-4 py-10 text-left sm:p-10 overflow-auto absolute flex flex-col justify-between`}
+            } rounded-lg px-4 pb-4 py-10 text-left sm:p-10 overflow-auto absolute flex flex-col justify-between `}
           >
             <div>
               <h1 className="text-3xl modalAnimatedText pb-1 navbarTitle">
                 Nft Information
               </h1>
               <hr className="modalAnimatedLine" />
-              <ul className="mt-6">
+              <ul className="mt-6 modalAnimatedText">
                 <li className="text-2xl mb-3">{`${nftsCopy[currentNftIndex].name}`}</li>
                 <li className="text-lg text-xs">
                   Created by{" "}
@@ -148,79 +152,90 @@ export default function NftModal({
                   <span className="bg-main rounded-full px-6 ml-8">Listed</span>
                 </li>
               </ul>
-              <h1 className="text-3xl modalAnimatedText pb-1 navbarTitle mt-10">
-                Desired terms
-              </h1>
-              <hr className="modalAnimatedLine" />
-              <ul className="mt-6">
-                <li className="text-lg text-xs flex items-center">
-                  Token supply
-                  <span className="text-main text-lg mx-2">{`100`}</span>{" "}
-                  <Image
-                    src={GHO.src}
-                    alt={`Token image`}
-                    width={24}
-                    height={24}
-                    id="nftCardImage"
-                    className="rounded-lg h-[24px] min-w-[24px]"
-                  />
-                </li>
-                <li className="text-lg text-xs flex items-center">
-                  Rewards
-                  <span className="text-main text-lg mx-2">{`100`}</span>{" "}
-                  <Image
-                    src={GHO.src}
-                    alt={`Token image`}
-                    width={24}
-                    height={24}
-                    id="nftCardImage"
-                    className="rounded-lg h-[24px] min-w-[24px]"
-                  />
-                </li>
-              </ul>
-              <h1 className="text-3xl modalAnimatedText pb-1 navbarTitle mt-10">
-                Loan Duration
-              </h1>
-              <hr className="modalAnimatedLine" />
-              <ul className="mt-6">
-                <li className="text-lg text-xs flex items-center">
-                  Duration
-                  <span className="text-main text-lg mx-2">{`${calculateTimeComponents(
-                    360000
-                  )}`}</span>{" "}
-                </li>
-                <li className="text-lg text-xs flex items-center">
-                  Finish
-                  <span className="text-main text-lg mx-2">{`${formatDate(
-                    currentTimestamp + 360000 * 1000
-                  )}`}</span>{" "}
-                </li>
-              </ul>
-              {!isConnected ? (
-                <div className="w-min mx-auto mt-10">
-                  <WalletButton />
-                </div>
-              ) : (
-                <div className="mt-10">
-                  {!approveTx && (
-                    <button className="bg-main text-black font-light px-[50px] py-2 rounded-xl hover:bg-secondary flex mx-auto mb-4">
-                      Approve
-                    </button>
+              {!isPortfolio && (
+                <>
+                  {!isLoan && (
+                    <>
+                      <h1 className="text-3xl modalAnimatedText pb-1 navbarTitle mt-10">
+                        Desired terms
+                      </h1>
+                      <hr className="modalAnimatedLine" />
+                      <ul className="mt-6 modalAnimatedText">
+                        <li className="text-lg text-xs flex items-center">
+                          Token supply
+                          <span className="text-main text-lg mx-2">{`100`}</span>{" "}
+                          <Image
+                            src={GHO.src}
+                            alt={`Token image`}
+                            width={24}
+                            height={24}
+                            className="rounded-lg h-[24px] min-w-[24px]"
+                          />
+                        </li>
+                        <li className="text-lg text-xs flex items-center">
+                          Rewards
+                          <span className="text-main text-lg mx-2">{`100`}</span>{" "}
+                          <Image
+                            src={GHO.src}
+                            alt={`Token image`}
+                            width={24}
+                            height={24}
+                            className="rounded-lg h-[24px] min-w-[24px]"
+                          />
+                        </li>
+                      </ul>
+                    </>
                   )}
+                  <h1 className="text-3xl modalAnimatedText pb-1 navbarTitle mt-10">
+                    Loan Duration
+                  </h1>
+                  <hr className="modalAnimatedLine" />
+                  <ul className="mt-6 modalAnimatedText">
+                    <li className="text-lg text-xs flex items-center">
+                      Duration
+                      <span className="text-main text-lg mx-2">{`${calculateTimeComponents(
+                        360000
+                      )}`}</span>{" "}
+                    </li>
+                    <li className="text-lg text-xs flex items-center">
+                      Finish
+                      <span className="text-main text-lg mx-2">{`${formatDate(
+                        currentTimestamp + 360000 * 1000
+                      )}`}</span>{" "}
+                    </li>
+                  </ul>
+                  <div className="modalAnimatedText">
+                    {" "}
+                    {!isConnected ? (
+                      <div className="w-min mx-auto mt-10">
+                        <WalletButton />
+                      </div>
+                    ) : isLoan ? (
+                      <div>Is a Loan</div>
+                    ) : (
+                      <div className="mt-10">
+                        {!approveTx && (
+                          <button className="bg-main text-black font-light px-[50px] py-2 rounded-xl hover:bg-secondary flex mx-auto mb-4">
+                            Approve
+                          </button>
+                        )}
 
-                  {approveTx ? (
-                    <button className="bg-main text-black font-light px-[36px] py-2 rounded-xl hover:bg-secondary flex mx-auto">
-                      Create Loan
-                    </button>
-                  ) : (
-                    <button
-                      className="flex flex-col  rounded-xl border-main border-1 px-[36px] py-2 mx-auto opacity-50"
-                      disabled
-                    >
-                      Create Loan
-                    </button>
-                  )}
-                </div>
+                        {approveTx ? (
+                          <button className="bg-main text-black font-light px-[34px] py-2 rounded-xl hover:bg-secondary flex mx-auto">
+                            Create Loan
+                          </button>
+                        ) : (
+                          <button
+                            className="flex flex-col rounded-xl border-main border-1 px-[34px] py-2 mx-auto opacity-50"
+                            disabled
+                          >
+                            Create Loan
+                          </button>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </>
               )}
             </div>
 

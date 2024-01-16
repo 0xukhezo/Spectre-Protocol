@@ -165,6 +165,8 @@ export default function GiveLoanSection() {
                   index={index}
                   nftsCopy={nftsCopy}
                   key={index}
+                  isPortfolio={false}
+                  isLoan={false}
                 />
               ))}
             </>

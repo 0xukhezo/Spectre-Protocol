@@ -18,6 +18,7 @@ export default function ProfileNfts() {
   const { address, isConnected } = useAccount();
   const { nftData: data } = useNFTData(address as `0x${string}`);
 
+  const [connected, setConnected] = useState(false);
   const [search, setSearch] = useState<string>("");
   const [nftsCopy, setNftsCopy] = useState<any[] | null>(data);
   const [symbols, setSymbols] = useState<string[]>([]);
@@ -32,6 +33,13 @@ export default function ProfileNfts() {
 
   const getFilters = (selectedSymbols: string[]) => {
     setSelectedFilters(selectedSymbols);
+  };
+
+  const handleClearFilters = () => {
+    setClearFilters(true);
+    setTimeout(() => {
+      setClearFilters(false);
+    }, 200);
   };
 
   useEffect(() => {
@@ -76,12 +84,9 @@ export default function ProfileNfts() {
     };
   }, [data]);
 
-  const handleClearFilters = () => {
-    setClearFilters(true);
-    setTimeout(() => {
-      setClearFilters(false);
-    }, 200);
-  };
+  useEffect(() => {
+    setConnected(isConnected);
+  }, [isConnected]);
 
   return (
     <main
@@ -89,7 +94,7 @@ export default function ProfileNfts() {
         showFilterPage ? "grid-cols-4" : "grid-cols-16"
       } pb-10 navbarTextOpacity relative`}
     >
-      {isConnected && (
+      {connected && (
         <>
           {showFilterPage ? (
             <div className="border-r-1 border-main my-4 flex flex-col items-end">
@@ -130,7 +135,7 @@ export default function ProfileNfts() {
 
       <div
         className={` ${showFilterPage ? "col-span-3" : "col-span-15"} ${
-          !isConnected && "col-span-4"
+          !connected && "col-span-4"
         } mx-4`}
       >
         {selectedSymbols.length !== 0 && (
@@ -159,7 +164,7 @@ export default function ProfileNfts() {
           </div>
         )}
 
-        {!isConnected ? (
+        {!connected ? (
           <div className="h-[700px] flex justify-center items-center flex-col">
             <h1 className="font-extralight mb-10 text-3xl">
               You need to be connected to see your NFTs
@@ -195,6 +200,8 @@ export default function ProfileNfts() {
                         key={index}
                         index={index}
                         nftsCopy={nftsCopy}
+                        isLoan={false}
+                        isPortfolio={true}
                       />
                     ))}
                   </>
