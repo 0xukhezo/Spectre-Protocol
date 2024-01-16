@@ -50,7 +50,7 @@ contract EventEmitter is IEventEmitter {
         emit SuppliedLoan(msg.sender, supplier, chainSelector);
     }
 
-    function emitCompleteLoan(uint64 chainSelector) public onlySlot {
-        emit CompleteLoan(msg.sender, chainSelector);
+    function emitCompleteLoan(bool successfull, uint256 amountWithdraw) public onlySlot {
+        emit CompleteLoan(msg.sender, successfull, amountWithdraw);
     }
 }
