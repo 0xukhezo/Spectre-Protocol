@@ -158,3 +158,29 @@ export const tokens = [
     contract: "0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9",
   },
 ];
+
+export const initialSteps = [
+  {
+    name: "Select NFT",
+    description: "Pick the MVP from your NFT squad for the loan spotlight!",
+    status: "current",
+  },
+  {
+    name: "Select Token",
+    description:
+      "Your sponsor supply you this token and then you can have GHO!",
+    status: "upcoming",
+  },
+  {
+    name: "Supply amount",
+    description:
+      "This is the amount of the selected tokens your sponsor gonna supply you.",
+    status: "upcoming",
+  },
+  {
+    name: "Rewards amount",
+    description:
+      "Your sponsor receive at the end of the loan this amount of GHO.",
+    status: "upcoming",
+  },
+];

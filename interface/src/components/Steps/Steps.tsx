@@ -16,7 +16,7 @@ export default function Steps({ steps }: StepsProps) {
           <li
             key={step.name}
             className={classNames(
-              stepIdx !== steps.length - 1 ? "pb-12" : "",
+              stepIdx !== steps.length - 1 ? "pb-6" : "",
               "relative"
             )}
           >

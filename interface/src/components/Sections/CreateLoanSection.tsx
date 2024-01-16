@@ -4,7 +4,7 @@ import { useAccount } from "wagmi";
 import SelectNftModal from "../Modals/SelectNftModal";
 import Image from "next/image";
 import SelectTokenModal from "../Modals/SelectTokenModal";
-import { tokens } from "../../../constants/constants";
+import { initialSteps, tokens } from "../../../constants/constants";
 import GHO from "../../../public/GHO.svg";
 import WalletButton from "../Buttons/WalletButton";
 import Steps from "../Steps/Steps";
@@ -14,28 +14,7 @@ export default function CreateLoanSection() {
   const { nftData: data } = useNFTData(address as `0x${string}`);
 
   const [connected, setConnected] = useState(false);
-  const [steps, setSteps] = useState([
-    {
-      name: "Select NFT",
-      description: "Vitae sed mi luctus laoreet.",
-      status: "current",
-    },
-    {
-      name: "Select Token",
-      description: "Cursus semper viverra facilisis et et some more.",
-      status: "upcoming",
-    },
-    {
-      name: "Supply amount",
-      description: "Penatibus eu quis ante.",
-      status: "upcoming",
-    },
-    {
-      name: "Rewards amount",
-      description: "Faucibus nec enim leo et.",
-      status: "upcoming",
-    },
-  ]);
+  const [steps, setSteps] = useState(initialSteps);
 
   const [openNFTModal, setOpenNFTModal] = useState(false);
   const [openTokenModal, setOpenTokenModal] = useState(false);
@@ -84,22 +63,26 @@ export default function CreateLoanSection() {
       setSteps([
         {
           name: "Select NFT",
-          description: "Vitae sed mi luctus laoreet.",
+          description:
+            "Pick the MVP from your NFT squad for the loan spotlight!",
           status: "complete",
         },
         {
           name: "Select Token",
-          description: "Cursus semper viverra facilisis et et some more.",
+          description:
+            "Your sponsor supply you this token and then you can have GHO!",
           status: "current",
         },
         {
           name: "Supply amount",
-          description: "Penatibus eu quis ante.",
+          description:
+            "This is the amount of the selected tokens your sponsor gonna supply you.",
           status: "upcoming",
         },
         {
           name: "Rewards amount",
-          description: "Faucibus nec enim leo et.",
+          description:
+            "Your sponsor receive at the end of the loan this amount of GHO.",
           status: "upcoming",
         },
       ]);
@@ -110,22 +93,26 @@ export default function CreateLoanSection() {
       setSteps([
         {
           name: "Select NFT",
-          description: "Vitae sed mi luctus laoreet.",
+          description:
+            "Pick the MVP from your NFT squad for the loan spotlight!",
           status: "complete",
         },
         {
           name: "Select Token",
-          description: "Cursus semper viverra facilisis et et some more.",
+          description:
+            "Your sponsor supply you this token and then you can have GHO!",
           status: "complete",
         },
         {
           name: "Supply amount",
-          description: "Penatibus eu quis ante.",
+          description:
+            "This is the amount of the selected tokens your sponsor gonna supply you.",
           status: "current",
         },
         {
           name: "Rewards amount",
-          description: "Faucibus nec enim leo et.",
+          description:
+            "Your sponsor receive at the end of the loan this amount of GHO.",
           status: "upcoming",
         },
       ]);
@@ -136,22 +123,26 @@ export default function CreateLoanSection() {
       setSteps([
         {
           name: "Select NFT",
-          description: "Vitae sed mi luctus laoreet.",
+          description:
+            "Pick the MVP from your NFT squad for the loan spotlight!",
           status: "complete",
         },
         {
           name: "Select Token",
-          description: "Cursus semper viverra facilisis et et some more.",
+          description:
+            "Your sponsor supply you this token and then you can have GHO!",
           status: "complete",
         },
         {
           name: "Supply amount",
-          description: "Penatibus eu quis ante.",
+          description:
+            "This is the amount of the selected tokens your sponsor gonna supply you.",
           status: "complete",
         },
         {
           name: "Rewards amount",
-          description: "Faucibus nec enim leo et.",
+          description:
+            "Your sponsor receive at the end of the loan this amount of GHO.",
           status: "current",
         },
       ]);
@@ -162,29 +153,33 @@ export default function CreateLoanSection() {
       setSteps([
         {
           name: "Select NFT",
-          description: "Vitae sed mi luctus laoreet.",
+          description:
+            "Pick the MVP from your NFT squad for the loan spotlight!",
           status: "complete",
         },
         {
           name: "Select Token",
-          description: "Cursus semper viverra facilisis et et some more.",
+          description:
+            "Your sponsor supply you this token and then you can have GHO!",
           status: "complete",
         },
         {
           name: "Supply amount",
-          description: "Penatibus eu quis ante.",
+          description:
+            "This is the amount of the selected tokens your sponsor gonna supply you.",
           status: "complete",
         },
         {
           name: "Rewards amount",
-          description: "Faucibus nec enim leo et.",
+          description:
+            "Your sponsor receive at the end of the loan this amount of GHO.",
           status: "complete",
         },
       ]);
   }, [rewards]);
 
   return (
-    <main className="py-10 navbarTextOpacity">
+    <main className="pb-10 pt-8 navbarTextOpacity">
       {!connected ? (
         <div className="h-[700px] flex justify-center items-center flex-col">
           <h1 className="font-extralight mb-10 text-3xl">
@@ -194,13 +189,13 @@ export default function CreateLoanSection() {
         </div>
       ) : (
         <>
-          <div className="w-full flex flex-col px-24 rounded-xl mainBackground py-6 mx-auto max-w-[1000px] my-10">
+          <div className="w-full flex flex-col px-24 rounded-xl mainBackground py-6 mx-auto max-w-[1000px] mb-10">
             <div className="mb-6">
               <h1 className="text-3xl navbarTitle pb-2">Fill your Slot</h1>{" "}
               <hr className="modalAnimatedLine" />
             </div>
 
-            <div className="px-10 grid grid-cols-2">
+            <div className="p-10 grid grid-cols-2">
               <Steps steps={steps} />
               <div className="flex flex-col items-end">
                 {" "}
