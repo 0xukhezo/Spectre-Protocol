@@ -4,7 +4,7 @@ import { WagmiConfig, createConfig, mainnet, sepolia } from "wagmi";
 import { ConnectKitProvider, getDefaultConfig } from "connectkit";
 import Navbar from "@/components/Layout/Navbar";
 
-const chains = [mainnet, sepolia];
+const chains = [sepolia];
 
 const config = createConfig(
   getDefaultConfig({
