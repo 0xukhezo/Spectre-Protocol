@@ -16,8 +16,8 @@ export default function useNFTData(ownerAddr: `0x${string}`) {
   useEffect(() => {
     const fetchData = async () => {
       const settings = {
-        apiKey: "demo",
-        network: Network.ETH_MAINNET,
+        apiKey: process.env.NEXT_PUBLIC_ALCHEMY_ID,
+        network: Network.ETH_SEPOLIA,
       };
 
       const alchemy = new Alchemy(settings);

@@ -22,8 +22,9 @@ export default function ProfileLoans() {
       <div className="mx-4">
         {!connected ? (
           <div className="h-[700px] flex justify-center items-center flex-col">
-            <h1 className="font-extralight mb-10 text-3xl">
-              You need to be connected to get a loan
+            <h1 className="font-extralight mb-10 text-3xl text-center">
+              You need to be connected to see <br />
+              your loans or supplies
             </h1>
             <WalletButton />
           </div>

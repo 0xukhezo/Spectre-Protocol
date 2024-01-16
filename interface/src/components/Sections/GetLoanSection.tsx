@@ -6,6 +6,10 @@ import WalletButton from "../Buttons/WalletButton";
 import SlotCard from "../Cards/SlotCard";
 import InfoSteps from "../Steps/InfoSteps";
 import { getLoanInfoSteps } from "../../../constants/constants";
+import TxButton from "../Buttons/TxButton";
+
+import { abiUserSlotFactory } from "../../../abis/abis.json";
+import { UserSlotFactoryAddress } from "../../../abis/contractAddress.json";
 
 export default function GetLoanSection() {
   const [connected, setConnected] = useState(false);
@@ -14,6 +18,10 @@ export default function GetLoanSection() {
   useEffect(() => {
     setConnected(isConnected);
   }, [isConnected]);
+
+  const getTxStatus = (status: string, name: string) => {
+    console.log(status, name);
+  };
 
   return (
     <main className="pb-10 navbarTextOpacity">
@@ -35,9 +43,15 @@ export default function GetLoanSection() {
                 </span>
                 <InfoSteps steps={getLoanInfoSteps} />
               </div>{" "}
-              <button className="bg-main text-black font-light px-4 py-2 rounded-xl max-h-[44px] hover:bg-secondary">
-                + Create a Slot
-              </button>
+              <TxButton
+                address={UserSlotFactoryAddress as `0x${string}`}
+                abi={abiUserSlotFactory}
+                functionName="createSlot"
+                args={[]}
+                getTxStatus={getTxStatus}
+                children={<span> + Create a Slot</span>}
+                className="bg-main text-black font-light px-4 py-2 rounded-xl max-h-[44px] hover:bg-secondary"
+              />
             </div>
             <div className="mt-10">
               <h1 className="text-3xl navbarTitle pb-2">Slots created</h1>{" "}
