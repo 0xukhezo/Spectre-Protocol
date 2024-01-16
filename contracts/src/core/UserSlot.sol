@@ -15,7 +15,6 @@ import {IUserSlot} from "src/interfaces/IUserSlot.sol";
 import {ICCIPConnector} from "src/interfaces/ICCIPConnector.sol";
 import {IEventEmitter} from "src/interfaces/IEventEmitter.sol";
 
-
 import {console2} from "forge-std/Test.sol";
 
 contract UserSlot is IUserSlot, Ownable, ERC721Holder {
@@ -122,7 +121,7 @@ contract UserSlot is IUserSlot, Ownable, ERC721Holder {
         IERC20(position.tokenRequest).safeTransferFrom(_msgSender(), address(this), position.amountRequest);
         position.chainSelector = 0;
         position.supplier = _msgSender();
-        position.loanDeadline = block.timestamp+position.loanDuration;
+        position.loanDeadline = block.timestamp + position.loanDuration;
         IERC20(position.tokenRequest).approve(address(pool), position.amountRequest);
         pool.supply(position.tokenRequest, position.amountRequest, address(this), 0);
 
@@ -142,7 +141,7 @@ contract UserSlot is IUserSlot, Ownable, ERC721Holder {
         IERC20(position.tokenRequest).safeTransferFrom(_msgSender(), address(this), position.amountRequest);
         position.supplier = supplier;
         position.chainSelector = chainSelector;
-        position.loanDeadline = block.timestamp+position.loanDuration;
+        position.loanDeadline = block.timestamp + position.loanDuration;
         IERC20(position.tokenRequest).approve(address(pool), position.amountRequest);
         pool.supply(position.tokenRequest, position.amountRequest, address(this), 0);
 

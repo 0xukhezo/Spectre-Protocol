@@ -4,9 +4,20 @@ pragma solidity ^0.8.20;
 import {ERC721} from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
 contract MockERC721 is ERC721 {
+
+    string public baseUri;
+
     constructor(string memory name_, string memory symbol_) ERC721(name_, symbol_) {}
 
     function mint(address to, uint256 tokenId) external {
         _mint(to, tokenId);
+    }
+
+    function setBaseUri(string memory _baseUri) public {
+        baseUri = _baseUri;
+    }
+
+    function _baseURI() internal view virtual override returns (string memory) {
+        return baseUri;
     }
 }

@@ -1,0 +1,8 @@
+{
+  "sepolia": {
+    "EventEmitter": {
+      "address": "0xb4f28403cC940878292046208Cb9476b00C5C197",
+      "startBlock": 5094944
+    }
+  }
+}

@@ -39,10 +39,10 @@ contract EventEmitter is IEventEmitter {
         uint256 amountRequest,
         address tokenToBorrow,
         uint256 rewards,
-        uint256 loanDeadline
+        uint256 loanDuration
     ) public onlySlot {
         emit NewRequestLoan(
-            msg.sender, tokenContract, tokenId, tokenRequest, amountRequest, tokenToBorrow, rewards, loanDeadline
+            msg.sender, tokenContract, tokenId, tokenRequest, amountRequest, tokenToBorrow, rewards, loanDuration
         );
     }
 
