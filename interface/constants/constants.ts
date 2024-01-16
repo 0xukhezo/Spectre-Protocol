@@ -184,3 +184,10 @@ export const initialSteps = [
     status: "upcoming",
   },
 ];
+
+export const getLoanInfoSteps = [
+  { id: "Step 1", name: "Create a slot." },
+  { id: "Step 2", name: "Fill the loan form clicking in your empty slot." },
+  { id: "Step 3", name: "Approve NFT" },
+  { id: "Step 4", name: "Create the loan" },
+];
