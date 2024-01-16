@@ -16,7 +16,7 @@ export default function Steps({ steps }: StepsProps) {
           <li
             key={step.name}
             className={classNames(
-              stepIdx !== steps.length - 1 ? "pb-10" : "",
+              stepIdx !== steps.length - 1 ? "pb-7" : "",
               "relative"
             )}
           >
@@ -24,13 +24,13 @@ export default function Steps({ steps }: StepsProps) {
               <>
                 {stepIdx !== steps.length - 1 ? (
                   <div
-                    className="absolute left-4 top-4 -ml-px mt-0.5 h-full w-0.5 bg-secondary"
+                    className="absolute left-4 top-2 -ml-px mt-0.5 h-full w-0.5 bg-secondary"
                     aria-hidden="true"
                   />
                 ) : null}
                 <div className="group relative flex items-start">
                   <span className="flex h-9 items-center">
-                    <span className="relative z-10 flex h-8 w-8 items-center justify-center rounded-full bg-secondary group-hover:bg-main">
+                    <span className="relative z-10 flex h-8 w-8 items-center justify-center rounded-full bg-secondary">
                       <CheckIcon
                         className="h-5 w-5 text-white"
                         aria-hidden="true"

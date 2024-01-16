@@ -36,7 +36,6 @@ export default function SlotCard() {
             alt={`${slot.loan.nft.name} image`}
             width={150}
             height={150}
-            id="nftCardImage"
             className={`min-h-[150px] mb-5 rounded-xl ${
               isHovered ? "float" : ""
             }`}

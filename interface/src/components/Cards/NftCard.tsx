@@ -6,9 +6,17 @@ type NftCardProps = {
   nftInfo: any;
   index: number;
   nftsCopy: any;
+  isLoan: boolean;
+  isPortfolio: boolean;
 };
 
-export default function NftCard({ nftInfo, index, nftsCopy }: NftCardProps) {
+export default function NftCard({
+  nftInfo,
+  index,
+  nftsCopy,
+  isLoan,
+  isPortfolio,
+}: NftCardProps) {
   const [openModal, setOpenModal] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
@@ -58,6 +66,8 @@ export default function NftCard({ nftInfo, index, nftsCopy }: NftCardProps) {
           getShowMenu={getShowMenu}
           nftIndex={index}
           nftsCopy={nftsCopy}
+          isLoan={isLoan}
+          isPortfolio={isPortfolio}
         />
       )}
     </button>

@@ -4,6 +4,8 @@ import { useAccount } from "wagmi";
 
 import WalletButton from "../Buttons/WalletButton";
 import SlotCard from "../Cards/SlotCard";
+import InfoSteps from "../Steps/InfoSteps";
+import { getLoanInfoSteps } from "../../../constants/constants";
 
 export default function GetLoanSection() {
   const [connected, setConnected] = useState(false);
@@ -25,18 +27,13 @@ export default function GetLoanSection() {
           </div>
         ) : (
           <div className="mx-4 py-10">
-            <div className="mainBackground p-6 rounded-xl flex justify-between text-lg">
-              <div>
-                <span>
+            <div className="mainBackground p-6 rounded-xl flex justify-between text-lg w-full">
+              <div className="w-8/12 xl:w-10/12">
+                <span className="text-2xl navbarTitle">
                   You need to create a slot in order to can have a loan in one
                   of your NFTs.
                 </span>
-                <div className="ml-4 my-4">
-                  <ul>1. Create a slot.</ul>
-                  <ul className="my-1">2. Fill the loan form.</ul>
-                  <ul>3. Approve NFT.</ul>
-                  <ul className="mt-1">4. Create a Loan</ul>{" "}
-                </div>{" "}
+                <InfoSteps steps={getLoanInfoSteps} />
               </div>{" "}
               <button className="bg-main text-black font-light px-4 py-2 rounded-xl max-h-[44px] hover:bg-secondary">
                 + Create a Slot

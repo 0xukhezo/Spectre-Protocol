@@ -4,30 +4,58 @@ import Image from "next/image";
 import Arrow from "../../../public/Arrow.svg";
 import WalletButton from "../Buttons/WalletButton";
 import { useAccount, useEnsName } from "wagmi";
-import { formatAddress } from "../../../utils/utils";
+import {
+  calculateTimeComponents,
+  formatAddress,
+  formatDate,
+} from "../../../utils/utils";
+import GHO from "../../../public/GHO.svg";
+// Wagmi
+import { useContractRead } from "wagmi";
+import { abiAAVEPool } from "../../../abis/abis.json";
+import { AAVEPoolAddress } from "../../../abis/contractAddress.json";
 
 type NftModalProps = {
   getShowMenu: (open: boolean) => void;
   nftIndex: any;
   nftsCopy: any;
+  isLoan: boolean;
+  isPortfolio: boolean;
 };
 
 export default function NftModal({
   getShowMenu,
   nftIndex,
   nftsCopy,
+  isLoan,
+  isPortfolio,
 }: NftModalProps) {
   const [open, setOpen] = useState(true);
   const [image, setImage] = useState(nftsCopy[nftIndex].image);
   const [isClosing, setIsClosing] = useState(false);
   const [currentNftIndex, setCurrentNftIndex] = useState(nftIndex);
   const [isAnimating, setIsAnimating] = useState(false);
+
+  const [openBorrowModal, setOpenBorrowModal] = useState(false);
+  const [openRepayModal, setOpenRepayModal] = useState(false);
+
   const [buttonClicked, setButtonClicked] = useState<string>("Initial");
+  const [currentTimestamp, setCurrentTimestamp] = useState(Date.now());
 
   const { isConnected } = useAccount();
   const { data: ensName } = useEnsName({
     address: nftsCopy[currentNftIndex].owner,
   });
+
+  const { data: accountInfo } = useContractRead({
+    address: AAVEPoolAddress as `0x${string}`,
+    abi: abiAAVEPool,
+    functionName: "getUserAccountData",
+    args: ["0xb3204E7bD17273790f5ffb0Bb1e591Ab0011dC55"],
+  });
+  const healthFactor = accountInfo as any;
+
+  const [approveTx, setApproveTx] = useState<boolean | undefined>(false);
 
   const handleNextNft = () => {
     setButtonClicked("next");
@@ -96,6 +124,14 @@ export default function NftModal({
     }, 400);
   }, [currentNftIndex]);
 
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setCurrentTimestamp(Date.now());
+    }, 1000);
+
+    return () => clearInterval(intervalId);
+  }, []);
+
   return (
     <Transition.Root show={open} as={Fragment}>
       <Dialog as="div" className="relative " onClose={() => console.log()}>
@@ -106,37 +142,157 @@ export default function NftModal({
           <Dialog.Panel
             className={`textModal mainBackground text-white z-50 ${
               isClosing ? "closing" : ""
-            } rounded-lg px-4 pb-4 py-10 text-left sm:p-10 overflow-auto absolute`}
+            } rounded-lg px-4 pb-4 py-10 text-left sm:p-10 overflow-auto absolute flex flex-col justify-between `}
           >
-            <h1 className="text-3xl modalAnimatedText pb-1 navbarTitle">
-              Nft Information
-            </h1>
-            <hr className="modalAnimatedLine" />
-            <ul className="mt-6">
-              <li className="text-2xl mb-3">{`${nftsCopy[currentNftIndex].name}`}</li>
-              <li className="text-lg text-xs">
-                Created by{" "}
-                <span className="text-main text-lg">{`${nftsCopy[currentNftIndex].collection}`}</span>
-              </li>
-              <li className="text-lg mb-3 text-xs">
-                Owner{" "}
-                <span className="text-main text-lg">
-                  {ensName
-                    ? ensName
-                    : `${formatAddress(nftsCopy[currentNftIndex].owner)}`}
-                </span>
-              </li>
-              <li className="mb-2 mt-3 flex">
-                <span className="bg-main rounded-full px-6">ERC 721</span>
-                <span className="bg-main rounded-full px-6 ml-8">Listed</span>
-              </li>
-            </ul>
+            <div>
+              <h1 className="text-3xl modalAnimatedText pb-1 navbarTitle">
+                Nft Information
+              </h1>
+              <hr className="modalAnimatedLine" />
+              <ul className="mt-6 modalAnimatedText">
+                <li className="text-2xl mb-3">{`${nftsCopy[currentNftIndex].name}`}</li>
+                <li className="text-lg text-xs">
+                  Created by{" "}
+                  <span className="text-main text-lg">{`${nftsCopy[currentNftIndex].collection}`}</span>
+                </li>
+                <li className="text-lg mb-3 text-xs">
+                  Owner{" "}
+                  <span className="text-main text-lg">
+                    {ensName
+                      ? ensName
+                      : `${formatAddress(nftsCopy[currentNftIndex].owner)}`}
+                  </span>
+                </li>
+                <li className="mb-2 mt-3 flex text-black font-light">
+                  <span className="bg-main rounded-full px-6">ERC 721</span>
+                  <span className="bg-main rounded-full px-6 ml-8">Listed</span>
+                </li>
+              </ul>
+              {!isPortfolio && (
+                <>
+                  {!isLoan && (
+                    <>
+                      <h1 className="text-3xl modalAnimatedText pb-1 navbarTitle mt-10">
+                        Desired terms
+                      </h1>
+                      <hr className="modalAnimatedLine" />
+                      <ul className="mt-6 modalAnimatedText">
+                        <li className="text-lg text-xs flex items-center">
+                          Token supply
+                          <span className="text-main text-lg mx-2">{`100`}</span>{" "}
+                          <Image
+                            src={GHO.src}
+                            alt={`Token image`}
+                            width={24}
+                            height={24}
+                            className="rounded-lg h-[24px] min-w-[24px]"
+                          />
+                        </li>
+                        <li className="text-lg text-xs flex items-center">
+                          Rewards
+                          <span className="text-main text-lg mx-2">{`100`}</span>{" "}
+                          <Image
+                            src={GHO.src}
+                            alt={`Token image`}
+                            width={24}
+                            height={24}
+                            className="rounded-lg h-[24px] min-w-[24px]"
+                          />
+                        </li>
+                      </ul>
+                    </>
+                  )}
+                  <h1 className="text-3xl modalAnimatedText pb-1 navbarTitle mt-10">
+                    Loan Duration
+                  </h1>
+                  <hr className="modalAnimatedLine" />
+                  <ul className="mt-6 modalAnimatedText">
+                    <li className="text-lg text-xs flex items-center">
+                      Duration
+                      <span className="text-main text-lg mx-2">{`${calculateTimeComponents(
+                        1706408412 - currentTimestamp / 1000
+                      )}`}</span>{" "}
+                    </li>
+                    <li className="text-lg text-xs flex items-center">
+                      Finish
+                      <span className="text-main text-lg mx-2">{`${formatDate(
+                        1706408412 * 1000
+                      )}`}</span>{" "}
+                    </li>
+                  </ul>
+                  <div className="modalAnimatedText">
+                    {" "}
+                    {!isConnected ? (
+                      <div className="w-min mx-auto mt-10">
+                        <WalletButton />
+                      </div>
+                    ) : isLoan ? (
+                      <div>
+                        <h1 className="text-3xl modalAnimatedText pb-1 navbarTitle mt-10">
+                          Loan Health
+                        </h1>
+                        <hr className="modalAnimatedLine" />
+                        <ul className="mt-6 modalAnimatedText">
+                          <li className="text-lg text-xs flex items-center">
+                            Health Factor
+                            <span className="text-main text-lg mx-2">
+                              {" "}
+                              {healthFactor !== undefined &&
+                              Number(healthFactor[5]) / 10 ** 18 > 20
+                                ? "∞"
+                                : `${(healthFactor[5] / 10 ** 18).toFixed(2)}`}
+                            </span>{" "}
+                          </li>
+                        </ul>
+                        <div className="grid grid-cols-2 mt-10">
+                          <button
+                            className="bg-main text-black font-light px-[34px] py-2 rounded-xl hover:bg-secondary flex mx-auto"
+                            onClick={() => setOpenBorrowModal(true)}
+                          >
+                            Borrow GHO
+                          </button>
+                          {openBorrowModal && <div>Pepe</div>}
+                          <button
+                            className="bg-main text-black font-light px-[34px] py-2 rounded-xl hover:bg-secondary flex mx-auto"
+                            onClick={() => setOpenRepayModal(true)}
+                          >
+                            Repay GHO
+                          </button>{" "}
+                          {openRepayModal && <div>Pepe</div>}
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="mt-10">
+                        {!approveTx && (
+                          <button className="bg-main text-black font-light px-[50px] py-2 rounded-xl hover:bg-secondary flex mx-auto mb-4">
+                            Approve
+                          </button>
+                        )}
 
-            {!isConnected && (
-              <div className="w-min mx-auto">
-                <WalletButton />
-              </div>
-            )}
+                        {approveTx ? (
+                          <button className="bg-main text-black font-light px-[34px] py-2 rounded-xl hover:bg-secondary flex mx-auto">
+                            Create Loan
+                          </button>
+                        ) : (
+                          <button
+                            className="flex flex-col rounded-xl border-main border-1 px-[34px] py-2 mx-auto opacity-50"
+                            disabled
+                          >
+                            Create Loan
+                          </button>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </>
+              )}
+            </div>
+
+            <div className="text-gray-400 font-extralight text-xs mt-4">
+              The above price data is for informational purposes only and should
+              not be used for any investment decisions. Please do your own
+              research regarding NFT valuations.
+            </div>
           </Dialog.Panel>
           <Dialog.Panel
             id="imageContainer"

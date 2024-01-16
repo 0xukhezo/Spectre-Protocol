@@ -158,3 +158,41 @@ export const tokens = [
     contract: "0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9",
   },
 ];
+
+export const initialSteps = [
+  {
+    name: "Select NFT",
+    description: "Pick the MVP from your NFT squad for the loan spotlight!",
+    status: "current",
+  },
+  {
+    name: "Select Token",
+    description:
+      "Your sponsor supply you this token and then you can have GHO!",
+    status: "upcoming",
+  },
+  {
+    name: "Supply amount",
+    description:
+      "This is the amount of the selected tokens your sponsor gonna supply you.",
+    status: "upcoming",
+  },
+  {
+    name: "Rewards amount",
+    description:
+      "Your sponsor receive at the end of the loan this amount of GHO.",
+    status: "upcoming",
+  },
+  {
+    name: "Loan Duration",
+    description: "Final Step! The time the loan will be active.",
+    status: "upcoming",
+  },
+];
+
+export const getLoanInfoSteps = [
+  { id: "Step 1", name: "Create a slot." },
+  { id: "Step 2", name: "Fill the loan form clicking in your empty slot." },
+  { id: "Step 3", name: "Approve NFT" },
+  { id: "Step 4", name: "Create the loan" },
+];
