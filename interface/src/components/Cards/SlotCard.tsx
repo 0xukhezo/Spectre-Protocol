@@ -4,7 +4,11 @@ import Specter from "../../../public/Specter.svg";
 import Link from "next/link";
 import SadSpectre from "../../../public/SadSpectre.svg";
 
-export default function SlotCard() {
+type SlotCardProps = {
+  slot: any;
+};
+
+export default function SlotCard({ slot }: SlotCardProps) {
   const [isHovered, setIsHovered] = useState(false);
 
   const handleHover = () => {
@@ -14,12 +18,7 @@ export default function SlotCard() {
   const handleUnhover = () => {
     setIsHovered(false);
   };
-  const slot = {
-    loan: {
-      activeLoan: false,
-      nft: { name: "Pepe", image: Specter.src, collection: { name: "epepe" } },
-    },
-  };
+
   return (
     <button
       className="shadow2 flex items-center rounded-xl border-2 border-main hover:border-gray-100 xl:min-h-[300px] min-h-[350px]"
@@ -29,7 +28,7 @@ export default function SlotCard() {
       onMouseEnter={handleHover}
       onMouseLeave={handleUnhover}
     >
-      {slot.loan.activeLoan ? (
+      {slot.loan ? (
         <div className="w-full h-full flex flex-col items-center rounded-xl pt-10">
           <Image
             src={slot.loan.nft.image}
@@ -53,7 +52,7 @@ export default function SlotCard() {
       ) : (
         <Link
           className="w-full h-full flex flex-col justify-center items-center rounded-xl text-3xl"
-          href="/loan/create"
+          href={`/slot/${slot.id}`}
         >
           <h1>Nft missing...</h1>{" "}
           <Image

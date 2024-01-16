@@ -15,6 +15,7 @@ type TxButtonProps = {
   children: ReactElement;
   getTxStatus: (status: string, name: string) => void;
   className: string;
+  id: string;
 };
 
 export default function TxButton({
@@ -25,6 +26,7 @@ export default function TxButton({
   getTxStatus,
   children,
   className,
+  id,
 }: TxButtonProps) {
   const { config: txContractConfig } = usePrepareContractWrite({
     address: address,
@@ -41,7 +43,7 @@ export default function TxButton({
     isLoading: txLoadingWagmi,
     isError: txErrorWagmi,
   } = useWaitForTransaction({
-    confirmations: 5,
+    confirmations: 2,
     hash: dataTx?.hash,
   });
 
@@ -55,11 +57,11 @@ export default function TxButton({
 
   useEffect(() => {
     if (txLoadingWagmi) {
-      getTxStatus("loading", functionName);
+      getTxStatus("loading", id);
     } else if (txErrorWagmi) {
-      getTxStatus("error", functionName);
+      getTxStatus("error", id);
     } else if (txSuccessWagmi) {
-      getTxStatus("success", functionName);
+      getTxStatus("success", id);
     }
   }, [txSuccessWagmi, txLoadingWagmi, txErrorWagmi]);
 

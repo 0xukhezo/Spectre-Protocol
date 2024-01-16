@@ -1,18 +1,29 @@
 import useNFTData from "@/hooks/useNFTData";
-import React, { useEffect, useState } from "react";
-import { useAccount } from "wagmi";
+import React, { ReactElement, useEffect, useState } from "react";
+import { erc20ABI, erc721ABI, useAccount } from "wagmi";
 import SelectNftModal from "../Modals/SelectNftModal";
 import Image from "next/image";
 import SelectTokenModal from "../Modals/SelectTokenModal";
-import { initialSteps, tokens } from "../../../constants/constants";
+import { initialSteps, tokens, ghoToken } from "../../../constants/constants";
 import GHO from "../../../public/GHO.svg";
+import Error from "../../../public/Error.svg";
+import Success from "../../../public/Success.svg";
 import WalletButton from "../Buttons/WalletButton";
 import Steps from "../Steps/Steps";
-import { calculateTimeComponents, formatDate } from "../../../utils/utils";
+import { formatDate } from "../../../utils/utils";
+import { useRouter } from "next/router";
+import TxButton from "../Buttons/TxButton";
+import { abiUserSlot } from "../../../abis/abis.json";
+import Loader from "../Loader/Loader";
+import NotificationsCard from "../Cards/NotificationsCard";
 
 export default function CreateLoanSection() {
   const { address, isConnected } = useAccount();
   const { nftData: data } = useNFTData(address as `0x${string}`);
+
+  const router = useRouter();
+
+  const slotAddress = router.query.id;
 
   const [connected, setConnected] = useState(false);
   const [steps, setSteps] = useState(initialSteps);
@@ -20,13 +31,8 @@ export default function CreateLoanSection() {
   const [openNFTModal, setOpenNFTModal] = useState(false);
   const [openTokenModal, setOpenTokenModal] = useState(false);
 
-  const [nftTitle, setNftTitle] = useState<string | null>(null);
-  const [nftContract, setNftContract] = useState<string | null>(null);
-  const [nftImage, setNftImage] = useState<string | null>(null);
-
-  const [tokenSymbol, setTokenSymbol] = useState<string | null>(null);
-  const [tokenContract, setTokenContract] = useState<string | null>(null);
-  const [tokenImage, setTokenImage] = useState<string | null>(null);
+  const [nft, setNft] = useState<any | null>(null);
+  const [token, setToken] = useState<any | null>(null);
 
   const [amountSupply, setAmountSupply] = useState<number | undefined>(
     undefined
@@ -38,7 +44,11 @@ export default function CreateLoanSection() {
   const [loanDurationToContrat, setLoanDurationToContrat] = useState<
     number | undefined
   >(undefined);
-  const [approveTx, setApproveTx] = useState<boolean | undefined>(false);
+  const [status, setStatus] = useState<string[]>([]);
+
+  const [title, setTitle] = useState<string | null>(null);
+  const [image, setImage] = useState<string | ReactElement | null>(null);
+  const [txDescription, setTxDescription] = useState<string | null>(null);
 
   const getShowMenuNft = (state: boolean) => {
     setOpenNFTModal(state);
@@ -51,7 +61,7 @@ export default function CreateLoanSection() {
   const handleLoanDuration = (duration: number) => {
     if (duration >= 0) {
       setLoanDuration(duration);
-      setLoanDurationToContrat(duration * 3600 * 1000 * 24 + Date.now());
+      setLoanDurationToContrat(duration * 3600 * 1000 * 24);
     } else {
       setLoanDuration(0);
       setLoanDurationToContrat(0);
@@ -59,23 +69,65 @@ export default function CreateLoanSection() {
   };
 
   const getNft = (nft: any) => {
-    setNftContract(nft.contractAddress);
-    setNftImage(nft.image);
-    setNftTitle(nft.name);
+    setNft(nft);
   };
 
   const getToken = (token: any) => {
-    setTokenContract(token.contract);
-    setTokenImage(token.image);
-    setTokenSymbol(token.symbol);
+    setToken(token);
   };
+
+  const getStatus = (status: string, statusFuction: string) => {
+    setStatus([status, statusFuction]);
+  };
+
+  useEffect(() => {
+    if (status[0] === "loading") {
+      setTitle("Processing");
+      setTxDescription("The transaction is being processed.");
+      setImage(Loader);
+    } else if (status[0] === "error") {
+      setTitle("Error");
+      setTxDescription("Failed transaction.");
+      setImage(Error.src);
+    } else if (status[0] === "success") {
+      setTitle("Success");
+      setTxDescription("The transaction was executed correctly");
+      setImage(Success.src);
+    }
+    if (status[0] === "success" && status[1] === "approveNft") {
+      setTimeout(() => {
+        setTitle(null);
+        setTxDescription(null);
+        setImage(null);
+      }, 2000);
+    }
+    if (status[0] === "success" && status[1] === "approveGho") {
+      setTimeout(() => {
+        setTitle(null);
+        setTxDescription(null);
+        setImage(null);
+      }, 2000);
+    }
+    if (status[0] === "success" && status[1] === "openRequest") {
+      setLoanDuration(undefined);
+      setRewards(undefined);
+      setAmountSupply(undefined);
+      setToken(null);
+      setNft(null);
+      setTimeout(() => {
+        setTitle(null);
+        setTxDescription(null);
+        setImage(null);
+      }, 2000);
+    }
+  }, [status]);
 
   useEffect(() => {
     setConnected(isConnected);
   }, [isConnected]);
 
   useEffect(() => {
-    if (nftContract && tokenContract === null)
+    if (nft && token === null)
       setSteps([
         {
           name: "Select NFT",
@@ -107,10 +159,10 @@ export default function CreateLoanSection() {
           status: "upcoming",
         },
       ]);
-  }, [nftContract]);
+  }, [nft]);
 
   useEffect(() => {
-    if (tokenContract && amountSupply === undefined)
+    if (token && amountSupply === undefined)
       setSteps([
         {
           name: "Select NFT",
@@ -142,7 +194,7 @@ export default function CreateLoanSection() {
           status: "upcoming",
         },
       ]);
-  }, [tokenContract]);
+  }, [token]);
 
   useEffect(() => {
     if (rewards === undefined && amountSupply !== undefined)
@@ -249,10 +301,8 @@ export default function CreateLoanSection() {
       ]);
   }, [loanDuration]);
 
-  console.log(loanDurationToContrat);
-
   return (
-    <main className="pb-10 pt-8 navbarTextOpacity">
+    <main className="pb-10 pt-8 navbarTextOpacity h-[1000px]">
       {!connected ? (
         <div className="h-[700px] flex justify-center items-center flex-col">
           <h1 className="font-extralight mb-10 text-3xl">
@@ -278,13 +328,13 @@ export default function CreateLoanSection() {
                   }}
                   className="bg-main text-black font-light px-4 py-2 rounded-xl hover:bg-secondary w-[300px] mb-4 h-[54px]"
                 >
-                  {nftContract ? (
+                  {nft && nft.contractAddress ? (
                     <div className="flex items-center justify-between">
-                      <span>{nftTitle}</span>
-                      {nftImage && (
+                      <span>{nft.name}</span>
+                      {nft.image && (
                         <Image
-                          src={nftImage}
-                          alt={`${nftTitle} image`}
+                          src={nft.image}
+                          alt={`${nft.name} image`}
                           width={40}
                           height={40}
                           className="rounded-lg h-[40px] min-w-[40px]"
@@ -299,18 +349,18 @@ export default function CreateLoanSection() {
                   onClick={() => {
                     setOpenTokenModal(true);
                   }}
-                  disabled={nftContract === null}
+                  disabled={nft === null}
                   className={`bg-main text-black font-light px-4 py-2 rounded-xl hover:bg-secondary my-4 w-[300px] items-center flex justify-between h-[54px] ${
-                    nftContract === null && "opacity-50"
+                    nft === null && "opacity-50"
                   }`}
                 >
-                  {tokenContract ? (
+                  {token ? (
                     <>
-                      <span>{tokenSymbol}</span>
-                      {tokenImage && (
+                      <span>{token.symbol}</span>
+                      {token.image && (
                         <Image
-                          src={tokenImage}
-                          alt={`${tokenSymbol} image`}
+                          src={token.image}
+                          alt={`${token.symbol} image`}
                           width={40}
                           height={40}
                           className="rounded-lg h-[40px] min-w-[40px] ml-[24px]"
@@ -323,13 +373,14 @@ export default function CreateLoanSection() {
                 </button>
                 <div
                   className={`rounded-xl text-black bg-main font-light h-[54px] flex items-center my-4 px-4 w-[300px] ${
-                    tokenContract === null && "opacity-50"
+                    token === null && "opacity-50"
                   }`}
                 >
                   <input
                     type="number"
                     value={amountSupply}
                     min={0}
+                    step={1 / 10 ** 18}
                     onChange={(e) => {
                       if (Number(e.target.value) >= 0) {
                         setAmountSupply(Number(e.target.value));
@@ -339,12 +390,12 @@ export default function CreateLoanSection() {
                     }}
                     onWheel={(e) => (e.target as HTMLInputElement).blur()}
                     className="bg-main pr-8 py-1 text-black bg-main font-light h-[46px] ring-0 focus:ring-0 outline-0"
-                    disabled={tokenContract === null}
+                    disabled={token === null}
                   />{" "}
-                  {tokenImage && (
+                  {token && (
                     <Image
-                      src={tokenImage}
-                      alt={`${tokenSymbol} image`}
+                      src={token.image}
+                      alt={`${token.symbol} image`}
                       width={40}
                       height={40}
                       className="rounded-lg h-[40px] min-w-[40px] ml-[24px] ml-3"
@@ -360,6 +411,7 @@ export default function CreateLoanSection() {
                     type="number"
                     value={rewards}
                     min={0}
+                    step={1 / 10 ** 18}
                     onChange={(e) => {
                       if (Number(e.target.value) >= 0) {
                         setRewards(Number(e.target.value));
@@ -401,7 +453,9 @@ export default function CreateLoanSection() {
                 {loanDurationToContrat && loanDurationToContrat !== 0 && (
                   <div className=" flex justify-between w-3/4 items-center font-light text-xs">
                     <span>The loan finish:</span>
-                    <span>{formatDate(loanDurationToContrat)}</span>
+                    <span>
+                      {formatDate(loanDurationToContrat + Date.now())}
+                    </span>
                   </div>
                 )}
               </div>
@@ -425,33 +479,105 @@ export default function CreateLoanSection() {
             )}
           </div>
 
-          {nftContract &&
-          tokenContract &&
+          {(status.length === 0 ||
+            (status[0] === "loading" && status[1] === "approveNft")) &&
+          nft &&
+          token &&
           amountSupply &&
           rewards &&
           loanDuration ? (
-            <button className="bg-main text-black font-light px-24 py-4 rounded-xl hover:bg-secondary flex mx-auto mb-4">
-              Approve {nftTitle}
-            </button>
+            <TxButton
+              address={nft.contractAddress as `0x${string}`}
+              abi={erc721ABI}
+              functionName="approve"
+              args={[slotAddress, nft.tokenId]}
+              getTxStatus={getStatus}
+              children={<span> Approve {nft.name}</span>}
+              className="bg-main text-black font-light px-24 py-4 rounded-xl hover:bg-secondary flex mx-auto mb-4 min-w-[200px]"
+              id="approveNft"
+            />
           ) : (
             <button
-              className="flex flex-col px-24 rounded-xl mainBackground py-4 mx-auto mb-4 opacity-50"
+              className={`flex flex-col px-24 rounded-xl mainBackground py-4 mx-auto mb-4 opacity-50 min-w-[200px] ${
+                ((status[1] === "approveNft" && status[0] !== "loading") ||
+                  status[1] === "approveGho" ||
+                  (status[1] === "openRequest" && status[0] === "loading")) &&
+                "hidden"
+              }`}
               disabled
             >
               Approve NFT
             </button>
           )}
-          {approveTx ? (
-            <button className="bg-main text-black font-light px-24 py-4 rounded-xl hover:bg-secondary flex mx-auto">
-              Create Loan
-            </button>
+          {((status[1] === "approveNft" && status[0] !== "loading") ||
+            (status[1] === "approveGho" && status[0] === "loading")) &&
+          nft &&
+          token &&
+          amountSupply &&
+          rewards &&
+          loanDuration ? (
+            <TxButton
+              address={ghoToken.contract as `0x${string}`}
+              abi={erc20ABI}
+              functionName="approve"
+              args={[slotAddress, rewards * 10 ** ghoToken.decimals]}
+              getTxStatus={getStatus}
+              children={<span> Approve GHO</span>}
+              className="bg-main text-black font-light px-24 py-4 rounded-xl hover:bg-secondary flex mx-auto mb-4 min-w-[200px]"
+              id="approveGho"
+            />
           ) : (
             <button
-              className="flex flex-col px-24 rounded-xl mainBackground py-4 mx-auto opacity-50"
+              className={`flex flex-col px-24 rounded-xl mainBackground py-4 mx-auto mb-4 opacity-50 min-w-[200px] ${
+                ((status[1] === "approveGho" && status[0] !== "loading") ||
+                  (status[1] === "openRequest" && status[0] === "loading")) &&
+                "hidden"
+              }`}
+              disabled
+            >
+              Approve GHO
+            </button>
+          )}
+
+          {((status[1] === "approveGho" && status[0] !== "loading") ||
+            (status[1] === "openRequest" && status[0] === "loading")) &&
+          token &&
+          nft &&
+          amountSupply &&
+          rewards ? (
+            <TxButton
+              address={slotAddress as `0x${string}`}
+              abi={abiUserSlot}
+              functionName="openRequest"
+              args={[
+                nft.contractAddress,
+                nft.tokenId,
+                token.contract,
+                amountSupply * 10 ** token.decimals,
+                ghoToken.contract,
+                rewards * 10 ** ghoToken.decimals,
+                loanDurationToContrat,
+              ]}
+              getTxStatus={getStatus}
+              children={<span>Create Loan</span>}
+              className="bg-main text-black font-light px-24 py-4 rounded-xl hover:bg-secondary flex mx-auto min-w-[200px]"
+              id="openRequest"
+            />
+          ) : (
+            <button
+              className="flex flex-col px-24 rounded-xl mainBackground py-4 mx-auto opacity-50 min-w-[200px]"
               disabled
             >
               Create Loan
             </button>
+          )}
+
+          {title && image && txDescription && (
+            <NotificationsCard
+              title={title}
+              image={image}
+              txDescription={txDescription}
+            />
           )}
         </>
       )}

@@ -9,6 +9,7 @@ export default function useNFTData(ownerAddr: `0x${string}`) {
         name: string | undefined;
         image: string | undefined;
         collection: string | undefined;
+        tokenId: string;
       }[]
   >(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -31,6 +32,7 @@ export default function useNFTData(ownerAddr: `0x${string}`) {
           image: nft?.image?.pngUrl || nft.image.originalUrl,
           collection: nft?.collection?.name,
           owner: ownerAddr,
+          tokenId: nft.tokenId,
         }));
 
         setNFTData(formattedNFTData);

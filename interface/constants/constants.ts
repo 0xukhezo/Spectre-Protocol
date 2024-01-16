@@ -4,6 +4,7 @@ import { navigatioHeaderType } from "../types/types";
 import AAVE from "../public/AAVE.svg";
 import USDC from "../public/USDC.svg";
 import ETH from "../public/ETH.svg";
+import GHO from "../public/GHO.svg";
 
 export const navigation = [
   {
@@ -143,19 +144,22 @@ export const tokens = [
     image: ETH.src,
     name: "Wrapped Ether",
     symbol: "WETH",
-    contract: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+    contract: "0xC558DBdd856501FCd9aaF1E62eae57A9F0629a3c",
+    decimals: 18,
   },
   {
     image: USDC.src,
     name: "USDC",
     symbol: "USDC",
-    contract: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+    contract: "0x94a9D9AC8a22534E3FaCa9F4e7F2E2cf85d5E4C8",
+    decimals: 6,
   },
   {
     image: AAVE.src,
     name: "Aave Token",
     symbol: "AAVE",
-    contract: "0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9",
+    contract: "0x88541670E55cC00bEEFD87eB59EDd1b7C511AC9a",
+    decimals: 18,
   },
 ];
 
@@ -185,7 +189,7 @@ export const initialSteps = [
   },
   {
     name: "Loan Duration",
-    description: "Final Step! The time the loan will be active.",
+    description: "Final Step! The time in days the loan will be active.",
     status: "upcoming",
   },
 ];
@@ -196,3 +200,11 @@ export const getLoanInfoSteps = [
   { id: "Step 3", name: "Approve NFT" },
   { id: "Step 4", name: "Create the loan" },
 ];
+
+export const ghoToken = {
+  image: GHO.src,
+  name: "Gho Token",
+  symbol: "GHO",
+  contract: "0xc4bF5CbDaBE595361438F8c6a187bDc330539c60",
+  decimals: 18,
+};
