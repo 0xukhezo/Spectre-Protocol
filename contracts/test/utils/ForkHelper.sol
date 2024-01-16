@@ -6,7 +6,7 @@ import {Vm} from "forge-std/Vm.sol";
 contract ForkHelper {
     function fork(Vm vm) public {
         string memory rpcUrl = vm.envString("ETH_NODE_URI_MAINNET");
-        uint256 blockNumber = 18976993;
+        uint256 blockNumber = 5090766;
 
         vm.createSelectFork(rpcUrl, blockNumber);
     }

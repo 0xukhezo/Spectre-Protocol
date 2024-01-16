@@ -15,6 +15,9 @@ import {IUserSlot} from "src/interfaces/IUserSlot.sol";
 import {ICCIPConnector} from "src/interfaces/ICCIPConnector.sol";
 import {IEventEmitter} from "src/interfaces/IEventEmitter.sol";
 
+
+import {console2} from "forge-std/Test.sol";
+
 contract UserSlot is IUserSlot, Ownable, ERC721Holder {
     using SafeERC20 for IERC20;
 
@@ -22,7 +25,7 @@ contract UserSlot is IUserSlot, Ownable, ERC721Holder {
     IPoolDataProvider immutable protocolDataProvider;
     ICCIPConnector immutable connector;
     IEventEmitter immutable eventEmitter;
-    
+    IERC20 immutable ghoToken;
 
     Position public position;
 
@@ -54,13 +57,19 @@ contract UserSlot is IUserSlot, Ownable, ERC721Holder {
         _;
     }
 
-    constructor(address _pool, address _aaveDataProvider, address _connector, address _eventEmitter, address _owner)
-        Ownable(_owner)
-    {
+    constructor(
+        address _pool,
+        address _aaveDataProvider,
+        address _connector,
+        address _eventEmitter,
+        address _ghoToken,
+        address _owner
+    ) Ownable(_owner) {
         pool = IPool(_pool);
         protocolDataProvider = IPoolDataProvider(_aaveDataProvider);
         connector = ICCIPConnector(_connector);
         eventEmitter = IEventEmitter(_eventEmitter);
+        ghoToken = IERC20(_ghoToken);
     }
 
     function openRequest(
@@ -71,19 +80,17 @@ contract UserSlot is IUserSlot, Ownable, ERC721Holder {
         address tokenToBorrow,
         uint256 rewards,
         uint256 loanDuration
-    ) external payable onlyOwner {
+    ) external onlyOwner {
         if (_isLoanActive()) {
             revert LoanActive();
         }
 
-        //If have a supplier, it is not the first time have opened a loan and may have debt
-        if (_hasSupplier() && _hasPendingDebt()) {
+        // may have debt
+        if (_hasPendingDebt()) {
             revert PendingDebtExists();
         }
 
-        if (msg.value < position.rewards) {
-            revert InsufficientRewards(msg.value);
-        }
+        ghoToken.safeTransferFrom(_msgSender(), address(this), rewards);
 
         require(tokenContract != address(0), "Token contract could not be zero");
         require(tokenRequest != address(0), "Token request could not be zero");
@@ -95,25 +102,27 @@ contract UserSlot is IUserSlot, Ownable, ERC721Holder {
             tokenRequest,
             amountRequest,
             tokenToBorrow,
-            loanDeadline,
+            loanDuration,
+            type(uint256).max,
             address(0),
             rewards,
-            0,
-            true
+            0
         );
 
         eventEmitter.emitNewRequestLoan(
-            tokenContract, tokenId, tokenRequest, amountRequest, tokenToBorrow, rewards, loanDeadline
+            tokenContract, tokenId, tokenRequest, amountRequest, tokenToBorrow, rewards, loanDuration
         );
     }
 
-    function supplyRequest() external loanActive {
-        if (_hasSupplier()) {
+    function supplyRequest() external {
+        if (_isLoanActive()) {
             revert LoanAlreadySupplied();
         }
 
         IERC20(position.tokenRequest).safeTransferFrom(_msgSender(), address(this), position.amountRequest);
+        position.chainSelector = 0;
         position.supplier = _msgSender();
+        position.loanDeadline = block.timestamp+position.loanDuration;
         IERC20(position.tokenRequest).approve(address(pool), position.amountRequest);
         pool.supply(position.tokenRequest, position.amountRequest, address(this), 0);
 
@@ -125,14 +134,15 @@ contract UserSlot is IUserSlot, Ownable, ERC721Holder {
         eventEmitter.emitSuppliedLoan(_msgSender(), 0);
     }
 
-    function supplyRequest(address supplier, uint64 chainSelector) external loanActive onlyConnector {
-        if (_hasSupplier()) {
+    function supplyRequest(address supplier, uint64 chainSelector) external onlyConnector {
+        if (!_isLoanActive()) {
             revert LoanAlreadySupplied();
         }
 
         IERC20(position.tokenRequest).safeTransferFrom(_msgSender(), address(this), position.amountRequest);
         position.supplier = supplier;
         position.chainSelector = chainSelector;
+        position.loanDeadline = block.timestamp+position.loanDuration;
         IERC20(position.tokenRequest).approve(address(pool), position.amountRequest);
         pool.supply(position.tokenRequest, position.amountRequest, address(this), 0);
 
@@ -150,10 +160,12 @@ contract UserSlot is IUserSlot, Ownable, ERC721Holder {
         }
 
         pool.withdraw(token, amount, owner());
+        IERC20(token).safeTransfer(owner(), amount);
     }
 
     function _isLoanActive() internal view returns (bool) {
-        return position.activeLoan;
+        //return position.activeLoan;
+        return position.supplier != address(0);
     }
 
     function _hasSupplier() internal view returns (bool) {
@@ -161,9 +173,12 @@ contract UserSlot is IUserSlot, Ownable, ERC721Holder {
     }
 
     function _hasPendingDebt() internal view returns (bool) {
-        (, uint256 stableDebtTokenBalance, uint256 variableDebtTokenBalance,,,,,,) =
-            protocolDataProvider.getUserReserveData(position.tokenToBorrow, address(this));
-        return stableDebtTokenBalance != 0 || variableDebtTokenBalance != 0;
+        if (position.tokenToBorrow != address(0)) {
+            (, uint256 stableDebtTokenBalance, uint256 variableDebtTokenBalance,,,,,,) =
+                protocolDataProvider.getUserReserveData(position.tokenToBorrow, address(this));
+            return stableDebtTokenBalance != 0 || variableDebtTokenBalance != 0;
+        }
+        return false;
     }
 
     function completeLoanSupplier() external onlySupplier loanActive {
@@ -185,7 +200,7 @@ contract UserSlot is IUserSlot, Ownable, ERC721Holder {
         (, uint256 stableDebtTokenBalance, uint256 variableDebtTokenBalance,,,,,,) =
             protocolDataProvider.getUserReserveData(position.tokenToBorrow, address(this));
 
-        if (aTokenBalance > position.amountRequest && stableDebtTokenBalance == 0 && variableDebtTokenBalance == 0) {
+        if (aTokenBalance >= position.amountRequest && stableDebtTokenBalance == 0 && variableDebtTokenBalance == 0) {
             pool.withdraw(position.tokenRequest, type(uint256).max, address(this));
             _finalizeSuccessfulLoanTransfer(aTokenBalance);
         } else {
@@ -219,12 +234,12 @@ contract UserSlot is IUserSlot, Ownable, ERC721Holder {
         _finalizeSuccessfulLoanTransfer(aTokenBalance);
     }
 
+    //TODO nonreentrancy?
     function _finalizeSuccessfulLoanTransfer(uint256 aTokenAmount) internal {
-        position.activeLoan = false;
         IERC721(position.tokenContract).safeTransferFrom(address(this), owner(), position.tokenId);
 
         if (position.chainSelector == 0) {
-            IERC20(position.tokenRequest).safeTransferFrom(address(this), position.supplier, aTokenAmount);
+            IERC20(position.tokenRequest).safeTransfer(position.supplier, aTokenAmount);
         } else {
             IERC20(position.tokenRequest).approve(address(connector), aTokenAmount);
             connector.sendMessage(
@@ -235,16 +250,17 @@ contract UserSlot is IUserSlot, Ownable, ERC721Holder {
                 aTokenAmount
             );
         }
-        _transferRewardsOfLoan();
+        _transferRewardsToSupplier();
+        position.supplier = address(0);
         eventEmitter.emitCompleteLoan(true, aTokenAmount);
     }
 
+    //TODO no reentrancy?
     function _finalizeFailedLoanTransfer() internal {
-        position.activeLoan = false;
         uint256 currentBalance = IERC20(position.tokenRequest).balanceOf(address(this));
         if (currentBalance != 0) {
             if (position.chainSelector == 0) {
-                IERC20(position.tokenRequest).safeTransferFrom(address(this), position.supplier, currentBalance);
+                IERC20(position.tokenRequest).safeTransfer(position.supplier, currentBalance);
             } else {
                 IERC20(position.tokenRequest).approve(address(connector), currentBalance);
                 connector.sendMessage(
@@ -257,12 +273,12 @@ contract UserSlot is IUserSlot, Ownable, ERC721Holder {
             }
         }
         IERC721(position.tokenContract).safeTransferFrom(address(this), position.supplier, position.tokenId);
-        _transferRewardsOfLoan();
+        _transferRewardsToSupplier();
+        position.supplier = address(0);
         eventEmitter.emitCompleteLoan(false, 0);
     }
 
-    function _transferRewardsOfLoan() internal {
-        (bool success,) = payable(position.supplier).call{value: position.rewards}("");
-        require(success, "Transfer rewards failed.");
+    function _transferRewardsToSupplier() internal {
+        ghoToken.safeTransfer(position.supplier, position.rewards);
     }
 }

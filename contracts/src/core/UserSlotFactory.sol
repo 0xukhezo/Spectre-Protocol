@@ -11,16 +11,20 @@ contract UserSlotFactory is Ownable, IUserSlotFactory {
     EventEmitter public immutable eventEmitter;
     address public immutable aavePool;
     address public immutable aaveDataProvider;
+    address public immutable ghoToken;
     address public immutable connector;
 
     mapping(address => bool) public slots;
 
-    constructor(address _aavePool, address _aaveDataProvider, address _connector) Ownable(_msgSender()) {
+    constructor(address _aavePool, address _aaveDataProvider, address _connector, address _ghoToken) Ownable(_msgSender()) {
         if (_aavePool == address(0)) {
             revert InvalidAddressForConstructorArgument("aavePool");
         }
         if (_aaveDataProvider == address(0)) {
             revert InvalidAddressForConstructorArgument("aaveDataProvider");
+        }
+        if (_ghoToken == address(0)) {
+            revert InvalidAddressForConstructorArgument("ghoToken");
         }
         if (_connector == address(0)) {
             revert InvalidAddressForConstructorArgument("connector");
@@ -29,10 +33,17 @@ contract UserSlotFactory is Ownable, IUserSlotFactory {
         eventEmitter = new EventEmitter(address(this));
         aavePool = _aavePool;
         aaveDataProvider = _aaveDataProvider;
+        ghoToken = _ghoToken;
         connector = _connector;
     }
 
-    function createSlot() public {}
+    function createSlot() public {
+        UserSlot userSlot = new UserSlot(aavePool, aaveDataProvider, connector, address(eventEmitter), ghoToken, _msgSender());
+        slots[address(userSlot)] = true;
+        eventEmitter.emitUserSlotCreated(_msgSender(), address(userSlot));
+    }
 
-    function slotExists(address _slotAddress) public view returns (bool) {}
+    function slotExists(address _slotAddress) public view returns (bool) {
+        return slots[_slotAddress];
+    }
 }

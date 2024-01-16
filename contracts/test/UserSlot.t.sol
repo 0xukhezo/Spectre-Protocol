@@ -5,6 +5,16 @@ import {Test, console2} from "forge-std/Test.sol";
 import {Vm} from "forge-std/Vm.sol";
 import {ForkHelper} from "test/utils/ForkHelper.sol";
 
+import {UserSlot} from "src/core/UserSlot.sol";
+import {IUserSlot} from "src/interfaces/IUserSlot.sol";
+import {IEventEmitter} from "src/interfaces/IEventEmitter.sol";
+import {UserSlotFactory} from "src/core/UserSlotFactory.sol";
+import {MockERC721} from "src/mocks/MockERC721.sol";
+
+import {IPool} from "aave-v3-core/contracts/interfaces/Ipool.sol";
+import {IPoolDataProvider} from "aave-v3-core/contracts/interfaces/IpoolDataProvider.sol";
+import {ICreditDelegationToken} from "aave-v3-core/contracts/interfaces/ICreditDelegationToken.sol";
+
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
@@ -20,18 +30,32 @@ contract UserSlotTest is Test {
 
     uint256 rewardsForLoan = 100 ether; //GHO 18 decimals
 
-    IERC20 constant WETH = IERC20(0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2);
-    IERC20 constant aWETH = IERC20(0x4d5F47FA6A74757f35C14fD3a6Ef8E3C9BC514E8);
+    //Mainnet
+    //IERC20 constant WETH = IERC20(0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2);
+    //IERC20 constant aWETH = IERC20(0x4d5F47FA6A74757f35C14fD3a6Ef8E3C9BC514E8);
+    //address constant GHO = 0x40D16FC0246aD3160Ccc09B8D0D3A2cD28aE6C2f;
+    //address constant aDebtGHO = 0x3FEaB6F8510C73E05b8C0Fdf96Df012E3A144319; //variable
+    //address constant aDebtGHO = 0x05b435C741F5ab03C2E6735e23f1b7Fe01Cc6b22; //stable
 
-    address constant GHO = 0x40D16FC0246aD3160Ccc09B8D0D3A2cD28aE6C2f;
-    address constant aDebtGHO = 0x3FEaB6F8510C73E05b8C0Fdf96Df012E3A144319; //variable
+    //address constant richHolderWETH = 0x2fEb1512183545f48f6b9C5b4EbfCaF49CfCa6F3;
+    //address constant richHolderGHO = 0xE831C8903de820137c13681E78A5780afDdf7697;
 
-    address constant richHolderWETH = 0x2fEb1512183545f48f6b9C5b4EbfCaF49CfCa6F3;
-    address constant richHolderGHO = 0xE831C8903de820137c13681E78A5780afDdf7697;
+    //address constant aavePool = 0x87870Bca3F3fD6335C3F4ce8392D69350B4fA4E2;
+    //address constant poolDataProvider = 0x7B4EB56E7CD4b454BA8ff71E4518426369a138a3;
 
-    address constant aavePool = 0x87870Bca3F3fD6335C3F4ce8392D69350B4fA4E2;
-    address constant poolDataProvider = 0x7B4EB56E7CD4b454BA8ff71E4518426369a138a3;
+    //Sepolia
+    IERC20 constant WETH = IERC20(0xC558DBdd856501FCd9aaF1E62eae57A9F0629a3c);
+    IERC20 constant aWETH = IERC20(0x5b071b590a59395fE4025A0Ccc1FcC931AAc1830);
+    address constant GHO = 0xc4bF5CbDaBE595361438F8c6a187bDc330539c60;
+    address constant aDebtGHO = 0x67ae46EF043F7A4508BD1d6B94DB6c33F0915844; //variable
 
+
+    address constant richHolderWETH = 0x6471c3793e004113391Bc55D3D9dF91802c5D097;
+    address constant richHolderGHO = 0x7d69ecf1d54cce2A153fEf1C08bBF6D88D97e437;
+
+    address constant aavePool = 0x6Ae43d3271ff6888e7Fc43Fd7321a503ff738951;
+    address constant poolDataProvider = 0x3e9708d80f7B3e43118013075F7e95CE3AB31F31;
+ 
     address constant ALICE = address(0x1111);
     address constant BOB = address(0x1112);
     address constant CHARLES = address(0x1113);
@@ -46,7 +70,7 @@ contract UserSlotTest is Test {
 
         address ccipConnector = address(0x11);
 
-        slotFactory = new UserSlotFactory(aavePool, poolDataProvider, ccipConnector);
+        slotFactory = new UserSlotFactory(aavePool, poolDataProvider, ccipConnector, GHO);
         eventEmitter = slotFactory.eventEmitter();
 
         //Alice Deploy her Slot
@@ -62,17 +86,17 @@ contract UserSlotTest is Test {
         mockERC721.mint(ALICE, 1);
         assertTrue(mockERC721.ownerOf(1) == ALICE, "The NFT could not be minted to ALICE");
 
-        vm.startPrank(richHolderWETH);
+        vm.prank(richHolderWETH);
         WETH.transfer(BOB, 1 ether);
         assertTrue(WETH.balanceOf(BOB) == 1 ether, "Could not get WETH from richHolder.");
-        vm.stopPrank();
+        
     }
 
     /**
-    * Alice wants to be given 1 ether to use as supply in her name to borrow, and she is going to 
-    * offer a reward of 100 GHO to anyone who provides that supply. 
-    * Additionally, she will use her NFT as collateral for the borrowed supply.
-    */
+     * Alice wants to be given 1 ether to use as supply in her name to borrow, and she is going to
+     * offer a reward of 100 GHO to anyone who provides that supply.
+     * Additionally, she will use her NFT as collateral for the borrowed supply.
+     */
     function test_AliceOpenRequestLoan() public {
         (
             address tokenContractExpected,
@@ -81,7 +105,7 @@ contract UserSlotTest is Test {
             uint256 amountRequestExpected,
             address tokenToBorrowExpected,
             uint256 rewardsExpected,
-            uint256 deadlineExpected
+            uint256 durationExpected
         ) = (address(mockERC721), 1, address(WETH), 1 ether, address(GHO), rewardsForLoan, 30 days);
 
         aliceOpenRequestLoan(
@@ -91,7 +115,7 @@ contract UserSlotTest is Test {
             amountRequestExpected,
             tokenToBorrowExpected,
             rewardsForLoan,
-            deadlineExpected
+            durationExpected
         );
 
         (
@@ -100,11 +124,11 @@ contract UserSlotTest is Test {
             address tokenRequest,
             uint256 amountRequest,
             address tokenToBorrow,
+            uint256 loanDuration,
             uint256 loanDeadline,
             address supplier,
             uint256 rewards,
-            uint64 chainSelector,
-            bool activeLoan
+            uint64 chainSelector
         ) = aliceSlot.position();
 
         assertTrue(
@@ -119,11 +143,11 @@ contract UserSlotTest is Test {
         assertTrue(
             tokenToBorrow == tokenToBorrowExpected, "The token to borrow address does not match the expected value."
         );
-        assertTrue(loanDeadline == deadlineExpected, "The loan deadline does not match the expected value.");
+        assertTrue(loanDeadline == type(uint256).max, "The loan deadline does not match the expected value.");
+        assertTrue(loanDuration == durationExpected, "The loan duration does not match the expected value.");
         assertTrue(supplier == address(0), "The supplier address is not the expected zero address.");
         assertTrue(rewards == rewardsExpected, "The rewards amount does not match the expected value.");
         assertTrue(chainSelector == 0, "The chain selector does not match the expected value.");
-        assertTrue(activeLoan == true, "The activeLoan value does not match the expected value.");
 
         assertTrue(
             mockERC721.ownerOf(1) == address(aliceSlot), "The owner of token ID 1 does not match the expected address."
@@ -137,17 +161,18 @@ contract UserSlotTest is Test {
             address tokenRequest,
             uint256 amountRequest,
             address tokenToBorrow,
-            uint256 deadline
-        ) = (address(mockERC721), 1, address(WETH), 1 ether, address(USDC), block.timestamp + 30 days);
+            uint256 duration
+        ) = (address(mockERC721), 1, address(WETH), 1 ether, address(GHO), 30 days);
 
         aliceOpenRequestLoan(
-            tokenContract, tokenId, tokenRequest, amountRequest, tokenToBorrow, rewardsForLoan, deadline
+            tokenContract, tokenId, tokenRequest, amountRequest, tokenToBorrow, rewardsForLoan, duration
         );
 
         bobSupplyRequestLoan(IERC20(tokenRequest), amountRequest);
-        (,,,,,, address supplier,,,) = aliceSlot.position();
+        (,,,,,,uint256 loanDeadline,address supplier,,) = aliceSlot.position();
 
         assertTrue(supplier == BOB, "The supplier address is not the expected BOB address.");
+        assertTrue(loanDeadline == block.timestamp + 30 days, "Loan deadline value not expected.");
         assertTrue(aWETH.balanceOf(address(aliceSlot)) == 1 ether, "Amount of AToken wrong.");
 
         (, address stableDebtTokenAddress, address variableDebtTokenAddress) =
@@ -167,13 +192,13 @@ contract UserSlotTest is Test {
     function test_AliceBorrow() public {
         test_BobSupplyRequestOnBehalOfAlice();
 
-        uint256 borrowAmount = 1000000000;
+        uint256 borrowAmount = 1 ether;
 
-        aliceBorrow(USDC, borrowAmount, 2, address(aliceSlot));
-        assertTrue(IERC20(USDC).balanceOf(address(ALICE)) == borrowAmount, "Loan not executed successfully.");
-        assertTrue(IERC20(USDC).balanceOf(address(aliceSlot)) == 0, "Contract has borrowed tokens.");
+        aliceBorrow(GHO, borrowAmount, 2, address(aliceSlot));
+        assertTrue(IERC20(GHO).balanceOf(address(ALICE)) == borrowAmount, "Loan not executed successfully.");
+        assertTrue(IERC20(GHO).balanceOf(address(aliceSlot))-rewardsForLoan == 0, "Contract has borrowed tokens.");
         assertTrue(
-            IERC20(aDebtUSDC).balanceOf(address(aliceSlot)) == borrowAmount, "Contract has not the correct debt."
+            IERC20(aDebtGHO).balanceOf(address(aliceSlot)) == borrowAmount, "Contract has not the correct debt."
         );
     }
 
@@ -182,11 +207,11 @@ contract UserSlotTest is Test {
 
         vm.warp(block.timestamp + 2 days);
 
-        aliceRepayDebt(aDebtUSDC, USDC, richHolderUSDC, 2);
+        aliceRepayDebt(aDebtGHO, GHO, richHolderGHO, 2);
 
-        assertTrue(IERC20(USDC).balanceOf(address(ALICE)) == 0, "Balance of Alice is not as expected.");
-        assertTrue(IERC20(USDC).balanceOf(address(aliceSlot)) == 0, "Balance of contract is not as expected.");
-        assertTrue(IERC20(aDebtUSDC).balanceOf(address(aliceSlot)) == 0, "ADebt balance is not as expected.");
+        assertTrue(IERC20(GHO).balanceOf(address(ALICE)) == 0, "Balance of Alice is not as expected.");
+        assertTrue(IERC20(GHO).balanceOf(address(aliceSlot))-rewardsForLoan == 0, "Balance of contract is not as expected.");
+        assertTrue(IERC20(aDebtGHO).balanceOf(address(aliceSlot)) == 0, "ADebt balance is not as expected.");
     }
 
     function test_CompleteLoanOwnerWithRepay() public {
@@ -201,9 +226,9 @@ contract UserSlotTest is Test {
         aliceCompleteLoan();
         uint256 balanceAfterCompleteBob = WETH.balanceOf(BOB);
 
-        assertTrue(balanceAfterCompleteBob - balanceBeforeCompleteBob > 1000000000, "Bob has not recovered his tokens.");
+        assertTrue(balanceAfterCompleteBob - balanceBeforeCompleteBob >= 1 ether, "Bob has not recovered his tokens.");
         assertTrue(mockERC721.ownerOf(1) == ALICE, "Alice has not recovered his token.");
-        assertTrue(BOB.balance == rewardsForLoan, "BOB has not received the rewards.");
+        assertTrue(IERC20(GHO).balanceOf(BOB) == rewardsForLoan, "BOB has not received his rewards.");
     }
 
     function test_CompleteLoanOwnerWithoutRepay() public {
@@ -230,11 +255,12 @@ contract UserSlotTest is Test {
         emit IEventEmitter.CompleteLoan(address(aliceSlot), true, balanceSlotAToken);
 
         bobCompleteLoan();
+     
         uint256 balanceAfterCompleteBob = WETH.balanceOf(BOB);
 
-        assertTrue(balanceAfterCompleteBob - balanceBeforeCompleteBob > 1000000000, "Bob has not recovered his tokens.");
+        assertTrue(balanceAfterCompleteBob - balanceBeforeCompleteBob >= 1 ether, "Bob has not recovered his tokens.");
         assertTrue(mockERC721.ownerOf(1) == ALICE, "Alice has not recovered his token.");
-        assertTrue(BOB.balance == rewardsForLoan, "BOB has not received the rewards.");
+        assertTrue(IERC20(GHO).balanceOf(BOB) == rewardsForLoan, "BOB has not received his rewards.");
     }
 
     function test_CompleteLoanSupplierWithoutRepayDebt() public {
@@ -252,12 +278,22 @@ contract UserSlotTest is Test {
 
         assertTrue(balanceAfterCompleteBob - balanceBeforeCompleteBob == 0, "Bob has not recovered his tokens.");
         assertTrue(mockERC721.ownerOf(1) == BOB, "BOB has not recovered NFT token.");
-        assertTrue(BOB.balance == rewardsForLoan, "BOB has not received the rewards.");
+        assertTrue(IERC20(GHO).balanceOf(BOB) == rewardsForLoan, "BOB has not received the rewards.");
     }
 
     /**
      * Utils
-     */
+    */
+
+    function fundAndApproveSpender(IERC20 token, uint256 amount, address richHolder,address to, address spender) public{
+        require(token.balanceOf(richHolder)>=amount, "richHolder have not enought tokens to fund");
+        vm.prank(richHolder);
+        token.safeTransfer(to, amount);
+
+        vm.prank(to);
+        token.approve(spender,amount);
+
+    }
 
     function aliceOpenRequestLoan(
         address erc721,
@@ -268,7 +304,10 @@ contract UserSlotTest is Test {
         uint256 rewards,
         uint256 deadline
     ) public {
-        vm.deal(ALICE, rewards);
+
+        //fund rewards
+        fundAndApproveSpender(IERC20(GHO), rewards, richHolderGHO, ALICE, address(aliceSlot));
+
         vm.startPrank(ALICE);
         mockERC721.approve(address(aliceSlot), tokenId);
 
@@ -277,9 +316,7 @@ contract UserSlotTest is Test {
             address(aliceSlot), erc721, tokenId, tokenRequest, amountRequest, tokenToBorrow, rewards, deadline
         );
 
-        aliceSlot.openRequest{value: rewards}(
-            erc721, tokenId, tokenRequest, amountRequest, tokenToBorrow, rewards, deadline
-        );
+        aliceSlot.openRequest(erc721, tokenId, tokenRequest, amountRequest, tokenToBorrow, rewards, deadline);
         vm.stopPrank();
     }
 

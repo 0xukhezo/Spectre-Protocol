@@ -13,7 +13,6 @@ interface IUserSlot {
         address supplier;
         uint256 rewards;
         uint64 chainSelector;
-        bool activeLoan;
     }
 
     //Errors
@@ -36,7 +35,7 @@ interface IUserSlot {
         address tokenToBorrow,
         uint256 rewards,
         uint256 loanDeadline
-    ) external payable;
+    ) external;
     function supplyRequest() external;
     function supplyRequest(address _supplier, uint64 chainSelector) external;
     function completeLoanSupplier() external;
