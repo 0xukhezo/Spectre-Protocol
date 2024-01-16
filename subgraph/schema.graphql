@@ -1,0 +1,41 @@
+type User @entity {
+  id: ID! # address
+  slots: [SlotUser]! @derivedFrom(field: "user")
+  historial: [Loan]! @derivedFrom(field: "user")
+}
+
+type SlotUser @entity {
+  id: Bytes! # address
+  user: User!
+  loan: Loan
+}
+
+type Loan @entity {
+  id: ID!
+  slot: SlotUser!
+  user: User!
+  nft: NFT!
+  tokenRequest: Bytes!
+  amountRequest: BigInt!
+  tokenToBorrow: Bytes!
+  rewards: BigInt!
+  loanDuration: BigInt!
+  deadline: BigInt!
+  supplier: Bytes
+  chainSelector: BigInt!
+  completedSuccessfully: Boolean
+  amountWithdraw: BigInt
+  activeLoan: Boolean
+}
+
+type Collection @entity(immutable: true) {
+  id: ID!
+  name: String!
+  symbol: String!
+}
+
+type NFT @entity {
+  id: ID!
+  collection: Collection!
+  uri: String!
+}

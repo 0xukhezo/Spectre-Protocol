@@ -1,0 +1,36 @@
+specVersion: 0.0.5
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: EventEmitter
+    network: sepolia
+    source:
+      address: "0x2160a54800bf900D6Bb69771834757afF682B59D"
+      abi: EventEmitter
+      startBlock: 5096161
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - User
+        - SlotUser
+        - Loan
+        - Collection
+        - NFT
+      abis:
+        - name: EventEmitter
+          file: ./abis/EventEmitter.json
+        - name: ERC721
+          file: ./abis/ERC721.json
+      eventHandlers:
+        - event: CompleteLoan(indexed address,bool,uint256)
+          handler: handleCompleteLoan
+        - event: NewRequestLoan(indexed address,address,uint256,address,uint256,address,uint256,uint256)
+          handler: handleNewRequestLoan
+        - event: SlotUserCreated(indexed address,indexed address)
+          handler: handleSlotUserCreated
+        - event: SuppliedLoan(indexed address,address,uint64)
+          handler: handleSuppliedLoan
+      file: ./src/mapping/event-emitter.ts
