@@ -98,7 +98,7 @@ export default function NftModal({
 
   return (
     <Transition.Root show={open} as={Fragment}>
-      <Dialog as="div" className="relative " onClose={() => console.log()}>
+      <Dialog as="div" className="relative " onClose={() => closeModal()}>
         <div
           className={`overlay flex justify-between ${open ? "open" : ""}`}
           onClick={() => closeModal()}
@@ -126,12 +126,15 @@ export default function NftModal({
                     : `${formatAddress(nftsCopy[currentNftIndex].owner)}`}
                 </span>
               </li>
-              <li className="mb-2 mt-3 flex">
+              <li className="mb-2 mt-3 flex text-black font-light">
                 <span className="bg-main rounded-full px-6">ERC 721</span>
                 <span className="bg-main rounded-full px-6 ml-8">Listed</span>
               </li>
             </ul>
-
+            <h1 className="text-3xl modalAnimatedText pb-1 navbarTitle">
+              Loan Information
+            </h1>
+            <hr className="modalAnimatedLine" />
             {!isConnected && (
               <div className="w-min mx-auto">
                 <WalletButton />

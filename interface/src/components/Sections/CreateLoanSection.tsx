@@ -208,10 +208,10 @@ export default function CreateLoanSection() {
                   onClick={() => {
                     setOpenNFTModal(true);
                   }}
-                  className="bg-main text-black font-light px-4 py-2 rounded-xl hover:bg-secondary max-w-fit mb-4"
+                  className="bg-main text-black font-light px-4 py-2 rounded-xl hover:bg-secondary w-[300px] mb-4 h-[54px]"
                 >
                   {nftContract ? (
-                    <div className="flex items-center">
+                    <div className="flex items-center justify-between">
                       <span>{nftTitle}</span>
                       {nftImage && (
                         <Image
@@ -220,7 +220,7 @@ export default function CreateLoanSection() {
                           width={40}
                           height={40}
                           id="nftCardImage"
-                          className="rounded-lg h-[40px] min-w-[40px] ml-[24px]"
+                          className="rounded-lg h-[40px] min-w-[40px]"
                         />
                       )}
                     </div>
@@ -233,10 +233,12 @@ export default function CreateLoanSection() {
                     setOpenTokenModal(true);
                   }}
                   disabled={nftContract === null}
-                  className="bg-main text-black font-light px-4 py-2 rounded-xl hover:bg-secondary max-w-fit my-4"
+                  className={`bg-main text-black font-light px-4 py-2 rounded-xl hover:bg-secondary my-4 w-[300px] items-center flex justify-between h-[54px] ${
+                    nftContract === null && "opacity-50"
+                  }`}
                 >
                   {tokenContract ? (
-                    <div className="flex items-center">
+                    <>
                       <span>{tokenSymbol}</span>
                       {tokenImage && (
                         <Image
@@ -248,17 +250,29 @@ export default function CreateLoanSection() {
                           className="rounded-lg h-[40px] min-w-[40px] ml-[24px]"
                         />
                       )}
-                    </div>
+                    </>
                   ) : (
-                    "Select Token"
+                    <span className="mx-auto">Select Token</span>
                   )}
                 </button>
-                <div className="flex items-center my-4">
+                <div
+                  className={`rounded-xl text-black bg-main font-light h-[54px] flex items-center my-4 px-4 w-[300px] ${
+                    tokenContract === null && "opacity-50"
+                  }`}
+                >
                   <input
                     type="number"
                     value={amountSupply}
-                    onChange={(e) => setAmountSupply(Number(e.target.value))}
-                    className="rounded-lg px-4 py-1 text-black"
+                    min={0}
+                    onChange={(e) => {
+                      if (Number(e.target.value) >= 0) {
+                        setAmountSupply(Number(e.target.value));
+                      } else {
+                        setAmountSupply(0);
+                      }
+                    }}
+                    onWheel={(e) => (e.target as HTMLInputElement).blur()}
+                    className="bg-main pr-8 py-1 text-black bg-main font-light h-[46px] ring-0 focus:ring-0 outline-0"
                     disabled={tokenContract === null}
                   />{" "}
                   {tokenImage && (
@@ -272,12 +286,24 @@ export default function CreateLoanSection() {
                     />
                   )}
                 </div>{" "}
-                <div className="flex items-center mt-4">
+                <div
+                  className={`rounded-xl text-black bg-main font-light h-[54px] flex items-center my-4 px-4 w-[300px] ${
+                    amountSupply === undefined && "opacity-50"
+                  }`}
+                >
                   <input
                     type="number"
                     value={rewards}
-                    onChange={(e) => setRewards(Number(e.target.value))}
-                    className="rounded-lg px-4 py-1 text-black"
+                    min={0}
+                    onChange={(e) => {
+                      if (Number(e.target.value) >= 0) {
+                        setRewards(Number(e.target.value));
+                      } else {
+                        setRewards(0);
+                      }
+                    }}
+                    onWheel={(e) => (e.target as HTMLInputElement).blur()}
+                    className="rounded-lg pr-8 py-1 text-black bg-main font-light h-[46px] ring-0 focus:ring-0 outline-0"
                     disabled={amountSupply === undefined}
                   />
 
@@ -291,34 +317,6 @@ export default function CreateLoanSection() {
                   />
                 </div>
               </div>
-
-              {/* <div className="flex justify-between mt-4">
-                <div className="flex items-center">
-                  <span className="mr-[24px]">1. Select your NFT</span>
-                </div>
-              </div>
-              <div className="flex justify-between my-8">
-                <div className="flex items-center">
-                  <span className="mr-[24px]">
-                    2. Select the token you want as supply in AAVE
-                  </span>
-                </div>
-              </div>
-              <div className="flex justify-between">
-                <div className="flex items-center">
-                  <span className="mr-[24px]">
-                    3. Tell your sponsor how much you wawwant as supply
-                  </span>
-                </div>{" "}
-              </div>
-              <div className="flex justify-between mt-8">
-                <div className="flex items-center">
-                  <span className="mr-[24px]">
-                    {" "}
-                    4. Select the amout of rewards you will give
-                  </span>
-                </div>
-              </div> */}
             </div>
 
             {openNFTModal && data && (
