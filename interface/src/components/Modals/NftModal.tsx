@@ -10,6 +10,10 @@ import {
   formatDate,
 } from "../../../utils/utils";
 import GHO from "../../../public/GHO.svg";
+// Wagmi
+import { useContractRead } from "wagmi";
+import { abiAAVEPool } from "../../../abis/abis.json";
+import { AAVEPoolAddress } from "../../../abis/contractAddress.json";
 
 type NftModalProps = {
   getShowMenu: (open: boolean) => void;
@@ -38,6 +42,14 @@ export default function NftModal({
   const { data: ensName } = useEnsName({
     address: nftsCopy[currentNftIndex].owner,
   });
+
+  const { data: accountInfo } = useContractRead({
+    address: AAVEPoolAddress as `0x${string}`,
+    abi: abiAAVEPool,
+    functionName: "getUserAccountData",
+    args: ["0xb3204E7bD17273790f5ffb0Bb1e591Ab0011dC55"],
+  });
+  const healthFactor = accountInfo as any;
 
   const [approveTx, setApproveTx] = useState<boolean | undefined>(false);
 
@@ -200,7 +212,7 @@ export default function NftModal({
                     <li className="text-lg text-xs flex items-center">
                       Finish
                       <span className="text-main text-lg mx-2">{`${formatDate(
-                        currentTimestamp + 360000 * 1000
+                        3805408412003 - currentTimestamp
                       )}`}</span>{" "}
                     </li>
                   </ul>
@@ -210,8 +222,25 @@ export default function NftModal({
                       <div className="w-min mx-auto mt-10">
                         <WalletButton />
                       </div>
-                    ) : isLoan ? (
-                      <div>Is a Loan</div>
+                    ) : !isLoan ? (
+                      <div>
+                        <h1 className="text-3xl modalAnimatedText pb-1 navbarTitle mt-10">
+                          Loan Health
+                        </h1>
+                        <hr className="modalAnimatedLine" />
+                        <ul className="mt-6 modalAnimatedText">
+                          <li className="text-lg text-xs flex items-center">
+                            Health Factor
+                            <span className="text-main text-lg mx-2">
+                              {" "}
+                              {healthFactor !== undefined &&
+                              Number(healthFactor[5]) / 10 ** 18 > 20
+                                ? "∞"
+                                : `${(healthFactor[5] / 10 ** 18).toFixed(2)}`}
+                            </span>{" "}
+                          </li>
+                        </ul>
+                      </div>
                     ) : (
                       <div className="mt-10">
                         {!approveTx && (
