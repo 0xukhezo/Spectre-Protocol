@@ -11,7 +11,7 @@ interface IEventEmitter {
         uint256 amountRequest,
         address tokenToBorrow,
         uint256 rewards,
-        uint256 loanDeadline
+        uint256 loanDuration
     );
     event SuppliedLoan(address indexed slot, address supplier, uint64 chainSelector);
     event CompleteLoan(address indexed slot, bool successfull, uint256 amountWithdraw);
@@ -27,7 +27,7 @@ interface IEventEmitter {
         uint256 amountRequest,
         address tokenToBorrow,
         uint256 rewards,
-        uint256 loanDeadline
+        uint256 loanDuration
     ) external;
     function emitSuppliedLoan(address supplier, uint64 chainSelector) external;
     function emitCompleteLoan(bool successfull, uint256 amountWithdraw) external;
