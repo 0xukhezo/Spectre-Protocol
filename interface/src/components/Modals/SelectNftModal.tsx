@@ -3,6 +3,8 @@ import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import SearchBar from "../Filters/SearchBar";
 import DisplayerCard from "../Cards/DisplayerCard";
+import Image from "next/image";
+import SadSpectre from "../../../public/SadSpectre.svg";
 
 type SelectNftModalProps = {
   getShowMenu: (open: boolean) => void;
@@ -82,24 +84,37 @@ export default function SelectNftModal({
                   <SearchBar
                     getInfo={getInfo}
                     query={search}
-                    classMain="rounded-xl text-black px-[22px] items-center w-full outline-none placeholder:text-black flex my-[16px] border-1 border-main"
+                    classMain="rounded-xl text-white px-[22px] items-center w-full outline-none placeholder:text-black flex my-[16px] border-1 border-main"
                     placeholder="Search token or paste address"
-                    classInput="rounded-xl outline-none placeholder:text-gray-400 py-[10px] px-[20px] w-full text-black mainBackground"
+                    classInput="rounded-xl outline-none placeholder:text-gray-400 py-[10px] px-[20px] w-full text-white mainBackground"
                   />
                 </div>
 
                 <div className="px-[18px] w-full mt-4 overflow-y-auto flex flex-col">
-                  {assetsArrayCopy.map((asset: any, index: number) => {
-                    return (
-                      <DisplayerCard
-                        asset={asset}
-                        selectAsset={getAsset}
-                        closeModal={() => closeModal()}
-                        roundedImage="rounded-lg"
-                        key={index}
+                  {assetsArrayCopy.length === 0 ? (
+                    <div className="text-5xl navbarTitle max-w-[600px] text-center mx-auto pt-40 flex items-center flex-col font-extralight">
+                      <h1>Looks like NFTs are playing ghost.</h1>
+                      <Image
+                        src={SadSpectre.src}
+                        alt="SadSpectre Image"
+                        width={200}
+                        height={200}
+                        className="min-h-[150px] mb-5"
                       />
-                    );
-                  })}
+                    </div>
+                  ) : (
+                    assetsArrayCopy.map((asset: any, index: number) => {
+                      return (
+                        <DisplayerCard
+                          asset={asset}
+                          selectAsset={getAsset}
+                          closeModal={() => closeModal()}
+                          roundedImage="rounded-lg"
+                          key={index}
+                        />
+                      );
+                    })
+                  )}
                 </div>
               </div>
             </div>

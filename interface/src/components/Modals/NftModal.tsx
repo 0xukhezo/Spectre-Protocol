@@ -222,7 +222,7 @@ export default function NftModal({
                       <div className="w-min mx-auto mt-10">
                         <WalletButton />
                       </div>
-                    ) : !isLoan ? (
+                    ) : isLoan ? (
                       <div>
                         <h1 className="text-3xl modalAnimatedText pb-1 navbarTitle mt-10">
                           Loan Health
