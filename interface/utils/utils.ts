@@ -15,5 +15,5 @@ export function calculateTimeComponents(totalSeconds: number) {
   const minutes = Math.floor((totalSeconds % (60 * 60)) / 60);
   const seconds = totalSeconds % 60;
 
-  return `${days} d ${hours} h ${minutes} min ${seconds} s`;
+  return `${days} d ${hours} h ${minutes} min ${seconds.toFixed(0)} s`;
 }

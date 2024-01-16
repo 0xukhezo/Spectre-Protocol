@@ -35,6 +35,10 @@ export default function NftModal({
   const [isClosing, setIsClosing] = useState(false);
   const [currentNftIndex, setCurrentNftIndex] = useState(nftIndex);
   const [isAnimating, setIsAnimating] = useState(false);
+
+  const [openBorrowModal, setOpenBorrowModal] = useState(false);
+  const [openRepayModal, setOpenRepayModal] = useState(false);
+
   const [buttonClicked, setButtonClicked] = useState<string>("Initial");
   const [currentTimestamp, setCurrentTimestamp] = useState(Date.now());
 
@@ -206,13 +210,13 @@ export default function NftModal({
                     <li className="text-lg text-xs flex items-center">
                       Duration
                       <span className="text-main text-lg mx-2">{`${calculateTimeComponents(
-                        360000
+                        1706408412 - currentTimestamp / 1000
                       )}`}</span>{" "}
                     </li>
                     <li className="text-lg text-xs flex items-center">
                       Finish
                       <span className="text-main text-lg mx-2">{`${formatDate(
-                        3805408412003 - currentTimestamp
+                        1706408412 * 1000
                       )}`}</span>{" "}
                     </li>
                   </ul>
@@ -240,6 +244,22 @@ export default function NftModal({
                             </span>{" "}
                           </li>
                         </ul>
+                        <div className="grid grid-cols-2 mt-10">
+                          <button
+                            className="bg-main text-black font-light px-[34px] py-2 rounded-xl hover:bg-secondary flex mx-auto"
+                            onClick={() => setOpenBorrowModal(true)}
+                          >
+                            Borrow GHO
+                          </button>
+                          {openBorrowModal && <div>Pepe</div>}
+                          <button
+                            className="bg-main text-black font-light px-[34px] py-2 rounded-xl hover:bg-secondary flex mx-auto"
+                            onClick={() => setOpenRepayModal(true)}
+                          >
+                            Repay GHO
+                          </button>{" "}
+                          {openRepayModal && <div>Pepe</div>}
+                        </div>
                       </div>
                     ) : (
                       <div className="mt-10">
