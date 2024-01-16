@@ -46,6 +46,7 @@ export default function SortBy({
         classMain="pt-4 pb-4 z-50"
         getInfo={getInfo}
         query={search}
+        classInput="rounded-xl outline-none placeholder:text-gray-400 py-[10px] px-[20px] w-full text-white mainBackground border-main border-1"
       />
       <div className="px-2">
         <FilterCard

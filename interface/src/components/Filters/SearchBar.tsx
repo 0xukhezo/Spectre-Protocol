@@ -6,6 +6,7 @@ type SearchBar = {
   query: string;
   classMain: string;
   placeholder: string;
+  classInput: string;
 };
 
 export default function SearchBar({
@@ -13,6 +14,7 @@ export default function SearchBar({
   query,
   classMain,
   placeholder,
+  classInput,
 }: SearchBar) {
   const handleSearchChange = (e: any) => {
     let search = e.currentTarget.value;
@@ -25,7 +27,7 @@ export default function SearchBar({
         type="text"
         value={query}
         placeholder={placeholder}
-        className="rounded-xl outline-none placeholder:text-gray-400 py-[10px] px-[20px] w-full text-white mainBackground"
+        className={classInput}
         onChange={(e) => handleSearchChange(e)}
       />
     </div>

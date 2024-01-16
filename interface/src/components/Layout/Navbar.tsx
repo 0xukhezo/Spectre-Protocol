@@ -141,9 +141,9 @@ export default function Navbar() {
           </Disclosure.Panel>
 
           {navigatioHeader[router.asPath] && (
-            <div className="py-10 relative overflow-hidden border-b-main border-b-1">
+            <div className="pt-10 pb-16 relative overflow-hidden border-b-main border-b-1">
               <div className="navbarTextOpacity" id="textNavbar">
-                <h1 className="text-6xl navbarTitle">
+                <h1 className="text-6xl navbarTitle pb-2">
                   {navigatioHeader[router.asPath].title}
                 </h1>
                 <h2 className="text-xl md:w-2/3 sm:w-1/2 lg:h-[50px] sm:h-[80px] my-5">

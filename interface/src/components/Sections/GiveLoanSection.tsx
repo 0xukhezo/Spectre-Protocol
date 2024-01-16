@@ -148,6 +148,7 @@ export default function GiveLoanSection() {
           } pb-4 z-50 px-[16px]`}
           getInfo={getInfo}
           query={search}
+          classInput="rounded-xl outline-none placeholder:text-gray-400 py-[10px] px-[20px] w-full text-white mainBackground"
         />
         <div
           className={`relative min-h-[500px] ${
