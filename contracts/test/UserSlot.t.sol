@@ -49,13 +49,12 @@ contract UserSlotTest is Test {
     address constant GHO = 0xc4bF5CbDaBE595361438F8c6a187bDc330539c60;
     address constant aDebtGHO = 0x67ae46EF043F7A4508BD1d6B94DB6c33F0915844; //variable
 
-
     address constant richHolderWETH = 0x6471c3793e004113391Bc55D3D9dF91802c5D097;
     address constant richHolderGHO = 0x7d69ecf1d54cce2A153fEf1C08bBF6D88D97e437;
 
     address constant aavePool = 0x6Ae43d3271ff6888e7Fc43Fd7321a503ff738951;
     address constant poolDataProvider = 0x3e9708d80f7B3e43118013075F7e95CE3AB31F31;
- 
+
     address constant ALICE = address(0x1111);
     address constant BOB = address(0x1112);
     address constant CHARLES = address(0x1113);
@@ -89,7 +88,6 @@ contract UserSlotTest is Test {
         vm.prank(richHolderWETH);
         WETH.transfer(BOB, 1 ether);
         assertTrue(WETH.balanceOf(BOB) == 1 ether, "Could not get WETH from richHolder.");
-        
     }
 
     /**
@@ -169,7 +167,7 @@ contract UserSlotTest is Test {
         );
 
         bobSupplyRequestLoan(IERC20(tokenRequest), amountRequest);
-        (,,,,,,uint256 loanDeadline,address supplier,,) = aliceSlot.position();
+        (,,,,,, uint256 loanDeadline, address supplier,,) = aliceSlot.position();
 
         assertTrue(supplier == BOB, "The supplier address is not the expected BOB address.");
         assertTrue(loanDeadline == block.timestamp + 30 days, "Loan deadline value not expected.");
@@ -196,10 +194,8 @@ contract UserSlotTest is Test {
 
         aliceBorrow(GHO, borrowAmount, 2, address(aliceSlot));
         assertTrue(IERC20(GHO).balanceOf(address(ALICE)) == borrowAmount, "Loan not executed successfully.");
-        assertTrue(IERC20(GHO).balanceOf(address(aliceSlot))-rewardsForLoan == 0, "Contract has borrowed tokens.");
-        assertTrue(
-            IERC20(aDebtGHO).balanceOf(address(aliceSlot)) == borrowAmount, "Contract has not the correct debt."
-        );
+        assertTrue(IERC20(GHO).balanceOf(address(aliceSlot)) - rewardsForLoan == 0, "Contract has borrowed tokens.");
+        assertTrue(IERC20(aDebtGHO).balanceOf(address(aliceSlot)) == borrowAmount, "Contract has not the correct debt.");
     }
 
     function test_RepayDebt() public {
@@ -210,7 +206,9 @@ contract UserSlotTest is Test {
         aliceRepayDebt(aDebtGHO, GHO, richHolderGHO, 2);
 
         assertTrue(IERC20(GHO).balanceOf(address(ALICE)) == 0, "Balance of Alice is not as expected.");
-        assertTrue(IERC20(GHO).balanceOf(address(aliceSlot))-rewardsForLoan == 0, "Balance of contract is not as expected.");
+        assertTrue(
+            IERC20(GHO).balanceOf(address(aliceSlot)) - rewardsForLoan == 0, "Balance of contract is not as expected."
+        );
         assertTrue(IERC20(aDebtGHO).balanceOf(address(aliceSlot)) == 0, "ADebt balance is not as expected.");
     }
 
@@ -255,7 +253,7 @@ contract UserSlotTest is Test {
         emit IEventEmitter.CompleteLoan(address(aliceSlot), true, balanceSlotAToken);
 
         bobCompleteLoan();
-     
+
         uint256 balanceAfterCompleteBob = WETH.balanceOf(BOB);
 
         assertTrue(balanceAfterCompleteBob - balanceBeforeCompleteBob >= 1 ether, "Bob has not recovered his tokens.");
@@ -283,16 +281,17 @@ contract UserSlotTest is Test {
 
     /**
      * Utils
-    */
+     */
 
-    function fundAndApproveSpender(IERC20 token, uint256 amount, address richHolder,address to, address spender) public{
-        require(token.balanceOf(richHolder)>=amount, "richHolder have not enought tokens to fund");
+    function fundAndApproveSpender(IERC20 token, uint256 amount, address richHolder, address to, address spender)
+        public
+    {
+        require(token.balanceOf(richHolder) >= amount, "richHolder have not enought tokens to fund");
         vm.prank(richHolder);
         token.safeTransfer(to, amount);
 
         vm.prank(to);
-        token.approve(spender,amount);
-
+        token.approve(spender, amount);
     }
 
     function aliceOpenRequestLoan(
@@ -304,7 +303,6 @@ contract UserSlotTest is Test {
         uint256 rewards,
         uint256 deadline
     ) public {
-
         //fund rewards
         fundAndApproveSpender(IERC20(GHO), rewards, richHolderGHO, ALICE, address(aliceSlot));
 

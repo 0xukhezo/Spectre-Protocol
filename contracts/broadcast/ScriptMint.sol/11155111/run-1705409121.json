@@ -1,0 +1,36 @@
+{
+  "transactions": [
+    {
+      "hash": "0x8c0c895e3d580b3313f59361a55b1ac3a766a2479afedae10a470ffa309dc7c6",
+      "transactionType": "CALL",
+      "contractName": null,
+      "contractAddress": "0x19cfa3A50Abf669FF7000675e81F6A6Cbbe7436A",
+      "function": "setBaseUri(string)",
+      "arguments": [
+        "\"https://coral-estimated-smelt-608.mypinata.cloud/ipfs/QmTm8ma6X2Ewi9NWb1T2ypCSrEUCST279aZGq65y8hsnAA/\""
+      ],
+      "transaction": {
+        "type": "0x02",
+        "from": "0xb4f28403cc940878292046208cb9476b00c5c197",
+        "to": "0x19cfa3a50abf669ff7000675e81f6a6cbbe7436a",
+        "gas": "0xfb6c",
+        "value": "0x0",
+        "data": "0xa0bcfc7f0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000006568747470733a2f2f636f72616c2d657374696d617465642d736d656c742d3630382e6d7970696e6174612e636c6f75642f697066732f516d546d386d61365832457769394e576231543279704353724555435354323739615a47713635793868736e41412f000000000000000000000000000000000000000000000000000000",
+        "nonce": "0x1f",
+        "accessList": []
+      },
+      "additionalContracts": [],
+      "isFixedGasLimit": false
+    }
+  ],
+  "receipts": [],
+  "libraries": [],
+  "pending": [
+    "0x8c0c895e3d580b3313f59361a55b1ac3a766a2479afedae10a470ffa309dc7c6"
+  ],
+  "returns": {},
+  "timestamp": 1705409121,
+  "chain": 11155111,
+  "multi": false,
+  "commit": "878a08c"
+}

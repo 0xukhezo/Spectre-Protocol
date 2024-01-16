@@ -16,7 +16,9 @@ contract UserSlotFactory is Ownable, IUserSlotFactory {
 
     mapping(address => bool) public slots;
 
-    constructor(address _aavePool, address _aaveDataProvider, address _connector, address _ghoToken) Ownable(_msgSender()) {
+    constructor(address _aavePool, address _aaveDataProvider, address _connector, address _ghoToken)
+        Ownable(_msgSender())
+    {
         if (_aavePool == address(0)) {
             revert InvalidAddressForConstructorArgument("aavePool");
         }
@@ -38,7 +40,8 @@ contract UserSlotFactory is Ownable, IUserSlotFactory {
     }
 
     function createSlot() public {
-        UserSlot userSlot = new UserSlot(aavePool, aaveDataProvider, connector, address(eventEmitter), ghoToken, _msgSender());
+        UserSlot userSlot =
+            new UserSlot(aavePool, aaveDataProvider, connector, address(eventEmitter), ghoToken, _msgSender());
         slots[address(userSlot)] = true;
         eventEmitter.emitUserSlotCreated(_msgSender(), address(userSlot));
     }
