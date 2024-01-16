@@ -183,6 +183,11 @@ export const initialSteps = [
       "Your sponsor receive at the end of the loan this amount of GHO.",
     status: "upcoming",
   },
+  {
+    name: "Loan Duration",
+    description: "Final Step! The time the loan will be active.",
+    status: "upcoming",
+  },
 ];
 
 export const getLoanInfoSteps = [
