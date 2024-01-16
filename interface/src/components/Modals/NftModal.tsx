@@ -4,7 +4,12 @@ import Image from "next/image";
 import Arrow from "../../../public/Arrow.svg";
 import WalletButton from "../Buttons/WalletButton";
 import { useAccount, useEnsName } from "wagmi";
-import { formatAddress } from "../../../utils/utils";
+import {
+  calculateTimeComponents,
+  formatAddress,
+  formatDate,
+} from "../../../utils/utils";
+import GHO from "../../../public/GHO.svg";
 
 type NftModalProps = {
   getShowMenu: (open: boolean) => void;
@@ -23,11 +28,14 @@ export default function NftModal({
   const [currentNftIndex, setCurrentNftIndex] = useState(nftIndex);
   const [isAnimating, setIsAnimating] = useState(false);
   const [buttonClicked, setButtonClicked] = useState<string>("Initial");
+  const [currentTimestamp, setCurrentTimestamp] = useState(Date.now());
 
   const { isConnected } = useAccount();
   const { data: ensName } = useEnsName({
     address: nftsCopy[currentNftIndex].owner,
   });
+
+  const [approveTx, setApproveTx] = useState<boolean | undefined>(false);
 
   const handleNextNft = () => {
     setButtonClicked("next");
@@ -96,9 +104,17 @@ export default function NftModal({
     }, 400);
   }, [currentNftIndex]);
 
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setCurrentTimestamp(Date.now());
+    }, 1000);
+
+    return () => clearInterval(intervalId);
+  }, []);
+
   return (
     <Transition.Root show={open} as={Fragment}>
-      <Dialog as="div" className="relative " onClose={() => closeModal()}>
+      <Dialog as="div" className="relative " onClose={() => console.log()}>
         <div
           className={`overlay flex justify-between ${open ? "open" : ""}`}
           onClick={() => closeModal()}
@@ -106,40 +122,113 @@ export default function NftModal({
           <Dialog.Panel
             className={`textModal mainBackground text-white z-50 ${
               isClosing ? "closing" : ""
-            } rounded-lg px-4 pb-4 py-10 text-left sm:p-10 overflow-auto absolute`}
+            } rounded-lg px-4 pb-4 py-10 text-left sm:p-10 overflow-auto absolute flex flex-col justify-between`}
           >
-            <h1 className="text-3xl modalAnimatedText pb-1 navbarTitle">
-              Nft Information
-            </h1>
-            <hr className="modalAnimatedLine" />
-            <ul className="mt-6">
-              <li className="text-2xl mb-3">{`${nftsCopy[currentNftIndex].name}`}</li>
-              <li className="text-lg text-xs">
-                Created by{" "}
-                <span className="text-main text-lg">{`${nftsCopy[currentNftIndex].collection}`}</span>
-              </li>
-              <li className="text-lg mb-3 text-xs">
-                Owner{" "}
-                <span className="text-main text-lg">
-                  {ensName
-                    ? ensName
-                    : `${formatAddress(nftsCopy[currentNftIndex].owner)}`}
-                </span>
-              </li>
-              <li className="mb-2 mt-3 flex text-black font-light">
-                <span className="bg-main rounded-full px-6">ERC 721</span>
-                <span className="bg-main rounded-full px-6 ml-8">Listed</span>
-              </li>
-            </ul>
-            <h1 className="text-3xl modalAnimatedText pb-1 navbarTitle">
-              Loan Information
-            </h1>
-            <hr className="modalAnimatedLine" />
-            {!isConnected && (
-              <div className="w-min mx-auto">
-                <WalletButton />
-              </div>
-            )}
+            <div>
+              <h1 className="text-3xl modalAnimatedText pb-1 navbarTitle">
+                Nft Information
+              </h1>
+              <hr className="modalAnimatedLine" />
+              <ul className="mt-6">
+                <li className="text-2xl mb-3">{`${nftsCopy[currentNftIndex].name}`}</li>
+                <li className="text-lg text-xs">
+                  Created by{" "}
+                  <span className="text-main text-lg">{`${nftsCopy[currentNftIndex].collection}`}</span>
+                </li>
+                <li className="text-lg mb-3 text-xs">
+                  Owner{" "}
+                  <span className="text-main text-lg">
+                    {ensName
+                      ? ensName
+                      : `${formatAddress(nftsCopy[currentNftIndex].owner)}`}
+                  </span>
+                </li>
+                <li className="mb-2 mt-3 flex text-black font-light">
+                  <span className="bg-main rounded-full px-6">ERC 721</span>
+                  <span className="bg-main rounded-full px-6 ml-8">Listed</span>
+                </li>
+              </ul>
+              <h1 className="text-3xl modalAnimatedText pb-1 navbarTitle mt-10">
+                Desired terms
+              </h1>
+              <hr className="modalAnimatedLine" />
+              <ul className="mt-6">
+                <li className="text-lg text-xs flex items-center">
+                  Token supply
+                  <span className="text-main text-lg mx-2">{`100`}</span>{" "}
+                  <Image
+                    src={GHO.src}
+                    alt={`Token image`}
+                    width={24}
+                    height={24}
+                    id="nftCardImage"
+                    className="rounded-lg h-[24px] min-w-[24px]"
+                  />
+                </li>
+                <li className="text-lg text-xs flex items-center">
+                  Rewards
+                  <span className="text-main text-lg mx-2">{`100`}</span>{" "}
+                  <Image
+                    src={GHO.src}
+                    alt={`Token image`}
+                    width={24}
+                    height={24}
+                    id="nftCardImage"
+                    className="rounded-lg h-[24px] min-w-[24px]"
+                  />
+                </li>
+              </ul>
+              <h1 className="text-3xl modalAnimatedText pb-1 navbarTitle mt-10">
+                Loan Duration
+              </h1>
+              <hr className="modalAnimatedLine" />
+              <ul className="mt-6">
+                <li className="text-lg text-xs flex items-center">
+                  Duration
+                  <span className="text-main text-lg mx-2">{`${calculateTimeComponents(
+                    360000
+                  )}`}</span>{" "}
+                </li>
+                <li className="text-lg text-xs flex items-center">
+                  Finish
+                  <span className="text-main text-lg mx-2">{`${formatDate(
+                    currentTimestamp + 360000 * 1000
+                  )}`}</span>{" "}
+                </li>
+              </ul>
+              {!isConnected ? (
+                <div className="w-min mx-auto mt-10">
+                  <WalletButton />
+                </div>
+              ) : (
+                <div className="mt-10">
+                  {!approveTx && (
+                    <button className="bg-main text-black font-light px-[50px] py-2 rounded-xl hover:bg-secondary flex mx-auto mb-4">
+                      Approve
+                    </button>
+                  )}
+
+                  {approveTx ? (
+                    <button className="bg-main text-black font-light px-[36px] py-2 rounded-xl hover:bg-secondary flex mx-auto">
+                      Create Loan
+                    </button>
+                  ) : (
+                    <button
+                      className="flex flex-col  rounded-xl border-main border-1 px-[36px] py-2 mx-auto opacity-50"
+                      disabled
+                    >
+                      Create Loan
+                    </button>
+                  )}
+                </div>
+              )}
+            </div>
+
+            <div className="text-gray-400 font-extralight text-xs mt-4">
+              The above price data is for informational purposes only and should
+              not be used for any investment decisions. Please do your own
+              research regarding NFT valuations.
+            </div>
           </Dialog.Panel>
           <Dialog.Panel
             id="imageContainer"
