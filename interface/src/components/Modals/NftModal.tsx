@@ -392,7 +392,7 @@ export default function NftModal({
                               children={
                                 <span> Approve {requestToken.symbol}</span>
                               }
-                              className="bg-main text-black font-light px-[34px] py-2 rounded-xl hover:bg-secondary flex mx-auto min-w-[200px] items-center"
+                              className="bg-main text-black font-light px-[34px] py-2 rounded-xl hover:bg-secondary flex items-center justify-center mx-auto min-w-[200px] items-center"
                               id="approveToken"
                             />
                           )}
@@ -409,7 +409,7 @@ export default function NftModal({
                             args={[]}
                             getTxStatus={getStatus}
                             children={<span>Supply {requestToken.symbol}</span>}
-                            className="bg-main text-black font-light px-[34px] py-2 rounded-xl hover:bg-secondary flex mx-auto min-w-[200px] items-center mx-auto text-center mt-4"
+                            className="bg-main text-black font-light px-[34px] py-2 rounded-xl hover:bg-secondary flex mx-auto min-w-[200px] items-center mx-auto text-center flex items-center justify-center mt-4"
                             id="supplyRequest"
                           />
                         ) : (

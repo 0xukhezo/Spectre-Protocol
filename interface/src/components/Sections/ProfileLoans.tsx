@@ -7,6 +7,7 @@ import NftCard from "../Cards/NftCard";
 import Image from "next/image";
 import SadSpectre from "../../../public/SadSpectre.svg";
 import { useFetchLoans } from "@/hooks/useFetchLoans";
+import Loader from "../Loader/Loader";
 
 export default function ProfileLoans() {
   const { isConnected, address } = useAccount();
@@ -51,64 +52,76 @@ export default function ProfileLoans() {
             <div>
               <h1 className="text-3xl navbarTitle pb-2">Active Loans</h1>{" "}
               <hr className="modalAnimatedLine" />
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[36px] overflow-auto p-10">
-                {loansCopy.length > 0 ? (
-                  <>
-                    {loansCopy.map((nft: any, index: number) => (
-                      <NftCard
-                        nftInfo={nft}
-                        index={index}
-                        nftsCopy={loansCopy}
-                        key={index}
-                        isPortfolio={false}
-                        isLoan={true}
+              {loadingSupplies ? (
+                <div className="flex items-center justify-center w-full pt-32">
+                  <Loader />{" "}
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[36px] overflow-auto p-10">
+                  {loansCopy.length > 0 ? (
+                    <>
+                      {loansCopy.map((nft: any, index: number) => (
+                        <NftCard
+                          nftInfo={nft}
+                          index={index}
+                          nftsCopy={loansCopy}
+                          key={index}
+                          isPortfolio={false}
+                          isLoan={true}
+                        />
+                      ))}
+                    </>
+                  ) : (
+                    <div className="col-span-full text-5xl navbarTitle max-w-[600px] text-center mx-auto pt-40 flex items-center flex-col font-extralight">
+                      <h1>Looks like NFTs are playing ghost.</h1>
+                      <Image
+                        src={SadSpectre.src}
+                        alt="SadSpectre Image"
+                        width={200}
+                        height={200}
+                        className="min-h-[150px] mb-5 "
                       />
-                    ))}
-                  </>
-                ) : (
-                  <div className="col-span-full text-5xl navbarTitle max-w-[600px] text-center mx-auto pt-40 flex items-center flex-col font-extralight">
-                    <h1>Looks like NFTs are playing ghost.</h1>
-                    <Image
-                      src={SadSpectre.src}
-                      alt="SadSpectre Image"
-                      width={200}
-                      height={200}
-                      className="min-h-[150px] mb-5 "
-                    />
-                  </div>
-                )}{" "}
-              </div>
+                    </div>
+                  )}{" "}
+                </div>
+              )}
             </div>
             <div className="mt-10">
               <h1 className="text-3xl navbarTitle pb-2">Active Supplies</h1>{" "}
               <hr className="modalAnimatedLine" />{" "}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[36px] overflow-auto p-10">
-                {suppliesCopy.length > 0 ? (
-                  <>
-                    {suppliesCopy.map((nft: any, index: number) => (
-                      <NftCard
-                        nftInfo={nft}
-                        index={index}
-                        nftsCopy={loansCopy}
-                        key={index}
-                        isPortfolio={false}
-                        isLoan={true}
+              {loadingSupplies ? (
+                <div className="flex items-center justify-center w-full pt-32">
+                  <Loader />{" "}
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[36px] overflow-auto p-10">
+                  {suppliesCopy.length > 0 ? (
+                    <>
+                      {suppliesCopy.map((nft: any, index: number) => (
+                        <NftCard
+                          nftInfo={nft}
+                          index={index}
+                          nftsCopy={loansCopy}
+                          key={index}
+                          isPortfolio={false}
+                          isLoan={true}
+                        />
+                      ))}
+                    </>
+                  ) : (
+                    <div className="col-span-full text-5xl navbarTitle max-w-[600px] text-center mx-auto pt-40 flex items-center flex-col font-extralight">
+                      <h1>Looks like NFTs are playing ghost.</h1>
+                      <Image
+                        src={SadSpectre.src}
+                        alt="SadSpectre Image"
+                        width={200}
+                        height={200}
+                        className="min-h-[150px] mb-5 "
                       />
-                    ))}
-                  </>
-                ) : (
-                  <div className="col-span-full text-5xl navbarTitle max-w-[600px] text-center mx-auto pt-40 flex items-center flex-col font-extralight">
-                    <h1>Looks like NFTs are playing ghost.</h1>
-                    <Image
-                      src={SadSpectre.src}
-                      alt="SadSpectre Image"
-                      width={200}
-                      height={200}
-                      className="min-h-[150px] mb-5 "
-                    />
-                  </div>
-                )}{" "}
-              </div>
+                    </div>
+                  )}{" "}
+                </div>
+              )}
             </div>
           </div>
         )}
