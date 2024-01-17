@@ -4,7 +4,12 @@ import { erc20ABI, erc721ABI, useAccount } from "wagmi";
 import SelectNftModal from "../Modals/SelectNftModal";
 import Image from "next/image";
 import SelectTokenModal from "../Modals/SelectTokenModal";
-import { initialSteps, tokens, ghoToken } from "../../../constants/constants";
+import {
+  initialSteps,
+  tokens,
+  ghoToken,
+  creatSlotSteps,
+} from "../../../constants/constants";
 import GHO from "../../../public/GHO.svg";
 import Error from "../../../public/Error.svg";
 import Success from "../../../public/Success.svg";
@@ -16,6 +21,7 @@ import TxButton from "../Buttons/TxButton";
 import { abiUserSlot } from "../../../abis/abis.json";
 import Loader from "../Loader/Loader";
 import NotificationsCard from "../Cards/NotificationsCard";
+import InfoSteps from "../Steps/InfoSteps";
 
 export default function CreateLoanSection() {
   const { address, isConnected } = useAccount();
@@ -27,6 +33,7 @@ export default function CreateLoanSection() {
 
   const [connected, setConnected] = useState(false);
   const [steps, setSteps] = useState(initialSteps);
+  const [createSlotSteps, setCreateSlotSteps] = useState(creatSlotSteps);
 
   const [openNFTModal, setOpenNFTModal] = useState(false);
   const [openTokenModal, setOpenTokenModal] = useState(false);
@@ -119,6 +126,9 @@ export default function CreateLoanSection() {
         setTxDescription(null);
         setImage(null);
       }, 2000);
+      setTimeout(() => {
+        router.push("/");
+      }, 3000);
     }
   }, [status]);
 
@@ -301,8 +311,84 @@ export default function CreateLoanSection() {
       ]);
   }, [loanDuration]);
 
+  useEffect(() => {
+    if (nft && token && amountSupply && rewards && loanDuration) {
+      setCreateSlotSteps([
+        { id: "Step 1", name: "Fill the slot form", status: "complete" },
+        {
+          id: "Step 2",
+          name: "Approve the slot to access your NFT",
+          status: "current",
+        },
+        {
+          id: "Step 3",
+          name: "Approve GHO to pay your rewards.",
+          status: "upcoming",
+        },
+        { id: "Step 4", name: "Create loan", status: "upcoming" },
+      ]);
+    }
+  }, [nft, token, amountSupply, rewards, loanDuration]);
+
+  useEffect(() => {
+    if (status[0] === "success" && status[1] === "approveNft") {
+      setCreateSlotSteps([
+        { id: "Step 1", name: "Fill the slot form", status: "complete" },
+        {
+          id: "Step 2",
+          name: "Approve the slot to access your NFT",
+          status: "complete",
+        },
+        {
+          id: "Step 3",
+          name: "Approve GHO to pay your rewards.",
+          status: "current",
+        },
+        { id: "Step 4", name: "Create loan", status: "upcoming" },
+      ]);
+    }
+    if (status[0] === "success" && status[1] === "approveGho") {
+      setCreateSlotSteps([
+        { id: "Step 1", name: "Fill the slot form", status: "complete" },
+        {
+          id: "Step 2",
+          name: "Approve the slot to access your NFT",
+          status: "complete",
+        },
+        {
+          id: "Step 3",
+          name: "Approve GHO to pay your rewards.",
+          status: "complete",
+        },
+        { id: "Step 4", name: "Create loan", status: "current" },
+      ]);
+    }
+    if (status[0] === "success" && status[1] === "openRequest") {
+      setCreateSlotSteps([
+        { id: "Step 1", name: "Fill the slot form", status: "complete" },
+        {
+          id: "Step 2",
+          name: "Approve the slot to access your NFT",
+          status: "complete",
+        },
+        {
+          id: "Step 3",
+          name: "Approve GHO to pay your rewards.",
+          status: "complete",
+        },
+        { id: "Step 4", name: "Create loan", status: "complete" },
+      ]);
+    }
+  }, [status]);
+
   return (
-    <main className="pb-10 pt-8 navbarTextOpacity h-[1000px]">
+    <main className="pb-10 pt-8 navbarTextOpacity min-h-[1000px]">
+      <div className="mainBackground p-6 rounded-xl flex flex-col text-lg max-w-[1000px] mx-auto mb-10">
+        <span className="text-2xl navbarTitle">
+          In order to create your slot, follow this steps
+        </span>
+        <InfoSteps steps={createSlotSteps} />
+      </div>{" "}
       {!connected ? (
         <div className="h-[700px] flex justify-center items-center flex-col">
           <h1 className="font-extralight mb-10 text-3xl">

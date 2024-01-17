@@ -18,16 +18,16 @@ export default function SlotCard({ slot }: SlotCardProps) {
   const handleUnhover = () => {
     setIsHovered(false);
   };
-
+  console.log(slot);
   return (
     <button
       className={`${
-        slot.loan.activeLoan ? "" : "shadow2"
+        slot.loan ? "" : "shadow2"
       } flex items-center rounded-xl border-2 border-main hover:border-gray-100 xl:min-h-[300px] min-h-[350px]`}
       onClick={() => {
         handleUnhover();
       }}
-      disabled={slot.loan.activeLoan ? true : false}
+      disabled={slot.loan ? true : false}
       onMouseEnter={handleHover}
       onMouseLeave={handleUnhover}
     >

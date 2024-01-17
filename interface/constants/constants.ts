@@ -68,6 +68,21 @@ export const tokens = [
   },
 ];
 
+export const creatSlotSteps = [
+  { id: "Step 1", name: "Fill the slot form", status: "current" },
+  {
+    id: "Step 2",
+    name: "Approve the slot to access your NFT",
+    status: "upcoming",
+  },
+  {
+    id: "Step 3",
+    name: "Approve GHO to pay your rewards.",
+    status: "upcoming",
+  },
+  { id: "Step 4", name: "Create loan", status: "upcoming" },
+];
+
 export const initialSteps = [
   {
     name: "Select NFT",
@@ -100,10 +115,15 @@ export const initialSteps = [
 ];
 
 export const getLoanInfoSteps = [
-  { id: "Step 1", name: "Create a slot." },
-  { id: "Step 2", name: "Fill the loan form clicking in your empty slot." },
-  { id: "Step 3", name: "Approve NFT" },
-  { id: "Step 4", name: "Create the loan" },
+  { id: "Step 1", name: "Create a slot.", status: "complete" },
+  {
+    id: "Step 2",
+    name: "Fill the loan form clicking in your empty slot.",
+    status: "complete",
+  },
+  { id: "Step 3", name: "Approve NFT", status: "complete" },
+  { id: "Step 4", name: "Approve GHO", status: "complete" },
+  { id: "Step 5", name: "Create the loan", status: "complete" },
 ];
 
 export const ghoToken = {

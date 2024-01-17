@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { ReactElement, useEffect, useState } from "react";
 
 import { useAccount } from "wagmi";
 
@@ -15,22 +15,59 @@ import { useFetchSlotsUser } from "@/hooks/useFetchSlotsUser";
 import NotificationsCard from "../Cards/NotificationsCard";
 import Image from "next/image";
 import SadSpectre from "../../../public/SadSpectre.svg";
+import Loader from "../Loader/Loader";
+import router from "next/router";
 
 export default function GetLoanSection() {
   const [connected, setConnected] = useState(false);
   const { isConnected, address } = useAccount();
 
+  const [status, setStatus] = useState<string[]>([]);
+
+  const [title, setTitle] = useState<string | null>(null);
+  const [image, setImage] = useState<string | ReactElement | null>(null);
+  const [txDescription, setTxDescription] = useState<string | null>(null);
+
   const slots = useFetchSlotsUser(
     `(where: {user_: {id: "${address?.toLowerCase()}"}})`
   );
+
+  const getStatus = (status: string, statusFuction: string) => {
+    setStatus([status, statusFuction]);
+  };
 
   useEffect(() => {
     setConnected(isConnected);
   }, [isConnected]);
 
-  const getTxStatus = (status: string, name: string) => {
-    console.log(status, name);
-  };
+  useEffect(() => {
+    if (status[0] === "loading") {
+      setTitle("Processing");
+      setTxDescription("The transaction is being processed.");
+      setImage(Loader);
+    } else if (status[0] === "error") {
+      setTitle("Error");
+      setTxDescription("Failed transaction.");
+      setImage(Error.src);
+    } else if (status[0] === "success") {
+      setTitle("Success");
+      setTxDescription(
+        "The transaction was executed correctly. Reload the page."
+      );
+      setImage(Success.src);
+    }
+
+    if (status[0] === "success" && status[1] === "createSlotFuction") {
+      setTimeout(() => {
+        setTitle(null);
+        setTxDescription(null);
+        setImage(null);
+      }, 2000);
+      setTimeout(() => {
+        router.push("/");
+      }, 3000);
+    }
+  }, [status]);
 
   return (
     <main className="pb-10 navbarTextOpacity">
@@ -57,7 +94,7 @@ export default function GetLoanSection() {
                 abi={abiUserSlotFactory}
                 functionName="createSlot"
                 args={[]}
-                getTxStatus={getTxStatus}
+                getTxStatus={getStatus}
                 children={<span> + Create Slot</span>}
                 className="bg-main text-black font-light px-4 py-2 rounded-xl max-h-[44px] hover:bg-secondary"
                 id="createSlotFuction"
@@ -83,7 +120,7 @@ export default function GetLoanSection() {
                     abi={abiUserSlotFactory}
                     functionName="createSlot"
                     args={[]}
-                    getTxStatus={getTxStatus}
+                    getTxStatus={getStatus}
                     children={<span> + Create Slot</span>}
                     className="bg-main text-black font-light px-10 py-3 rounded-xl hover:bg-secondary text-base"
                     id="createSlotFuction"
@@ -93,7 +130,14 @@ export default function GetLoanSection() {
             </div>{" "}
           </div>
         )}
-      </div>
+      </div>{" "}
+      {title && image && txDescription && (
+        <NotificationsCard
+          title={title}
+          image={image}
+          txDescription={txDescription}
+        />
+      )}
     </main>
   );
 }
