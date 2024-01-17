@@ -34,7 +34,7 @@ export default function ProfileLoans() {
 
   useEffect(() => {
     setSuppliesCopy([...supplies]);
-  }, [loans]);
+  }, [supplies]);
 
   return (
     <main className="pb-10 navbarTextOpacity">
@@ -101,10 +101,10 @@ export default function ProfileLoans() {
                         <NftCard
                           nftInfo={nft}
                           index={index}
-                          nftsCopy={loansCopy}
+                          nftsCopy={suppliesCopy}
                           key={index}
                           isPortfolio={false}
-                          isLoan={true}
+                          isLoan={false}
                         />
                       ))}
                     </>

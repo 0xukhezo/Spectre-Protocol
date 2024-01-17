@@ -15,7 +15,6 @@ import Error from "../../../public/Error.svg";
 import Success from "../../../public/Success.svg";
 import WalletButton from "../Buttons/WalletButton";
 import Steps from "../Steps/Steps";
-import { formatDate } from "../../../utils/utils";
 import { useRouter } from "next/router";
 import TxButton from "../Buttons/TxButton";
 import { abiUserSlot } from "../../../abis/abis.json";
@@ -568,8 +567,9 @@ export default function CreateLoanSection() {
                         setAmountSupply(0);
                       }
                     }}
+                    placeholder="0"
                     onWheel={(e) => (e.target as HTMLInputElement).blur()}
-                    className="bg-main pr-8 py-1 text-black bg-main font-light h-[46px] ring-0 focus:ring-0 outline-0"
+                    className="bg-main pr-8 py-1 text-black bg-main font-light h-[46px] ring-0 focus:ring-0 outline-0  "
                     disabled={token === null}
                   />{" "}
                   {token && (
@@ -599,6 +599,7 @@ export default function CreateLoanSection() {
                         setRewards(0);
                       }
                     }}
+                    placeholder="0"
                     onWheel={(e) => (e.target as HTMLInputElement).blur()}
                     className="rounded-lg pr-8 py-1 text-black bg-main font-light h-[46px] ring-0 focus:ring-0 outline-0"
                     disabled={amountSupply === undefined}
@@ -623,6 +624,7 @@ export default function CreateLoanSection() {
                     min={0}
                     onChange={(e) => handleLoanDuration(Number(e.target.value))}
                     onWheel={(e) => (e.target as HTMLInputElement).blur()}
+                    placeholder="0"
                     className="rounded-lg pr-8 py-1 text-black bg-main font-light h-[46px] ring-0 focus:ring-0 outline-0"
                     disabled={rewards === undefined}
                   />
@@ -630,14 +632,6 @@ export default function CreateLoanSection() {
                     days
                   </span>
                 </div>{" "}
-                {loanDurationToContrat && loanDurationToContrat !== 0 && (
-                  <div className=" flex justify-between w-3/4 items-center font-light text-xs">
-                    <span>The loan finish:</span>
-                    <span>
-                      {formatDate(loanDurationToContrat + Date.now())}
-                    </span>
-                  </div>
-                )}
               </div>
             </div>
 
