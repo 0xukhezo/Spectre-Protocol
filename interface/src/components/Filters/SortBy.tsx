@@ -55,9 +55,6 @@ export default function SortBy({
           getFilters={getSymbolFilters}
           clearFilters={clearFilters}
         />
-        {/* {symbolsCopy.map((symbol: string) => (
-          <div>{symbol}</div>
-        ))} */}
       </div>
     </main>
   );

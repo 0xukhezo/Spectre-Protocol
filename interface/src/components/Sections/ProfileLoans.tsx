@@ -3,20 +3,25 @@ import React, { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
 
 import WalletButton from "../Buttons/WalletButton";
-import { nfts } from "../../../constants/constants";
 import NftCard from "../Cards/NftCard";
 import Image from "next/image";
 import SadSpectre from "../../../public/SadSpectre.svg";
+import { useFetchLoans } from "@/hooks/useFetchLoans";
 
 export default function ProfileLoans() {
-  const [connected, setConnected] = useState(false);
-  const [nftsCopy, setNftsCopy] = useState<any[]>([...nfts]);
+  const { isConnected, address } = useAccount();
 
-  const { isConnected } = useAccount();
+  const loans = useFetchLoans(
+    `(where: {user_: {id: "${address?.toLowerCase()}"}})`
+  );
+
+  const [connected, setConnected] = useState(false);
+  const [nftsCopy, setNftsCopy] = useState<any[]>([...loans]);
 
   useEffect(() => {
     setConnected(isConnected);
   }, [isConnected]);
+
   return (
     <main className="pb-10 navbarTextOpacity">
       <div className="mx-4">

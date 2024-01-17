@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import NftCard from "@/components/Cards/NftCard";
 import SearchBar from "../Filters/SearchBar";
-import { nfts } from "../../../constants/constants";
 import Image from "next/image";
 import SadSpectre from "../../../public/SadSpectre.svg";
 import SortBy from "../Filters/SortBy";

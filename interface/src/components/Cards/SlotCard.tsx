@@ -21,10 +21,13 @@ export default function SlotCard({ slot }: SlotCardProps) {
 
   return (
     <button
-      className="shadow2 flex items-center rounded-xl border-2 border-main hover:border-gray-100 xl:min-h-[300px] min-h-[350px]"
+      className={`${
+        slot.loan.activeLoan ? "" : "shadow2"
+      } flex items-center rounded-xl border-2 border-main hover:border-gray-100 xl:min-h-[300px] min-h-[350px]`}
       onClick={() => {
         handleUnhover();
       }}
+      disabled={slot.loan.activeLoan ? true : false}
       onMouseEnter={handleHover}
       onMouseLeave={handleUnhover}
     >

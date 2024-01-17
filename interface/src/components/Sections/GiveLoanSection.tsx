@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import NftCard from "@/components/Cards/NftCard";
 import SearchBar from "../Filters/SearchBar";
-import { nfts } from "../../../constants/constants";
 import Image from "next/image";
 import SadSpectre from "../../../public/SadSpectre.svg";
 import SortBy from "../Filters/SortBy";
@@ -9,10 +8,13 @@ import {
   ChevronDoubleLeftIcon,
   ChevronDoubleRightIcon,
 } from "@heroicons/react/24/outline";
+import { useFetchLoans } from "@/hooks/useFetchLoans";
 
 export default function GiveLoanSection() {
+  const loans = useFetchLoans(``);
+
   const [search, setSearch] = useState<string>("");
-  const [nftsCopy, setNftsCopy] = useState<any[]>([...nfts]);
+  const [nftsCopy, setNftsCopy] = useState<any[]>([...loans]);
   const [symbols, setSymbols] = useState<string[]>([]);
   const [scrolled, setScrolled] = useState<boolean>(false);
   const [clearFilters, setClearFilters] = useState<boolean>(false);
@@ -28,23 +30,27 @@ export default function GiveLoanSection() {
   };
 
   useEffect(() => {
-    let copy = [...nfts];
+    setNftsCopy([...loans]);
+  }, [loans]);
+
+  useEffect(() => {
+    let copy = [...loans];
 
     if (selectedSymbols.length !== 0) {
-      copy = copy.filter((nft: any) =>
-        selectedSymbols.includes(nft.collection)
+      copy = copy.filter((loan: any) =>
+        selectedSymbols.includes(loan.nft.collection.name)
       );
     }
     if (search.length !== 0) {
       copy = copy.filter(
-        (nfts: any) =>
-          nfts.name.toLowerCase().includes(search.toLowerCase()) ||
-          nfts.collection.toLowerCase() === search.toLowerCase()
+        (loan: any) =>
+          loan.name.toLowerCase().includes(search.toLowerCase()) ||
+          loan.nft.collection.name.toLowerCase() === search.toLowerCase()
       );
     }
 
     setNftsCopy(copy);
-  }, [search, selectedSymbols]);
+  }, [search, selectedSymbols, loans]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -56,7 +62,7 @@ export default function GiveLoanSection() {
     };
 
     const uniqueSymbols = Array.from(
-      new Set(nfts.map((nft: any) => nft.collection))
+      new Set(loans.map((loan: any) => loan.nft.collection.name))
     );
 
     setSymbols(uniqueSymbols);
@@ -66,7 +72,7 @@ export default function GiveLoanSection() {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, []);
+  }, [loans]);
 
   const handleClearFilters = () => {
     setClearFilters(true);
@@ -155,7 +161,7 @@ export default function GiveLoanSection() {
             nftsCopy.length > 0
               ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[36px] overflow-auto"
               : ""
-          }  px-[24px] pb-10`}
+          }  px-[24px] py-10`}
         >
           {nftsCopy.length > 0 ? (
             <>

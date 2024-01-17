@@ -28,9 +28,9 @@ export default function useNFTData(ownerAddr: `0x${string}`) {
 
         const formattedNFTData = nftsForOwner.ownedNfts.map((nft) => ({
           contractAddress: nft.contract.address,
-          name: nft.name,
+          name: nft.name || nft.tokenId,
           image: nft?.image?.pngUrl || nft.image.originalUrl,
-          collection: nft?.collection?.name,
+          collection: nft?.contract.name,
           owner: ownerAddr,
           tokenId: nft.tokenId,
         }));

@@ -56,7 +56,7 @@ export default function NftCard({
         <div className="mainBackground w-full h-full rounded-b-xl text-white border-t-1 border-t-main relative flex flex-col items-center align-center justify-center">
           <div className="w-6 h-6 absolute rotate-45 bg-main -top-3 right-[46%]"></div>
           <h1 className="pb-2 pt-8 text-sm text-main font-medium px-4">
-            {nftInfo.collection}
+            {isPortfolio ? nftInfo.collection : nftInfo.nft.collection.name}
           </h1>
           <h1 className="pb-12 text-xl font-semibold px-4">{nftInfo.name}</h1>
         </div>

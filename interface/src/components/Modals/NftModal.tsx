@@ -3,7 +3,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import Image from "next/image";
 import Arrow from "../../../public/Arrow.svg";
 import WalletButton from "../Buttons/WalletButton";
-import { useAccount, useEnsName } from "wagmi";
+import { erc20ABI, useAccount, useEnsName } from "wagmi";
 import {
   calculateTimeComponents,
   formatAddress,
@@ -14,6 +14,7 @@ import GHO from "../../../public/GHO.svg";
 import { useContractRead } from "wagmi";
 import { abiAAVEPool } from "../../../abis/abis.json";
 import { AAVEPoolAddress } from "../../../abis/contractAddress.json";
+import { tokens } from "../../../constants/constants";
 
 type NftModalProps = {
   getShowMenu: (open: boolean) => void;
@@ -41,11 +42,9 @@ export default function NftModal({
 
   const [buttonClicked, setButtonClicked] = useState<string>("Initial");
   const [currentTimestamp, setCurrentTimestamp] = useState(Date.now());
+  const [requestToken, setRequestToken] = useState<any>();
 
   const { isConnected } = useAccount();
-  const { data: ensName } = useEnsName({
-    address: nftsCopy[currentNftIndex].owner,
-  });
 
   const { data: accountInfo } = useContractRead({
     address: AAVEPoolAddress as `0x${string}`,
@@ -53,6 +52,13 @@ export default function NftModal({
     functionName: "getUserAccountData",
     args: ["0xb3204E7bD17273790f5ffb0Bb1e591Ab0011dC55"],
   });
+
+  const { data: decimalsTokenrequest } = useContractRead({
+    address: nftsCopy[currentNftIndex].tokenRequest as `0x${string}`,
+    abi: erc20ABI,
+    functionName: "decimals",
+  });
+
   const healthFactor = accountInfo as any;
 
   const [approveTx, setApproveTx] = useState<boolean | undefined>(false);
@@ -128,7 +134,12 @@ export default function NftModal({
     const intervalId = setInterval(() => {
       setCurrentTimestamp(Date.now());
     }, 1000);
+    const requestImage = tokens.filter(
+      (token) =>
+        nftsCopy[currentNftIndex].tokenRequest === token.contract.toLowerCase()
+    );
 
+    setRequestToken(requestImage[0]);
     return () => clearInterval(intervalId);
   }, []);
 
@@ -153,14 +164,18 @@ export default function NftModal({
                 <li className="text-2xl mb-3">{`${nftsCopy[currentNftIndex].name}`}</li>
                 <li className="text-lg text-xs">
                   Created by{" "}
-                  <span className="text-main text-lg">{`${nftsCopy[currentNftIndex].collection}`}</span>
+                  <span className="text-main text-lg">
+                    {isPortfolio
+                      ? `${nftsCopy[currentNftIndex].collection}`
+                      : `${nftsCopy[currentNftIndex].nft.collection.name}`}
+                  </span>
                 </li>
-                <li className="text-lg mb-3 text-xs">
+                <li className="text-lg text-xs">
                   Owner{" "}
                   <span className="text-main text-lg">
-                    {ensName
-                      ? ensName
-                      : `${formatAddress(nftsCopy[currentNftIndex].owner)}`}
+                    {isPortfolio
+                      ? `${formatAddress(nftsCopy[currentNftIndex].owner)}`
+                      : `${formatAddress(nftsCopy[currentNftIndex].user.id)}`}
                   </span>
                 </li>
                 <li className="mb-2 mt-3 flex text-black font-light">
@@ -177,20 +192,29 @@ export default function NftModal({
                       </h1>
                       <hr className="modalAnimatedLine" />
                       <ul className="mt-6 modalAnimatedText">
-                        <li className="text-lg text-xs flex items-center">
-                          Token supply
-                          <span className="text-main text-lg mx-2">{`100`}</span>{" "}
-                          <Image
-                            src={GHO.src}
-                            alt={`Token image`}
-                            width={24}
-                            height={24}
-                            className="rounded-lg h-[24px] min-w-[24px]"
-                          />
-                        </li>
+                        {decimalsTokenrequest !== undefined && (
+                          <li className="text-lg text-xs flex items-center">
+                            Token request
+                            <span className="text-main text-lg mx-2">
+                              {nftsCopy[currentNftIndex].amountRequest /
+                                10 ** decimalsTokenrequest}
+                            </span>{" "}
+                            {requestToken && (
+                              <Image
+                                src={requestToken.image}
+                                alt={`Token image`}
+                                width={24}
+                                height={24}
+                                className="rounded-lg h-[24px] min-w-[24px]"
+                              />
+                            )}
+                          </li>
+                        )}
                         <li className="text-lg text-xs flex items-center">
                           Rewards
-                          <span className="text-main text-lg mx-2">{`100`}</span>{" "}
+                          <span className="text-main text-lg mx-2">{`${
+                            nftsCopy[currentNftIndex].rewards / 10 ** 18
+                          }`}</span>{" "}
                           <Image
                             src={GHO.src}
                             alt={`Token image`}
@@ -210,13 +234,14 @@ export default function NftModal({
                     <li className="text-lg text-xs flex items-center">
                       Duration
                       <span className="text-main text-lg mx-2">{`${calculateTimeComponents(
-                        1706408412 - currentTimestamp / 1000
+                        nftsCopy[currentNftIndex].loanDuration / 1000
                       )}`}</span>{" "}
                     </li>
                     <li className="text-lg text-xs flex items-center">
-                      Finish
+                      If supply finish
                       <span className="text-main text-lg mx-2">{`${formatDate(
-                        1706408412 * 1000
+                        nftsCopy[currentNftIndex].loanDuration / 1000 +
+                          currentTimestamp
                       )}`}</span>{" "}
                     </li>
                   </ul>
@@ -269,9 +294,9 @@ export default function NftModal({
                           </button>
                         )}
 
-                        {approveTx ? (
+                        {approveTx && requestToken ? (
                           <button className="bg-main text-black font-light px-[34px] py-2 rounded-xl hover:bg-secondary flex mx-auto">
-                            Create Loan
+                            Supply {requestToken.symbol}
                           </button>
                         ) : (
                           <button

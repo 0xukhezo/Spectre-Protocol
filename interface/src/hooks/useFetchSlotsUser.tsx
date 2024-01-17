@@ -6,14 +6,31 @@ import { client, Graph } from "../pages/api/Graph";
 export const useFetchSlotsUser = (filter: string) => {
   const [slots, setSlots] = useState<any[]>([]);
 
-  async function fetchPools() {
+  async function fetchSlots() {
     const queryBody = `query MyQuery {
       slotUsers${filter} {
+        loan {
+          activeLoan
+          amountRequest
+          amountWithdraw
+          deadline
+          id
+          loanDuration
+          nft {
+            id
+            collection {
+              name
+              symbol
+            }
+            uri
+          }
+          rewards
+          tokenToBorrow
+          tokenRequest
+          supplier
+        }
         id
         user {
-          id
-        }
-        loan {
           id
         }
       }
@@ -28,7 +45,7 @@ export const useFetchSlotsUser = (filter: string) => {
   }
 
   useEffect(() => {
-    fetchPools();
+    fetchSlots();
   }, []);
 
   return slots;
