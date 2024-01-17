@@ -43,7 +43,6 @@ export default function TxButton({
     isLoading: txLoadingWagmi,
     isError: txErrorWagmi,
   } = useWaitForTransaction({
-    confirmations: 2,
     hash: dataTx?.hash,
   });
 

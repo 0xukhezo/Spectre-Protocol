@@ -11,16 +11,29 @@ import { useFetchLoans } from "@/hooks/useFetchLoans";
 export default function ProfileLoans() {
   const { isConnected, address } = useAccount();
 
-  const loans = useFetchLoans(
+  const { loans, loading } = useFetchLoans(
     `(where: {user_: {id: "${address?.toLowerCase()}"}})`
   );
 
+  const { loans: supplies, loading: loadingSupplies } = useFetchLoans(
+    `(where: {supplier: "${address?.toLowerCase()}"})`
+  );
+
   const [connected, setConnected] = useState(false);
-  const [nftsCopy, setNftsCopy] = useState<any[]>([...loans]);
+  const [loansCopy, setLonsCopy] = useState<any[]>([...loans]);
+  const [suppliesCopy, setSuppliesCopy] = useState<any[]>([...supplies]);
 
   useEffect(() => {
     setConnected(isConnected);
   }, [isConnected]);
+
+  useEffect(() => {
+    setLonsCopy([...loans]);
+  }, [loans]);
+
+  useEffect(() => {
+    setSuppliesCopy([...supplies]);
+  }, [loans]);
 
   return (
     <main className="pb-10 navbarTextOpacity">
@@ -39,13 +52,13 @@ export default function ProfileLoans() {
               <h1 className="text-3xl navbarTitle pb-2">Active Loans</h1>{" "}
               <hr className="modalAnimatedLine" />
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[36px] overflow-auto p-10">
-                {nftsCopy.length > 0 ? (
+                {loansCopy.length > 0 ? (
                   <>
-                    {nftsCopy.map((nft: any, index: number) => (
+                    {loansCopy.map((nft: any, index: number) => (
                       <NftCard
                         nftInfo={nft}
                         index={index}
-                        nftsCopy={nftsCopy}
+                        nftsCopy={loansCopy}
                         key={index}
                         isPortfolio={false}
                         isLoan={true}
@@ -70,13 +83,13 @@ export default function ProfileLoans() {
               <h1 className="text-3xl navbarTitle pb-2">Active Supplies</h1>{" "}
               <hr className="modalAnimatedLine" />{" "}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[36px] overflow-auto p-10">
-                {nftsCopy.length > 0 ? (
+                {suppliesCopy.length > 0 ? (
                   <>
-                    {nftsCopy.map((nft: any, index: number) => (
+                    {suppliesCopy.map((nft: any, index: number) => (
                       <NftCard
                         nftInfo={nft}
                         index={index}
-                        nftsCopy={nftsCopy}
+                        nftsCopy={loansCopy}
                         key={index}
                         isPortfolio={false}
                         isLoan={true}

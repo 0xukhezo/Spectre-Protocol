@@ -5,6 +5,7 @@ import { client, Graph } from "../pages/api/Graph";
 
 export const useFetchLoans = (filter: string) => {
   const [loans, setLoans] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
   async function fetchLoans() {
     const queryBody = `query MyQuery {
@@ -40,9 +41,10 @@ export const useFetchLoans = (filter: string) => {
 
     try {
       let response = await client.query({ query: Graph(queryBody) });
-
+      setLoading(false);
       setLoans(response.data.loans);
     } catch (err) {
+      setLoading(false);
       console.log({ err });
     }
   }
@@ -51,5 +53,5 @@ export const useFetchLoans = (filter: string) => {
     fetchLoans();
   }, []);
 
-  return loans;
+  return { loans, loading };
 };

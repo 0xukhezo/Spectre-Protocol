@@ -10,10 +10,11 @@ import {
 } from "@heroicons/react/24/outline";
 import { useFetchLoans } from "@/hooks/useFetchLoans";
 import { useAccount } from "wagmi";
+import Loader from "../Loader/Loader";
 
 export default function GiveLoanSection() {
   const { address } = useAccount();
-  const loans = useFetchLoans(
+  const { loans, loading } = useFetchLoans(
     `(where: {user_: {id_not: "${address?.toLowerCase()}"}, supplier: "0x0000000000000000000000000000000000000000"})`
   );
 
@@ -160,39 +161,45 @@ export default function GiveLoanSection() {
           query={search}
           classInput="rounded-xl outline-none placeholder:text-gray-400 py-[10px] px-[20px] w-full text-white mainBackground"
         />
-        <div
-          className={`relative min-h-[500px] ${
-            nftsCopy.length > 0
-              ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[36px] overflow-auto"
-              : ""
-          }  px-[24px] py-10`}
-        >
-          {nftsCopy.length > 0 ? (
-            <>
-              {nftsCopy.map((nft: any, index: number) => (
-                <NftCard
-                  nftInfo={nft}
-                  index={index}
-                  nftsCopy={nftsCopy}
-                  key={index}
-                  isPortfolio={false}
-                  isLoan={false}
+        {loading ? (
+          <div className="flex h-[500px] justify-center items-center">
+            <Loader />
+          </div>
+        ) : (
+          <div
+            className={`relative min-h-[500px] ${
+              nftsCopy.length > 0
+                ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[36px] overflow-auto"
+                : ""
+            }  px-[24px] py-10`}
+          >
+            {nftsCopy.length > 0 ? (
+              <>
+                {nftsCopy.map((nft: any, index: number) => (
+                  <NftCard
+                    nftInfo={nft}
+                    index={index}
+                    nftsCopy={nftsCopy}
+                    key={index}
+                    isPortfolio={false}
+                    isLoan={false}
+                  />
+                ))}
+              </>
+            ) : (
+              <div className="col-span-full text-5xl navbarTitle max-w-[600px] text-center mx-auto pt-40 flex items-center flex-col font-extralight">
+                <h1>Looks like NFTs are playing ghost.</h1>
+                <Image
+                  src={SadSpectre.src}
+                  alt="SadSpectre Image"
+                  width={200}
+                  height={200}
+                  className="min-h-[150px] mb-5 "
                 />
-              ))}
-            </>
-          ) : (
-            <div className="col-span-full text-5xl navbarTitle max-w-[600px] text-center mx-auto pt-40 flex items-center flex-col font-extralight">
-              <h1>Looks like NFTs are playing ghost.</h1>
-              <Image
-                src={SadSpectre.src}
-                alt="SadSpectre Image"
-                width={200}
-                height={200}
-                className="min-h-[150px] mb-5 "
-              />
-            </div>
-          )}
-        </div>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </main>
   );

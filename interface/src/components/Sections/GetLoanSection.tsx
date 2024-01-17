@@ -28,7 +28,7 @@ export default function GetLoanSection() {
   const [image, setImage] = useState<string | ReactElement | null>(null);
   const [txDescription, setTxDescription] = useState<string | null>(null);
 
-  const slots = useFetchSlotsUser(
+  const { slots, loading } = useFetchSlotsUser(
     `(where: {user_: {id: "${address?.toLowerCase()}"}})`
   );
 
@@ -104,30 +104,36 @@ export default function GetLoanSection() {
               <h1 className="text-3xl navbarTitle pb-2">Slots created</h1>{" "}
               <hr className="modalAnimatedLine" />
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[36px] overflow-auto p-10">
-              {slots.length !== 0 ? (
-                <>
-                  {slots.map((slot: any, index: number) => (
-                    <SlotCard slot={slot} key={index} />
-                  ))}
-                </>
-              ) : (
-                <div className="col-span-full text-5xl navbarTitle max-w-[600px] text-center mx-auto pt-40 flex items-center flex-col font-extralight">
-                  <h1>Looks like you haven't got slots created.</h1>
-                  <span className="my-5">Create one!</span>
-                  <TxButton
-                    address={UserSlotFactoryAddress as `0x${string}`}
-                    abi={abiUserSlotFactory}
-                    functionName="createSlot"
-                    args={[]}
-                    getTxStatus={getStatus}
-                    children={<span> + Create Slot</span>}
-                    className="bg-main text-black font-light px-10 py-3 rounded-xl hover:bg-secondary text-base"
-                    id="createSlotFuction"
-                  />
-                </div>
-              )}
-            </div>{" "}
+            {loading ? (
+              <div className="flex h-[400px] justify-center items-center">
+                <Loader />
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[36px] overflow-auto p-10">
+                {slots.length !== 0 ? (
+                  <>
+                    {slots.map((slot: any, index: number) => (
+                      <SlotCard slot={slot} key={index} />
+                    ))}
+                  </>
+                ) : (
+                  <div className="col-span-full text-5xl navbarTitle max-w-[600px] text-center mx-auto pt-40 flex items-center flex-col font-extralight">
+                    <h1>Looks like you haven't got slots created.</h1>
+                    <span className="my-5">Create one!</span>
+                    <TxButton
+                      address={UserSlotFactoryAddress as `0x${string}`}
+                      abi={abiUserSlotFactory}
+                      functionName="createSlot"
+                      args={[]}
+                      getTxStatus={getStatus}
+                      children={<span> + Create Slot</span>}
+                      className="bg-main text-black font-light px-10 py-3 rounded-xl hover:bg-secondary text-base"
+                      id="createSlotFuction"
+                    />
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         )}
       </div>{" "}

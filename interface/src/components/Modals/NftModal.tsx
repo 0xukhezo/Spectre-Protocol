@@ -24,6 +24,7 @@ import TxButton from "../Buttons/TxButton";
 import NotificationsCard from "../Cards/NotificationsCard";
 import Loader from "../Loader/Loader";
 import { useFetchUriInfo } from "@/hooks/useFetchUriInfo";
+import { zeroAddress } from "viem";
 
 type NftModalProps = {
   getShowMenu: (open: boolean) => void;
@@ -222,8 +223,6 @@ export default function NftModal({
     }
   }, [status]);
 
-  console.log(info);
-
   return (
     <Transition.Root show={open} as={Fragment}>
       <Dialog as="div" className="relative " onClose={() => console.log()}>
@@ -315,19 +314,27 @@ export default function NftModal({
                     <li className="text-lg text-xs flex items-center">
                       Duration
                       <span className="text-main text-lg mx-2">{`${calculateTimeComponents(
-                        nftsCopy[currentNftIndex].loanDuration / 1000
+                        nftsCopy[currentNftIndex].loanDuration
                       )}`}</span>{" "}
                     </li>
-                    <li className="text-lg text-xs flex items-center">
-                      If supply finish
-                      <span className="text-main text-lg mx-2">{`${formatDate(
-                        nftsCopy[currentNftIndex].loanDuration / 1000 +
-                          currentTimestamp
-                      )}`}</span>{" "}
-                    </li>
+                    {nftsCopy[currentNftIndex].supplier === zeroAddress ? (
+                      <li className="text-lg text-xs flex items-center">
+                        If supply finish
+                        <span className="text-main text-lg mx-2">{`${formatDate(
+                          nftsCopy[currentNftIndex].loanDuration +
+                            currentTimestamp
+                        )}`}</span>{" "}
+                      </li>
+                    ) : (
+                      <li className="text-lg text-xs flex items-center">
+                        Finish
+                        <span className="text-main text-lg mx-2">{`${formatDate(
+                          Number(nftsCopy[currentNftIndex].deadline)
+                        )}`}</span>{" "}
+                      </li>
+                    )}
                   </ul>
                   <div className="modalAnimatedText">
-                    {" "}
                     {!isConnected ? (
                       <div className="w-min mx-auto mt-10">
                         <WalletButton />

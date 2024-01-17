@@ -5,6 +5,7 @@ import { client, Graph } from "../pages/api/Graph";
 
 export const useFetchSlotsUser = (filter: string) => {
   const [slots, setSlots] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
   async function fetchSlots() {
     const queryBody = `query MyQuery {
@@ -39,7 +40,9 @@ export const useFetchSlotsUser = (filter: string) => {
     try {
       let response = await client.query({ query: Graph(queryBody) });
       setSlots(response.data.slotUsers);
+      setLoading(false);
     } catch (err) {
+      setLoading(false);
       console.log({ err });
     }
   }
@@ -48,5 +51,5 @@ export const useFetchSlotsUser = (filter: string) => {
     fetchSlots();
   }, []);
 
-  return slots;
+  return { slots, loading };
 };

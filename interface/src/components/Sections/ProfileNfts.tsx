@@ -87,7 +87,6 @@ export default function ProfileNfts() {
     setConnected(isConnected);
   }, [isConnected]);
 
-  console.log(nftsCopy);
   return (
     <main
       className={`grid  ${

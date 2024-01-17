@@ -68,7 +68,7 @@ export default function CreateLoanSection() {
   const handleLoanDuration = (duration: number) => {
     if (duration >= 0) {
       setLoanDuration(duration);
-      setLoanDurationToContrat(duration * 3600 * 1000 * 24);
+      setLoanDurationToContrat(duration * 3600 * 24);
     } else {
       setLoanDuration(0);
       setLoanDurationToContrat(0);
@@ -413,7 +413,7 @@ export default function CreateLoanSection() {
                 ((status[1] === "approveNft" && status[0] !== "loading") ||
                   status[1] === "approveGho" ||
                   (status[1] === "openRequest" && status[0] === "loading")) &&
-                "hidden"
+                "opacity-0"
               }`}
               disabled
             >
@@ -442,7 +442,7 @@ export default function CreateLoanSection() {
               className={`h-1/2 my-auto items-center justify-center border-1 border-main mx-4 flex flex-col px-4 rounded-xl mainBackground opacity-50  py-6 ${
                 ((status[1] === "approveGho" && status[0] !== "loading") ||
                   (status[1] === "openRequest" && status[0] === "loading")) &&
-                "hidden"
+                "opacity-0"
               }`}
               disabled
             >
