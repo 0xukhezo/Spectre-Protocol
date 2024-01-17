@@ -6,8 +6,10 @@ import WalletButton from "../Buttons/WalletButton";
 import { erc20ABI, useAccount } from "wagmi";
 import {
   calculateTimeComponents,
+  fetchUri,
   formatAddress,
   formatDate,
+  transformUrl,
 } from "../../../utils/utils";
 import GHO from "../../../public/GHO.svg";
 import { abiUserSlot } from "../../../abis/abis.json";
@@ -21,6 +23,7 @@ import { tokens } from "../../../constants/constants";
 import TxButton from "../Buttons/TxButton";
 import NotificationsCard from "../Cards/NotificationsCard";
 import Loader from "../Loader/Loader";
+import { useFetchUriInfo } from "@/hooks/useFetchUriInfo";
 
 type NftModalProps = {
   getShowMenu: (open: boolean) => void;
@@ -38,7 +41,7 @@ export default function NftModal({
   isPortfolio,
 }: NftModalProps) {
   const [open, setOpen] = useState(true);
-  const [image, setImage] = useState(nftsCopy[nftIndex].image);
+
   const [isClosing, setIsClosing] = useState(false);
   const [currentNftIndex, setCurrentNftIndex] = useState(nftIndex);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -59,6 +62,22 @@ export default function NftModal({
 
   const { isConnected } = useAccount();
 
+  const { info, loading } = useFetchUriInfo(
+    nftsCopy[currentNftIndex].uri
+      ? `${nftsCopy[currentNftIndex].uri}`
+      : `${nftsCopy[currentNftIndex].nft.uri}`
+  );
+
+  useEffect(() => {
+    if (info) {
+      setImage(info.image);
+      setName(info.name);
+    }
+  }, [info]);
+
+  const [image, setImage] = useState(info.image);
+  const [name, setName] = useState<string>("");
+
   const { data: accountInfo } = useContractRead({
     address: AAVEPoolAddress as `0x${string}`,
     abi: abiAAVEPool,
@@ -66,7 +85,7 @@ export default function NftModal({
     args: ["0xb3204E7bD17273790f5ffb0Bb1e591Ab0011dC55"],
   });
 
-  const { data: decimalsTokenrequest } = useContractRead({
+  const { data: decimalsTokenRequest } = useContractRead({
     address: nftsCopy[currentNftIndex].tokenRequest as `0x${string}`,
     abi: erc20ABI,
     functionName: "decimals",
@@ -74,15 +93,23 @@ export default function NftModal({
 
   const healthFactor = accountInfo as any;
 
-  const handleNextNft = () => {
+  const handleNextNft = async () => {
     setButtonClicked("next");
     setIsAnimating(true);
     const imageContainer = document.getElementById("imageContainer");
     if (imageContainer) {
       imageContainer.classList.add("imagenModalMove");
     }
+
+    const nextImage = await fetchUri(
+      nftsCopy[currentNftIndex].uri
+        ? nftsCopy[(currentNftIndex + 1) % nftsCopy.length].uri
+        : nftsCopy[(currentNftIndex + 1) % nftsCopy.length].nft.uri
+    );
+
     setTimeout(() => {
-      setImage(nftsCopy[(currentNftIndex + 1) % nftsCopy.length].image);
+      setName(nextImage.name);
+      setImage(nextImage.image);
     }, 400);
 
     setTimeout(() => {
@@ -97,7 +124,7 @@ export default function NftModal({
     }, 700);
   };
 
-  const handlePrevNft = () => {
+  const handlePrevNft = async () => {
     setButtonClicked("previous");
     setIsAnimating(true);
     const imageContainer = document.getElementById("imageContainer");
@@ -106,11 +133,17 @@ export default function NftModal({
       imageContainer.classList.add("imagenModalMove");
     }
 
+    const prevImage = await fetchUri(
+      nftsCopy[currentNftIndex].uri
+        ? nftsCopy[(currentNftIndex - 1 + nftsCopy.length) % nftsCopy.length]
+            .uri
+        : nftsCopy[(currentNftIndex - 1 + nftsCopy.length) % nftsCopy.length]
+            .nft.uri
+    );
+
     setTimeout(() => {
-      setImage(
-        nftsCopy[(currentNftIndex - 1 + nftsCopy.length) % nftsCopy.length]
-          .image
-      );
+      setName(prevImage.name);
+      setImage(prevImage.image);
     }, 400);
 
     setTimeout(() => {
@@ -149,12 +182,12 @@ export default function NftModal({
     const intervalId = setInterval(() => {
       setCurrentTimestamp(Date.now());
     }, 1000);
-    const requestImage = tokens.filter(
+    const requestToken = tokens.filter(
       (token) =>
         nftsCopy[currentNftIndex].tokenRequest === token.contract.toLowerCase()
     );
 
-    setRequestToken(requestImage[0]);
+    setRequestToken(requestToken[0]);
     return () => clearInterval(intervalId);
   }, []);
 
@@ -188,7 +221,9 @@ export default function NftModal({
       }, 2000);
     }
   }, [status]);
-  console.log(nftsCopy[currentNftIndex]);
+
+  console.log(info);
+
   return (
     <Transition.Root show={open} as={Fragment}>
       <Dialog as="div" className="relative " onClose={() => console.log()}>
@@ -207,7 +242,7 @@ export default function NftModal({
               </h1>
               <hr className="modalAnimatedLine" />
               <ul className="mt-6 modalAnimatedText">
-                <li className="text-2xl mb-3">{`${nftsCopy[currentNftIndex].name}`}</li>
+                <li className="text-2xl mb-3">{`${name}`}</li>
                 <li className="text-lg text-xs">
                   Created by{" "}
                   <span className="text-main text-lg">
@@ -238,12 +273,12 @@ export default function NftModal({
                       </h1>
                       <hr className="modalAnimatedLine" />
                       <ul className="mt-6 modalAnimatedText">
-                        {decimalsTokenrequest !== undefined && (
+                        {decimalsTokenRequest !== undefined && (
                           <li className="text-lg text-xs flex items-center">
                             Token request
                             <span className="text-main text-lg mx-2">
                               {nftsCopy[currentNftIndex].amountRequest /
-                                10 ** decimalsTokenrequest}
+                                10 ** decimalsTokenRequest}
                             </span>{" "}
                             {requestToken && (
                               <Image
@@ -371,12 +406,14 @@ export default function NftModal({
                             id="supplyRequest"
                           />
                         ) : (
-                          <button
-                            className="flex flex-col rounded-xl border-main border-1 px-[34px] py-2 mx-auto opacity-50 min-w-[200px] items-center mt-4"
-                            disabled
-                          >
-                            Create Loan
-                          </button>
+                          requestToken && (
+                            <button
+                              className="flex flex-col rounded-xl border-main border-1 px-[34px] py-2 mx-auto opacity-50 min-w-[200px] items-center mt-4"
+                              disabled
+                            >
+                              Supply {requestToken.symbol}
+                            </button>
+                          )
                         )}
                       </div>
                     )}{" "}
@@ -409,33 +446,37 @@ export default function NftModal({
               onClick={() => closeModal()}
             >
               <div className="contenedor-imagen">
-                <Image
-                  src={image}
-                  alt={`${nftsCopy[currentNftIndex].name} image`}
-                  width={300}
-                  height={300}
-                  className={`h-[400px] w-[400px] rounded-xl z-10 ${
-                    !isAnimating && buttonClicked === "previous"
-                      ? "animate-transition-initial-next"
-                      : ""
-                  } ${
-                    !isAnimating && buttonClicked === "next"
-                      ? "animate-transition-initial-prev"
-                      : ""
-                  } ${
-                    isAnimating && buttonClicked === "previous"
-                      ? "animate-transition-next"
-                      : ""
-                  } ${
-                    isAnimating && buttonClicked === "next"
-                      ? "animate-transition-prev"
-                      : ""
-                  } ${
-                    !isAnimating &&
-                    buttonClicked === "Initial" &&
-                    "modalNftImage"
-                  }`}
-                />
+                {image === undefined ? (
+                  <Loader />
+                ) : (
+                  <Image
+                    src={transformUrl(image)}
+                    alt={`${info.name} image`}
+                    width={300}
+                    height={300}
+                    className={`h-[400px] w-[400px] rounded-xl z-10 ${
+                      !isAnimating && buttonClicked === "previous"
+                        ? "animate-transition-initial-next"
+                        : ""
+                    } ${
+                      !isAnimating && buttonClicked === "next"
+                        ? "animate-transition-initial-prev"
+                        : ""
+                    } ${
+                      isAnimating && buttonClicked === "previous"
+                        ? "animate-transition-next"
+                        : ""
+                    } ${
+                      isAnimating && buttonClicked === "next"
+                        ? "animate-transition-prev"
+                        : ""
+                    } ${
+                      !isAnimating &&
+                      buttonClicked === "Initial" &&
+                      "modalNftImage"
+                    }`}
+                  />
+                )}
               </div>
             </div>
             {nftsCopy.length > 1 && (

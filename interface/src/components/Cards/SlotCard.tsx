@@ -3,12 +3,18 @@ import React, { useState } from "react";
 import Specter from "../../../public/Specter.svg";
 import Link from "next/link";
 import SadSpectre from "../../../public/SadSpectre.svg";
+import { useFetchUriInfo } from "@/hooks/useFetchUriInfo";
+import Loader from "../Loader/Loader";
+import { transformUrl } from "../../../utils/utils";
 
 type SlotCardProps = {
   slot: any;
 };
 
 export default function SlotCard({ slot }: SlotCardProps) {
+  const { info, loading } = useFetchUriInfo(
+    slot.loan ? `${slot.loan.nft.uri}` : ""
+  );
   const [isHovered, setIsHovered] = useState(false);
 
   const handleHover = () => {
@@ -18,7 +24,7 @@ export default function SlotCard({ slot }: SlotCardProps) {
   const handleUnhover = () => {
     setIsHovered(false);
   };
-  console.log(slot);
+
   return (
     <button
       className={`${
@@ -31,26 +37,32 @@ export default function SlotCard({ slot }: SlotCardProps) {
       onMouseEnter={handleHover}
       onMouseLeave={handleUnhover}
     >
-      {slot.loan ? (
+      {slot.loan && info ? (
         <div className="w-full h-full flex flex-col items-center rounded-xl pt-10">
-          <Image
-            src={slot.loan.nft.image}
-            alt={`${slot.loan.nft.name} image`}
-            width={150}
-            height={150}
-            className={`min-h-[150px] mb-5 rounded-xl ${
-              isHovered ? "float" : ""
-            }`}
-          />
-          <div className="mainBackground w-full h-full rounded-b-xl text-white border-t-1 border-t-main relative flex flex-col items-center align-center justify-center">
-            <div className="w-6 h-6 absolute rotate-45 bg-main -top-3 right-[46%]"></div>
-            <h1 className="pb-2 pt-8 text-sm text-main font-medium px-4">
-              {slot.loan.nft.collection.name}
-            </h1>
-            <h1 className="pb-12 text-xl font-semibold px-4">
-              {slot.loan.nft.name}
-            </h1>
-          </div>{" "}
+          {loading ? (
+            <Loader />
+          ) : (
+            <>
+              <Image
+                src={transformUrl(info.image)}
+                alt={`${info.name} image`}
+                width={150}
+                height={150}
+                className={`min-h-[150px] mb-5 rounded-xl ${
+                  isHovered ? "float" : ""
+                }`}
+              />
+              <div className="mainBackground w-full h-full rounded-b-xl text-white border-t-1 border-t-main relative flex flex-col items-center align-center justify-center">
+                <div className="w-6 h-6 absolute rotate-45 bg-main -top-3 right-[46%]"></div>
+                <h1 className="pb-2 pt-8 text-sm text-main font-medium px-4">
+                  {slot.loan.nft.collection.name}
+                </h1>
+                <h1 className="pb-12 text-xl font-semibold px-4">
+                  {info.name}
+                </h1>
+              </div>{" "}
+            </>
+          )}
         </div>
       ) : (
         <Link

@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['metadata.ens.domains',"portal.forgottenrunes.com","alchemy.mypinata.cloud","res.cloudinary.com","ipfs.io"], 
+    domains: ['metadata.ens.domains',"portal.forgottenrunes.com","alchemy.mypinata.cloud","res.cloudinary.com","ipfs.io",""], 
     dangerouslyAllowSVG: true,
   },
 

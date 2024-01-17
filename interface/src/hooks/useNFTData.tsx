@@ -10,6 +10,7 @@ export default function useNFTData(ownerAddr: `0x${string}`) {
         image: string | undefined;
         collection: string | undefined;
         tokenId: string;
+        uri: string | undefined;
       }[]
   >(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -25,7 +26,7 @@ export default function useNFTData(ownerAddr: `0x${string}`) {
 
       try {
         const nftsForOwner = await alchemy.nft.getNftsForOwner(ownerAddr);
-        console.log(nftsForOwner);
+
         const formattedNFTData = nftsForOwner.ownedNfts.map((nft) => ({
           contractAddress: nft.contract.address,
           name: nft.name || nft.tokenId,
@@ -33,6 +34,7 @@ export default function useNFTData(ownerAddr: `0x${string}`) {
           collection: nft?.contract.name,
           owner: ownerAddr,
           tokenId: nft.tokenId,
+          uri: nft.raw.tokenUri,
         }));
 
         setNFTData(formattedNFTData);

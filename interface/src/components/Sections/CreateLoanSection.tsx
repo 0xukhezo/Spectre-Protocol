@@ -383,11 +383,105 @@ export default function CreateLoanSection() {
 
   return (
     <main className="pb-10 pt-8 navbarTextOpacity min-h-[1000px]">
-      <div className="mainBackground p-6 rounded-xl flex flex-col text-lg max-w-[1000px] mx-auto mb-10">
+      <div className="mainBackground p-6 rounded-xl flex flex-col text-lg max-w-[1000px] mx-auto mb-4">
         <span className="text-2xl navbarTitle">
           In order to create your slot, follow this steps
         </span>
         <InfoSteps steps={createSlotSteps} />
+        <div className="grid grid-cols-4 mt-3">
+          <div></div>
+          {(status.length === 0 ||
+            (status[0] === "loading" && status[1] === "approveNft")) &&
+          nft &&
+          token &&
+          amountSupply &&
+          rewards &&
+          loanDuration ? (
+            <TxButton
+              address={nft.contractAddress as `0x${string}`}
+              abi={erc721ABI}
+              functionName="approve"
+              args={[slotAddress, nft.tokenId]}
+              getTxStatus={getStatus}
+              children={<span> Approve {nft.name}</span>}
+              className="bg-main text-black font-light px-4 py-6 rounded-xl hover:bg-secondary flex h-1/2 my-auto items-center justify-center mx-4"
+              id="approveNft"
+            />
+          ) : (
+            <button
+              className={`h-1/2 my-auto items-center justify-center border-1 border-main mx-4 flex flex-col px-4 rounded-xl mainBackground opacity-50 py-6 ${
+                ((status[1] === "approveNft" && status[0] !== "loading") ||
+                  status[1] === "approveGho" ||
+                  (status[1] === "openRequest" && status[0] === "loading")) &&
+                "hidden"
+              }`}
+              disabled
+            >
+              Approve NFT
+            </button>
+          )}
+          {((status[1] === "approveNft" && status[0] !== "loading") ||
+            (status[1] === "approveGho" && status[0] === "loading")) &&
+          nft &&
+          token &&
+          amountSupply &&
+          rewards &&
+          loanDuration ? (
+            <TxButton
+              address={ghoToken.contract as `0x${string}`}
+              abi={erc20ABI}
+              functionName="approve"
+              args={[slotAddress, rewards * 10 ** ghoToken.decimals]}
+              getTxStatus={getStatus}
+              children={<span> Approve GHO</span>}
+              className="bg-main text-black font-light px-4 py-6 rounded-xl hover:bg-secondary flex h-1/2 my-auto items-center justify-center mx-4"
+              id="approveGho"
+            />
+          ) : (
+            <button
+              className={`h-1/2 my-auto items-center justify-center border-1 border-main mx-4 flex flex-col px-4 rounded-xl mainBackground opacity-50  py-6 ${
+                ((status[1] === "approveGho" && status[0] !== "loading") ||
+                  (status[1] === "openRequest" && status[0] === "loading")) &&
+                "hidden"
+              }`}
+              disabled
+            >
+              Approve GHO
+            </button>
+          )}
+          {((status[1] === "approveGho" && status[0] !== "loading") ||
+            (status[1] === "openRequest" && status[0] === "loading")) &&
+          token &&
+          nft &&
+          amountSupply &&
+          rewards ? (
+            <TxButton
+              address={slotAddress as `0x${string}`}
+              abi={abiUserSlot}
+              functionName="openRequest"
+              args={[
+                nft.contractAddress,
+                nft.tokenId,
+                token.contract,
+                amountSupply * 10 ** token.decimals,
+                ghoToken.contract,
+                rewards * 10 ** ghoToken.decimals,
+                loanDurationToContrat,
+              ]}
+              getTxStatus={getStatus}
+              children={<span>Create Loan</span>}
+              className="bg-main text-black font-light px-4 py-6 rounded-xl hover:bg-secondary flex h-1/2 my-auto items-center justify-center mx-4"
+              id="openRequest"
+            />
+          ) : (
+            <button
+              className="h-1/2 my-auto items-center justify-center border-1 border-main mx-4 flex flex-col px-4 rounded-xl mainBackground opacity-50 py-6"
+              disabled
+            >
+              Create Loan
+            </button>
+          )}
+        </div>
       </div>{" "}
       {!connected ? (
         <div className="h-[700px] flex justify-center items-center flex-col">
@@ -564,99 +658,6 @@ export default function CreateLoanSection() {
               />
             )}
           </div>
-
-          {(status.length === 0 ||
-            (status[0] === "loading" && status[1] === "approveNft")) &&
-          nft &&
-          token &&
-          amountSupply &&
-          rewards &&
-          loanDuration ? (
-            <TxButton
-              address={nft.contractAddress as `0x${string}`}
-              abi={erc721ABI}
-              functionName="approve"
-              args={[slotAddress, nft.tokenId]}
-              getTxStatus={getStatus}
-              children={<span> Approve {nft.name}</span>}
-              className="bg-main text-black font-light px-24 py-4 rounded-xl hover:bg-secondary flex mx-auto mb-4 min-w-[200px]"
-              id="approveNft"
-            />
-          ) : (
-            <button
-              className={`flex flex-col px-24 rounded-xl mainBackground py-4 mx-auto mb-4 opacity-50 min-w-[200px] ${
-                ((status[1] === "approveNft" && status[0] !== "loading") ||
-                  status[1] === "approveGho" ||
-                  (status[1] === "openRequest" && status[0] === "loading")) &&
-                "hidden"
-              }`}
-              disabled
-            >
-              Approve NFT
-            </button>
-          )}
-          {((status[1] === "approveNft" && status[0] !== "loading") ||
-            (status[1] === "approveGho" && status[0] === "loading")) &&
-          nft &&
-          token &&
-          amountSupply &&
-          rewards &&
-          loanDuration ? (
-            <TxButton
-              address={ghoToken.contract as `0x${string}`}
-              abi={erc20ABI}
-              functionName="approve"
-              args={[slotAddress, rewards * 10 ** ghoToken.decimals]}
-              getTxStatus={getStatus}
-              children={<span> Approve GHO</span>}
-              className="bg-main text-black font-light px-24 py-4 rounded-xl hover:bg-secondary flex mx-auto mb-4 min-w-[200px]"
-              id="approveGho"
-            />
-          ) : (
-            <button
-              className={`flex flex-col px-24 rounded-xl mainBackground py-4 mx-auto mb-4 opacity-50 min-w-[200px] ${
-                ((status[1] === "approveGho" && status[0] !== "loading") ||
-                  (status[1] === "openRequest" && status[0] === "loading")) &&
-                "hidden"
-              }`}
-              disabled
-            >
-              Approve GHO
-            </button>
-          )}
-
-          {((status[1] === "approveGho" && status[0] !== "loading") ||
-            (status[1] === "openRequest" && status[0] === "loading")) &&
-          token &&
-          nft &&
-          amountSupply &&
-          rewards ? (
-            <TxButton
-              address={slotAddress as `0x${string}`}
-              abi={abiUserSlot}
-              functionName="openRequest"
-              args={[
-                nft.contractAddress,
-                nft.tokenId,
-                token.contract,
-                amountSupply * 10 ** token.decimals,
-                ghoToken.contract,
-                rewards * 10 ** ghoToken.decimals,
-                loanDurationToContrat,
-              ]}
-              getTxStatus={getStatus}
-              children={<span>Create Loan</span>}
-              className="bg-main text-black font-light px-24 py-4 rounded-xl hover:bg-secondary flex mx-auto min-w-[200px]"
-              id="openRequest"
-            />
-          ) : (
-            <button
-              className="flex flex-col px-24 rounded-xl mainBackground py-4 mx-auto opacity-50 min-w-[200px]"
-              disabled
-            >
-              Create Loan
-            </button>
-          )}
 
           {title && image && txDescription && (
             <NotificationsCard
