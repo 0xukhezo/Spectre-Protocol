@@ -24,7 +24,7 @@ export default function SlotCard({ slot }: SlotCardProps) {
   const handleUnhover = () => {
     setIsHovered(false);
   };
-
+  console.log(slot);
   return (
     <button
       className={`${
@@ -41,7 +41,7 @@ export default function SlotCard({ slot }: SlotCardProps) {
         <div className="w-full h-full flex flex-col items-center rounded-xl pt-10">
           {loading ? (
             <Loader />
-          ) : (
+          ) : slot.loan.activeLoan ? (
             <>
               <Image
                 src={transformUrl(info.image)}
@@ -62,6 +62,20 @@ export default function SlotCard({ slot }: SlotCardProps) {
                 </h1>
               </div>{" "}
             </>
+          ) : (
+            <Link
+              className="w-full h-full flex flex-col justify-center items-center rounded-xl text-3xl"
+              href={`/slot/${slot.id}`}
+            >
+              <h1>Nft missing...</h1>{" "}
+              <Image
+                src={SadSpectre.src}
+                alt="SadSpectre Image"
+                width={200}
+                height={200}
+                className="min-h-[150px] mb-5 "
+              />
+            </Link>
           )}
         </div>
       ) : (

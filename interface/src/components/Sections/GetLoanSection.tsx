@@ -68,7 +68,7 @@ export default function GetLoanSection() {
       }, 3000);
     }
   }, [status]);
-
+  console.log(slots);
   return (
     <main className="pb-10 navbarTextOpacity">
       <div className="mx-4">
