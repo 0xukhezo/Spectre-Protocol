@@ -7,15 +7,17 @@ type NotificationsCardProps = {
   image: string | ReactElement;
   title: string;
   txDescription: string;
+  className?: string;
 };
 
 export default function NotificationsCard({
   image,
   title,
   txDescription,
+  className,
 }: NotificationsCardProps) {
   return (
-    <div className="absolute top-24 right-24 z-10">
+    <div className={className ? className : "absolute top-24 right-24 z-10"}>
       <div className="relative transform overflow-hidden rounded-3xl bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:m-8 max-w-[300px] sm:p-6 shadow-input">
         <div className="items-end w-full flex flex-row text-center max-w-[300px]">
           {typeof image !== "string" ? (

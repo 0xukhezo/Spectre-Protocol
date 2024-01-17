@@ -31,6 +31,9 @@ export const useFetchLoans = (filter: string) => {
             chainSelector
             user {
                 id
+            }  
+            slot {
+                id
             }
         }
     }`;

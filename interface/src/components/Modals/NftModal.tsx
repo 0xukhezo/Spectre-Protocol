@@ -1,20 +1,26 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, ReactElement, useEffect, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import Image from "next/image";
 import Arrow from "../../../public/Arrow.svg";
 import WalletButton from "../Buttons/WalletButton";
-import { erc20ABI, useAccount, useEnsName } from "wagmi";
+import { erc20ABI, useAccount } from "wagmi";
 import {
   calculateTimeComponents,
   formatAddress,
   formatDate,
 } from "../../../utils/utils";
 import GHO from "../../../public/GHO.svg";
+import { abiUserSlot } from "../../../abis/abis.json";
+import Error from "../../../public/Error.svg";
+import Success from "../../../public/Success.svg";
 // Wagmi
 import { useContractRead } from "wagmi";
 import { abiAAVEPool } from "../../../abis/abis.json";
 import { AAVEPoolAddress } from "../../../abis/contractAddress.json";
 import { tokens } from "../../../constants/constants";
+import TxButton from "../Buttons/TxButton";
+import NotificationsCard from "../Cards/NotificationsCard";
+import Loader from "../Loader/Loader";
 
 type NftModalProps = {
   getShowMenu: (open: boolean) => void;
@@ -44,6 +50,13 @@ export default function NftModal({
   const [currentTimestamp, setCurrentTimestamp] = useState(Date.now());
   const [requestToken, setRequestToken] = useState<any>();
 
+  const [title, setTitle] = useState<string | null>(null);
+  const [notificationImage, setNotificationImage] = useState<
+    string | ReactElement | null
+  >(null);
+  const [txDescription, setTxDescription] = useState<string | null>(null);
+  const [status, setStatus] = useState<string[]>([]);
+
   const { isConnected } = useAccount();
 
   const { data: accountInfo } = useContractRead({
@@ -60,8 +73,6 @@ export default function NftModal({
   });
 
   const healthFactor = accountInfo as any;
-
-  const [approveTx, setApproveTx] = useState<boolean | undefined>(false);
 
   const handleNextNft = () => {
     setButtonClicked("next");
@@ -124,6 +135,10 @@ export default function NftModal({
     }, 800);
   };
 
+  const getStatus = (status: string, statusFuction: string) => {
+    setStatus([status, statusFuction]);
+  };
+
   useEffect(() => {
     setTimeout(() => {
       setButtonClicked("Initial");
@@ -143,6 +158,37 @@ export default function NftModal({
     return () => clearInterval(intervalId);
   }, []);
 
+  useEffect(() => {
+    if (status[0] === "loading") {
+      setTitle("Processing");
+      setTxDescription("The transaction is being processed.");
+      setNotificationImage(Loader);
+    } else if (status[0] === "error") {
+      setTitle("Error");
+      setTxDescription("Failed transaction.");
+      setNotificationImage(Error.src);
+    } else if (status[0] === "success") {
+      setTitle("Success");
+      setTxDescription("The transaction was executed correctly");
+      setNotificationImage(Success.src);
+    }
+    if (status[0] === "success" && status[1] === "approveToken") {
+      setTimeout(() => {
+        setTitle(null);
+        setTxDescription(null);
+        setNotificationImage(null);
+      }, 2000);
+    }
+
+    if (status[0] === "success" && status[1] === "supplyRequest") {
+      setTimeout(() => {
+        setNotificationImage(null);
+        setTxDescription(null);
+        setNotificationImage(null);
+      }, 2000);
+    }
+  }, [status]);
+  console.log(nftsCopy[currentNftIndex]);
   return (
     <Transition.Root show={open} as={Fragment}>
       <Dialog as="div" className="relative " onClose={() => console.log()}>
@@ -288,37 +334,70 @@ export default function NftModal({
                       </div>
                     ) : (
                       <div className="mt-10">
-                        {!approveTx && (
-                          <button className="bg-main text-black font-light px-[50px] py-2 rounded-xl hover:bg-secondary flex mx-auto mb-4">
-                            Approve
-                          </button>
-                        )}
-
-                        {approveTx && requestToken ? (
-                          <button className="bg-main text-black font-light px-[34px] py-2 rounded-xl hover:bg-secondary flex mx-auto">
-                            Supply {requestToken.symbol}
-                          </button>
+                        {(status.length === 0 ||
+                          (status[0] === "loading" &&
+                            status[1] === "approveToken")) &&
+                          requestToken && (
+                            <TxButton
+                              address={requestToken.contract as `0x${string}`}
+                              abi={erc20ABI}
+                              functionName="approve"
+                              args={[
+                                nftsCopy[currentNftIndex].slot.id,
+                                nftsCopy[currentNftIndex].amountRequest,
+                              ]}
+                              getTxStatus={getStatus}
+                              children={
+                                <span> Approve {requestToken.symbol}</span>
+                              }
+                              className="bg-main text-black font-light px-[34px] py-2 rounded-xl hover:bg-secondary flex mx-auto min-w-[200px] items-center"
+                              id="approveToken"
+                            />
+                          )}
+                        {(status[1] === "approveToken" &&
+                          status[0] !== "loading") ||
+                        (status[1] === "supplyRequest" &&
+                          status[0] === "loading") ? (
+                          <TxButton
+                            address={
+                              nftsCopy[currentNftIndex].slot.id as `0x${string}`
+                            }
+                            abi={abiUserSlot}
+                            functionName="supplyRequest"
+                            args={[]}
+                            getTxStatus={getStatus}
+                            children={<span>Supply {requestToken.symbol}</span>}
+                            className="bg-main text-black font-light px-[34px] py-2 rounded-xl hover:bg-secondary flex mx-auto min-w-[200px] items-center mx-auto text-center mt-4"
+                            id="supplyRequest"
+                          />
                         ) : (
                           <button
-                            className="flex flex-col rounded-xl border-main border-1 px-[34px] py-2 mx-auto opacity-50"
+                            className="flex flex-col rounded-xl border-main border-1 px-[34px] py-2 mx-auto opacity-50 min-w-[200px] items-center mt-4"
                             disabled
                           >
                             Create Loan
                           </button>
                         )}
                       </div>
-                    )}
+                    )}{" "}
                   </div>
                 </>
               )}
             </div>
-
             <div className="text-gray-400 font-extralight text-xs mt-4">
               The above price data is for informational purposes only and should
               not be used for any investment decisions. Please do your own
               research regarding NFT valuations.
-            </div>
-          </Dialog.Panel>
+            </div>{" "}
+          </Dialog.Panel>{" "}
+          {title && notificationImage && txDescription && (
+            <NotificationsCard
+              title={title}
+              image={notificationImage}
+              txDescription={txDescription}
+              className="absolute top-0 left-0 z-10"
+            />
+          )}
           <Dialog.Panel
             id="imageContainer"
             className={`imageModal  ${

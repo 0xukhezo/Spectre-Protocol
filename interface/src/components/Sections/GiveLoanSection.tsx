@@ -9,9 +9,13 @@ import {
   ChevronDoubleRightIcon,
 } from "@heroicons/react/24/outline";
 import { useFetchLoans } from "@/hooks/useFetchLoans";
+import { useAccount } from "wagmi";
 
 export default function GiveLoanSection() {
-  const loans = useFetchLoans(``);
+  const { address } = useAccount();
+  const loans = useFetchLoans(
+    `(where: {user_: {id_not: "${address?.toLowerCase()}"}, supplier: "0x0000000000000000000000000000000000000000"})`
+  );
 
   const [search, setSearch] = useState<string>("");
   const [nftsCopy, setNftsCopy] = useState<any[]>([...loans]);
