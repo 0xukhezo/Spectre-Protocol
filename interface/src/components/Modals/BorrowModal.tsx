@@ -77,6 +77,9 @@ export default function BorrowModal({
         setTxDescription(null);
         setNotificationImage(null);
       }, 2000);
+      setTimeout(() => {
+        closeModal();
+      }, 2000);
     }
   }, [status]);
 
@@ -134,17 +137,23 @@ export default function BorrowModal({
                         className="mainBackground pr-8 py-1 text-black font-light h-[46px] ring-0 focus:ring-0 outline-0 w-full text-white placeholder:text-white"
                       />{" "}
                       <span className="flex text-xs text-gray-400">
-                        {amountBorrow !== undefined ? amountBorrow * 0.98 : 0} $
+                        {amountBorrow !== undefined
+                          ? (amountBorrow * 0.98).toFixed(2)
+                          : 0}{" "}
+                        $
                       </span>
                     </div>
 
-                    <Image
-                      src={GHO.src}
-                      alt={`GHO image`}
-                      width={40}
-                      height={40}
-                      className="rounded-lg h-[40px] min-w-[40px] ml-[24px] ml-3"
-                    />
+                    <div className="flex items-center">
+                      <Image
+                        src={GHO.src}
+                        alt={`GHO image`}
+                        width={40}
+                        height={40}
+                        className="rounded-lg h-[40px] min-w-[40px] ml-[24px] ml-3"
+                      />
+                      <span className="ml-2 text-white text-xl">GHO</span>
+                    </div>
                   </div>{" "}
                   <span className="text-start flex mt-4 mb-2">
                     Transaction overview

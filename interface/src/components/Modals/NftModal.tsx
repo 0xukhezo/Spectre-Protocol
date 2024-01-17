@@ -87,6 +87,13 @@ export default function NftModal({
     functionName: "decimals",
   });
 
+  const { data: debtGho } = useContractRead({
+    address: "0x67ae46EF043F7A4508BD1d6B94DB6c33F0915844",
+    abi: erc20ABI,
+    functionName: "balanceOf",
+    args: [nftsCopy[currentNftIndex].slot && nftsCopy[currentNftIndex].slot.id],
+  });
+
   const healthFactor = accountInfo as any;
 
   const handleNextNft = async () => {
@@ -209,6 +216,17 @@ export default function NftModal({
         setTitle(null);
         setTxDescription(null);
         setNotificationImage(null);
+      }, 2000);
+    }
+
+    if (status[0] === "success" && status[1] === "completeLoanOwner") {
+      setTimeout(() => {
+        setTitle(null);
+        setTxDescription(null);
+        setNotificationImage(null);
+      }, 2000);
+      setTimeout(() => {
+        closeModal();
       }, 2000);
     }
   }, [status]);
@@ -371,10 +389,26 @@ export default function NftModal({
                               </span>{" "}
                             </li>
                           )}
+                          {debtGho !== undefined ||
+                            (debtGho !== 0 && (
+                              <li className="text-lg text-xs flex items-center mt-2">
+                                Debt
+                                <span className="text-main text-lg mx-2 flex items-center">
+                                  {(Number(debtGho) / 10 ** 18).toFixed(2)}{" "}
+                                  <Image
+                                    src={GHO.src}
+                                    alt={`Token image`}
+                                    width={24}
+                                    height={24}
+                                    className="rounded-lg h-[24px] min-w-[24px] ml-2"
+                                  />
+                                </span>{" "}
+                              </li>
+                            ))}
                         </ul>
                         {nftsCopy[currentNftIndex].supplier !== zeroAddress && (
                           <>
-                            <div className="grid grid-cols-2 mt-10">
+                            <div className="grid grid-cols-2 mt-10 gap-[12px]">
                               <button
                                 className="bg-main text-black font-light px-[34px] py-2 rounded-xl hover:bg-secondary flex mx-auto"
                                 onClick={() => setOpenBorrowModal(true)}
@@ -415,6 +449,22 @@ export default function NftModal({
                                   }
                                 />
                               )}
+                              {debtGho !== undefined &&
+                                Number(debtGho) === 0 && (
+                                  <TxButton
+                                    address={
+                                      nftsCopy[currentNftIndex].slot
+                                        .id as `0x${string}`
+                                    }
+                                    abi={abiUserSlot}
+                                    functionName="completeLoanOwner"
+                                    args={[]}
+                                    getTxStatus={getStatus}
+                                    children={<span>Close Loan</span>}
+                                    className="bg-main text-black font-light px-[38px] py-2 rounded-xl hover:bg-secondary flex mx-auto mt-4 col-span-full"
+                                    id="completeLoanOwner"
+                                  />
+                                )}
                             </div>
                           </>
                         )}
