@@ -1,10 +1,11 @@
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
-import { WagmiConfig, createConfig, mainnet, sepolia } from "wagmi";
+import { WagmiConfig, createConfig, sepolia } from "wagmi";
 import { ConnectKitProvider, getDefaultConfig } from "connectkit";
 import Navbar from "@/components/Layout/Navbar";
+import { arbitrumSepolia } from "viem/chains";
 
-const chains = [sepolia];
+const chains = [sepolia, arbitrumSepolia];
 
 const config = createConfig(
   getDefaultConfig({

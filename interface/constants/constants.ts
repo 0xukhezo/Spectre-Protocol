@@ -5,6 +5,7 @@ import AAVE from "../public/AAVE.svg";
 import USDC from "../public/USDC.svg";
 import ETH from "../public/ETH.svg";
 import GHO from "../public/GHO.svg";
+import LINK from "../public/LINK.jpeg";
 
 export const navigation = [
   {
@@ -53,12 +54,13 @@ export const tokens = [
     decimals: 18,
   },
   {
-    image: USDC.src,
-    name: "USDC",
-    symbol: "USDC",
-    contract: "0x94a9D9AC8a22534E3FaCa9F4e7F2E2cf85d5E4C8",
-    decimals: 6,
+    image: LINK.src,
+    name: "Link Token",
+    symbol: "LINK",
+    contract: "0xCD85B9a767eF2277E264A4B9A14a2deACAB82FfB",
+    decimals: 18,
   },
+
   {
     image: AAVE.src,
     name: "Aave Token",

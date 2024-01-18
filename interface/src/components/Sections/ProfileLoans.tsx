@@ -13,11 +13,11 @@ export default function ProfileLoans() {
   const { isConnected, address } = useAccount();
 
   const { loans, loading } = useFetchLoans(
-    `(where: {user_: {id: "${address?.toLowerCase()}"}})`
+    `(where: {activeLoan: true, user_: {id: "${address?.toLowerCase()}"}})`
   );
 
   const { loans: supplies, loading: loadingSupplies } = useFetchLoans(
-    `(where: {supplier: "${address?.toLowerCase()}"})`
+    `(where: {activeLoan: true, supplier: "${address?.toLowerCase()}"})`
   );
 
   const [connected, setConnected] = useState(false);
@@ -34,14 +34,14 @@ export default function ProfileLoans() {
 
   useEffect(() => {
     setSuppliesCopy([...supplies]);
-  }, [loans]);
+  }, [supplies]);
 
   return (
     <main className="pb-10 navbarTextOpacity">
       <div className="mx-4">
         {!connected ? (
           <div className="h-[700px] flex justify-center items-center flex-col">
-            <h1 className="font-extralight mb-10 text-3xl text-center">
+            <h1 className="font-extralight mb-10 text-5xl text-center">
               You need to be connected to see <br />
               your loans or supplies
             </h1>
@@ -52,7 +52,7 @@ export default function ProfileLoans() {
             <div>
               <h1 className="text-3xl navbarTitle pb-2">Active Loans</h1>{" "}
               <hr className="modalAnimatedLine" />
-              {loadingSupplies ? (
+              {loading ? (
                 <div className="flex items-center justify-center w-full pt-32">
                   <Loader />{" "}
                 </div>
@@ -73,7 +73,7 @@ export default function ProfileLoans() {
                     </>
                   ) : (
                     <div className="col-span-full text-5xl navbarTitle max-w-[600px] text-center mx-auto pt-40 flex items-center flex-col font-extralight">
-                      <h1>Looks like NFTs are playing ghost.</h1>
+                      <h1>It looks like you don't have any loans yet.</h1>
                       <Image
                         src={SadSpectre.src}
                         alt="SadSpectre Image"
@@ -101,16 +101,18 @@ export default function ProfileLoans() {
                         <NftCard
                           nftInfo={nft}
                           index={index}
-                          nftsCopy={loansCopy}
+                          nftsCopy={suppliesCopy}
                           key={index}
                           isPortfolio={false}
-                          isLoan={true}
+                          isLoan={false}
                         />
                       ))}
                     </>
                   ) : (
                     <div className="col-span-full text-5xl navbarTitle max-w-[600px] text-center mx-auto pt-40 flex items-center flex-col font-extralight">
-                      <h1>Looks like NFTs are playing ghost.</h1>
+                      <h1>
+                        It appears that you have not yet provided any loans.
+                      </h1>
                       <Image
                         src={SadSpectre.src}
                         alt="SadSpectre Image"

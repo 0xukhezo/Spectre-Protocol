@@ -85,7 +85,7 @@ export default function SelectNftModal({
                     getInfo={getInfo}
                     query={search}
                     classMain="rounded-xl text-white px-[22px] items-center w-full outline-none placeholder:text-black flex my-[16px] border-1 border-main"
-                    placeholder="Search token or paste address"
+                    placeholder="Search Nft by name"
                     classInput="rounded-xl outline-none placeholder:text-gray-400 py-[10px] px-[20px] w-full text-white mainBackground"
                   />
                 </div>

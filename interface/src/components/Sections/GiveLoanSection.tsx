@@ -23,6 +23,8 @@ export default function GiveLoanSection() {
   const [symbols, setSymbols] = useState<string[]>([]);
   const [scrolled, setScrolled] = useState<boolean>(false);
   const [clearFilters, setClearFilters] = useState<boolean>(false);
+  const [loadingResearch, setLoadingResearch] = useState<boolean>(true);
+
   const [showFilterPage, setShowFilterPage] = useState<boolean>(true);
   const [selectedSymbols, setSelectedFilters] = useState<string[]>([]);
 
@@ -39,22 +41,28 @@ export default function GiveLoanSection() {
   }, [loans]);
 
   useEffect(() => {
-    let copy = [...loans];
+    setLoadingResearch(true);
 
-    if (selectedSymbols.length !== 0) {
-      copy = copy.filter((loan: any) =>
-        selectedSymbols.includes(loan.nft.collection.name)
-      );
-    }
-    if (search.length !== 0) {
-      copy = copy.filter(
-        (loan: any) =>
-          loan.name.toLowerCase().includes(search.toLowerCase()) ||
-          loan.nft.collection.name.toLowerCase() === search.toLowerCase()
-      );
-    }
+    const delaySearch = setTimeout(() => {
+      let copy = [...loans];
 
-    setNftsCopy(copy);
+      if (selectedSymbols.length !== 0) {
+        copy = copy.filter((loan) =>
+          selectedSymbols.includes(loan.nft.collection.name)
+        );
+      }
+
+      if (search.length !== 0) {
+        copy = copy.filter((loan) =>
+          loan.nft.collection.name.toLowerCase().includes(search.toLowerCase())
+        );
+      }
+
+      setNftsCopy(copy);
+      setLoadingResearch(false);
+    }, 300);
+
+    return () => clearTimeout(delaySearch);
   }, [search, selectedSymbols, loans]);
 
   useEffect(() => {
@@ -162,7 +170,7 @@ export default function GiveLoanSection() {
           classInput="rounded-xl outline-none placeholder:text-gray-400 py-[10px] px-[20px] w-full text-white mainBackground"
         />
         {loading ? (
-          <div className="flex h-[500px] justify-center items-center">
+          <div className="flex h-[800px] justify-center items-center">
             <Loader />
           </div>
         ) : (
@@ -173,18 +181,26 @@ export default function GiveLoanSection() {
                 : ""
             }  px-[24px] py-10`}
           >
-            {nftsCopy.length > 0 ? (
+            {nftsCopy.length !== 0 ? (
               <>
-                {nftsCopy.map((nft: any, index: number) => (
-                  <NftCard
-                    nftInfo={nft}
-                    index={index}
-                    nftsCopy={nftsCopy}
-                    key={index}
-                    isPortfolio={false}
-                    isLoan={false}
-                  />
-                ))}
+                {!loadingResearch ? (
+                  <>
+                    {nftsCopy.map((nft: any, index: number) => (
+                      <NftCard
+                        nftInfo={nft}
+                        index={index}
+                        nftsCopy={nftsCopy}
+                        key={index}
+                        isPortfolio={false}
+                        isLoan={false}
+                      />
+                    ))}
+                  </>
+                ) : (
+                  <div className="flex h-[700px] justify-center items-center col-span-full">
+                    <Loader />
+                  </div>
+                )}
               </>
             ) : (
               <div className="col-span-full text-5xl navbarTitle max-w-[600px] text-center mx-auto pt-40 flex items-center flex-col font-extralight">

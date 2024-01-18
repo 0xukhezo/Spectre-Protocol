@@ -15,7 +15,6 @@ import Error from "../../../public/Error.svg";
 import Success from "../../../public/Success.svg";
 import WalletButton from "../Buttons/WalletButton";
 import Steps from "../Steps/Steps";
-import { formatDate } from "../../../utils/utils";
 import { useRouter } from "next/router";
 import TxButton from "../Buttons/TxButton";
 import { abiUserSlot } from "../../../abis/abis.json";
@@ -403,17 +402,19 @@ export default function CreateLoanSection() {
               functionName="approve"
               args={[slotAddress, nft.tokenId]}
               getTxStatus={getStatus}
-              children={<span> Approve {nft.name}</span>}
-              className="bg-main text-black font-light px-4 py-6 rounded-xl hover:bg-secondary flex h-1/2 my-auto items-center justify-center mx-4"
+              className="bg-main text-black font-light px-4 py-8 rounded-xl hover:bg-secondary flex h-1/2 my-auto items-center justify-center mx-4"
               id="approveNft"
-            />
+            >
+              <span>Approve {nft.name}</span>
+            </TxButton>
           ) : (
             <button
-              className={`h-1/2 my-auto items-center justify-center border-1 border-main mx-4 flex flex-col px-4 rounded-xl mainBackground opacity-50 py-6 ${
-                ((status[1] === "approveNft" && status[0] !== "loading") ||
-                  status[1] === "approveGho" ||
-                  (status[1] === "openRequest" && status[0] === "loading")) &&
-                "opacity-0"
+              className={`h-1/2 my-auto items-center justify-center border-1 border-main mx-4 flex flex-col px-4 rounded-xl mainBackground  py-8 ${
+                (status[1] === "approveNft" && status[0] !== "loading") ||
+                status[1] === "approveGho" ||
+                (status[1] === "openRequest" && status[0] === "loading")
+                  ? "opacity-0"
+                  : "opacity-50"
               }`}
               disabled
             >
@@ -433,16 +434,18 @@ export default function CreateLoanSection() {
               functionName="approve"
               args={[slotAddress, rewards * 10 ** ghoToken.decimals]}
               getTxStatus={getStatus}
-              children={<span> Approve GHO</span>}
-              className="bg-main text-black font-light px-4 py-6 rounded-xl hover:bg-secondary flex h-1/2 my-auto items-center justify-center mx-4"
+              className="bg-main text-black font-light px-4 py-8 rounded-xl hover:bg-secondary flex h-1/2 my-auto items-center justify-center mx-4"
               id="approveGho"
-            />
+            >
+              <span> Approve GHO</span>
+            </TxButton>
           ) : (
             <button
-              className={`h-1/2 my-auto items-center justify-center border-1 border-main mx-4 flex flex-col px-4 rounded-xl mainBackground opacity-50  py-6 ${
-                ((status[1] === "approveGho" && status[0] !== "loading") ||
-                  (status[1] === "openRequest" && status[0] === "loading")) &&
-                "opacity-0"
+              className={`h-1/2 my-auto items-center justify-center border-1 border-main mx-4 flex flex-col px-4 rounded-xl mainBackground   py-8 ${
+                (status[1] === "approveGho" && status[0] !== "loading") ||
+                (status[1] === "openRequest" && status[0] === "loading")
+                  ? "opacity-0"
+                  : "opacity-50"
               }`}
               disabled
             >
@@ -469,13 +472,14 @@ export default function CreateLoanSection() {
                 loanDurationToContrat,
               ]}
               getTxStatus={getStatus}
-              children={<span>Create Loan</span>}
-              className="bg-main text-black font-light px-4 py-6 rounded-xl hover:bg-secondary flex h-1/2 my-auto items-center justify-center mx-4"
+              className="bg-main text-black font-light px-4 py-8 rounded-xl hover:bg-secondary flex h-1/2 my-auto items-center justify-center mx-4"
               id="openRequest"
-            />
+            >
+              <span>Create Loan</span>
+            </TxButton>
           ) : (
             <button
-              className="h-1/2 my-auto items-center justify-center border-1 border-main mx-4 flex flex-col px-4 rounded-xl mainBackground opacity-50 py-6"
+              className="h-1/2 my-auto items-center justify-center border-1 border-main mx-4 flex flex-col px-4 rounded-xl mainBackground opacity-50 py-8"
               disabled
             >
               Create Loan
@@ -568,8 +572,9 @@ export default function CreateLoanSection() {
                         setAmountSupply(0);
                       }
                     }}
+                    placeholder="0"
                     onWheel={(e) => (e.target as HTMLInputElement).blur()}
-                    className="bg-main pr-8 py-1 text-black bg-main font-light h-[46px] ring-0 focus:ring-0 outline-0"
+                    className="bg-main pr-8 py-1 text-black bg-main font-light h-[46px] ring-0 focus:ring-0 outline-0  "
                     disabled={token === null}
                   />{" "}
                   {token && (
@@ -599,6 +604,7 @@ export default function CreateLoanSection() {
                         setRewards(0);
                       }
                     }}
+                    placeholder="0"
                     onWheel={(e) => (e.target as HTMLInputElement).blur()}
                     className="rounded-lg pr-8 py-1 text-black bg-main font-light h-[46px] ring-0 focus:ring-0 outline-0"
                     disabled={amountSupply === undefined}
@@ -623,6 +629,7 @@ export default function CreateLoanSection() {
                     min={0}
                     onChange={(e) => handleLoanDuration(Number(e.target.value))}
                     onWheel={(e) => (e.target as HTMLInputElement).blur()}
+                    placeholder="0"
                     className="rounded-lg pr-8 py-1 text-black bg-main font-light h-[46px] ring-0 focus:ring-0 outline-0"
                     disabled={rewards === undefined}
                   />
@@ -630,14 +637,6 @@ export default function CreateLoanSection() {
                     days
                   </span>
                 </div>{" "}
-                {loanDurationToContrat && loanDurationToContrat !== 0 && (
-                  <div className=" flex justify-between w-3/4 items-center font-light text-xs">
-                    <span>The loan finish:</span>
-                    <span>
-                      {formatDate(loanDurationToContrat + Date.now())}
-                    </span>
-                  </div>
-                )}
               </div>
             </div>
 
@@ -658,7 +657,6 @@ export default function CreateLoanSection() {
               />
             )}
           </div>
-
           {title && image && txDescription && (
             <NotificationsCard
               title={title}

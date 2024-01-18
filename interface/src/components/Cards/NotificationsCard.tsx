@@ -18,8 +18,8 @@ export default function NotificationsCard({
 }: NotificationsCardProps) {
   return (
     <div className={className ? className : "absolute top-24 right-24 z-10"}>
-      <div className="relative transform overflow-hidden rounded-3xl bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:m-8 max-w-[300px] sm:p-6 shadow-input">
-        <div className="items-end w-full flex flex-row text-center max-w-[300px]">
+      <div className="relative transform overflow-hidden rounded-3xl bg-gray-100 px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:m-8 max-w-[400px] sm:p-6 shadow-input">
+        <div className="items-end w-full flex flex-row text-center max-w-[300px] items-center">
           {typeof image !== "string" ? (
             <div className="max-w-[100px] max-h-[100px] -mt-[20px]">
               {image}
@@ -34,7 +34,7 @@ export default function NotificationsCard({
             />
           )}
 
-          <div className="mt-3 sm:mt-0 sm:text-left w-[150px] mr-[70px] text-black">
+          <div className="mt-3 sm:mt-0 sm:text-left w-[200px] mr-[70px] text-black">
             <h3 className="font-medium leading-6 text-lg">{title}</h3>
             <p className="text-xs font-medium">{txDescription}</p>
           </div>
