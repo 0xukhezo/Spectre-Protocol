@@ -73,7 +73,7 @@ export default function ProfileLoans() {
                     </>
                   ) : (
                     <div className="col-span-full text-5xl navbarTitle max-w-[600px] text-center mx-auto pt-40 flex items-center flex-col font-extralight">
-                      <h1>Looks like NFTs are playing ghost.</h1>
+                      <h1>It looks like you don't have any loans yet.</h1>
                       <Image
                         src={SadSpectre.src}
                         alt="SadSpectre Image"
@@ -110,7 +110,9 @@ export default function ProfileLoans() {
                     </>
                   ) : (
                     <div className="col-span-full text-5xl navbarTitle max-w-[600px] text-center mx-auto pt-40 flex items-center flex-col font-extralight">
-                      <h1>Looks like NFTs are playing ghost.</h1>
+                      <h1>
+                        It appears that you have not yet provided any loans.
+                      </h1>
                       <Image
                         src={SadSpectre.src}
                         alt="SadSpectre Image"

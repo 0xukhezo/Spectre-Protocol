@@ -374,7 +374,7 @@ export default function NftModal({
                       <li className="text-lg text-xs flex items-center">
                         If supply finish
                         <span className="text-main text-lg mx-2">{`${formatDate(
-                          nftsCopy[currentNftIndex].loanDuration +
+                          nftsCopy[currentNftIndex].loanDuration * 1000 +
                             currentTimestamp
                         )}`}</span>{" "}
                       </li>
@@ -435,7 +435,9 @@ export default function NftModal({
                           Number(debtGho) === 0 &&
                           chain === sepolia.id &&
                           address?.toLowerCase() ===
-                            nftsCopy[currentNftIndex].user.id && (
+                            nftsCopy[currentNftIndex].user.id &&
+                          nftsCopy[currentNftIndex].supplier ===
+                            zeroAddress && (
                             <TxButton
                               address={
                                 nftsCopy[currentNftIndex].slot
@@ -689,7 +691,7 @@ export default function NftModal({
                     alt={`${info.name} image`}
                     width={300}
                     height={300}
-                    className={`h-[500px] w-[500px] rounded-xl z-10 ${
+                    className={`h-[450px] w-[450px] rounded-xl z-10 ${
                       !isAnimating && buttonClicked === "previous"
                         ? "animate-transition-initial-next"
                         : ""

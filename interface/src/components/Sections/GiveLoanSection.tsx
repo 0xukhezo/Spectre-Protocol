@@ -46,10 +46,13 @@ export default function GiveLoanSection() {
         selectedSymbols.includes(loan.nft.collection.name)
       );
     }
+    console.log(copy);
     if (search.length !== 0) {
       copy = copy.filter(
         (loan: any) =>
-          loan.name.toLowerCase().includes(search.toLowerCase()) ||
+          loan.nft.collection.name
+            .toLowerCase()
+            .includes(search.toLowerCase()) ||
           loan.nft.collection.name.toLowerCase() === search.toLowerCase()
       );
     }

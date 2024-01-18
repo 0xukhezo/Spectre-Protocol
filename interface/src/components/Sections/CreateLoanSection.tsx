@@ -402,18 +402,19 @@ export default function CreateLoanSection() {
               functionName="approve"
               args={[slotAddress, nft.tokenId]}
               getTxStatus={getStatus}
-              className="bg-main text-black font-light px-4 py-6 rounded-xl hover:bg-secondary flex h-1/2 my-auto items-center justify-center mx-4"
+              className="bg-main text-black font-light px-4 py-8 rounded-xl hover:bg-secondary flex h-1/2 my-auto items-center justify-center mx-4"
               id="approveNft"
             >
               <span>Approve {nft.name}</span>
             </TxButton>
           ) : (
             <button
-              className={`h-1/2 my-auto items-center justify-center border-1 border-main mx-4 flex flex-col px-4 rounded-xl mainBackground opacity-50 py-6 ${
-                ((status[1] === "approveNft" && status[0] !== "loading") ||
-                  status[1] === "approveGho" ||
-                  (status[1] === "openRequest" && status[0] === "loading")) &&
-                "opacity-0"
+              className={`h-1/2 my-auto items-center justify-center border-1 border-main mx-4 flex flex-col px-4 rounded-xl mainBackground  py-8 ${
+                (status[1] === "approveNft" && status[0] !== "loading") ||
+                status[1] === "approveGho" ||
+                (status[1] === "openRequest" && status[0] === "loading")
+                  ? "opacity-0"
+                  : "opacity-50"
               }`}
               disabled
             >
@@ -433,17 +434,18 @@ export default function CreateLoanSection() {
               functionName="approve"
               args={[slotAddress, rewards * 10 ** ghoToken.decimals]}
               getTxStatus={getStatus}
-              className="bg-main text-black font-light px-4 py-6 rounded-xl hover:bg-secondary flex h-1/2 my-auto items-center justify-center mx-4"
+              className="bg-main text-black font-light px-4 py-8 rounded-xl hover:bg-secondary flex h-1/2 my-auto items-center justify-center mx-4"
               id="approveGho"
             >
               <span> Approve GHO</span>
             </TxButton>
           ) : (
             <button
-              className={`h-1/2 my-auto items-center justify-center border-1 border-main mx-4 flex flex-col px-4 rounded-xl mainBackground opacity-50  py-6 ${
-                ((status[1] === "approveGho" && status[0] !== "loading") ||
-                  (status[1] === "openRequest" && status[0] === "loading")) &&
-                "opacity-0"
+              className={`h-1/2 my-auto items-center justify-center border-1 border-main mx-4 flex flex-col px-4 rounded-xl mainBackground   py-8 ${
+                (status[1] === "approveGho" && status[0] !== "loading") ||
+                (status[1] === "openRequest" && status[0] === "loading")
+                  ? "opacity-0"
+                  : "opacity-50"
               }`}
               disabled
             >
@@ -470,14 +472,14 @@ export default function CreateLoanSection() {
                 loanDurationToContrat,
               ]}
               getTxStatus={getStatus}
-              className="bg-main text-black font-light px-4 py-6 rounded-xl hover:bg-secondary flex h-1/2 my-auto items-center justify-center mx-4"
+              className="bg-main text-black font-light px-4 py-8 rounded-xl hover:bg-secondary flex h-1/2 my-auto items-center justify-center mx-4"
               id="openRequest"
             >
               <span>Create Loan</span>
             </TxButton>
           ) : (
             <button
-              className="h-1/2 my-auto items-center justify-center border-1 border-main mx-4 flex flex-col px-4 rounded-xl mainBackground opacity-50 py-6"
+              className="h-1/2 my-auto items-center justify-center border-1 border-main mx-4 flex flex-col px-4 rounded-xl mainBackground opacity-50 py-8"
               disabled
             >
               Create Loan

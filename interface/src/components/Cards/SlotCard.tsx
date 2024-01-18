@@ -30,7 +30,9 @@ export default function SlotCard({ slot }: SlotCardProps) {
   return (
     <button
       className={`${
-        slot.loan.activeLoan ? "" : "shadow2 hover:border-gray-100"
+        (slot.loan && slot.loan.activeLoan) || slot.loan
+          ? ""
+          : "shadow2 hover:border-gray-100"
       } flex items-center rounded-xl border-2 border-main  xl:min-h-[300px] min-h-[350px]`}
       onClick={() => {
         handleUnhover();

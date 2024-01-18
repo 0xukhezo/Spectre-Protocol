@@ -1,7 +1,7 @@
 //Apollo
 import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
 
-const API_URL = `https://api.studio.thegraph.com/query/50131/spectre/version/latest`;
+const API_URL = process.env.NEXT_PUBLIC_SUBGRAPH;
 
 export const client = new ApolloClient({
   uri: API_URL,
