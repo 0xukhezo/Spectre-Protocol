@@ -16,6 +16,11 @@ const config: Config = {
       borderWidth: {
         1: "1px",
       },
+      fontFamily: {
+        poppins: ["Poppins"],
+        ibm: ["IBM Plex Serif"],
+        inter: ["Inter"],
+      },
       colors: {
         main: "#d2c3f6",
         secondary: "#ac8cfb",

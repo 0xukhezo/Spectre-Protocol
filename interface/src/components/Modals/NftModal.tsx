@@ -12,6 +12,7 @@ import {
   transformUrl,
 } from "../../../utils/utils";
 import GHO from "../../../public/GHO.svg";
+import ETH from "../../../public/ETH.svg";
 import { abiUserSlot } from "../../../abis/abis.json";
 import Error from "../../../public/Error.svg";
 import Success from "../../../public/Success.svg";
@@ -63,7 +64,7 @@ export default function NftModal({
   const [txDescription, setTxDescription] = useState<string | null>(null);
   const [status, setStatus] = useState<string[]>([]);
 
-  const { isConnected } = useAccount();
+  const { isConnected, address } = useAccount();
 
   const { info, loading } = useFetchUriInfo(
     nftsCopy[currentNftIndex].uri
@@ -329,6 +330,17 @@ export default function NftModal({
                             width={24}
                             height={24}
                             className="rounded-lg h-[24px] min-w-[24px]"
+                          />{" "}
+                          <span className="text-main text-lg mx-2">
+                            {" "}
+                            + 0.01 % APY
+                          </span>{" "}
+                          <Image
+                            src={ETH.src}
+                            alt={`Token image`}
+                            width={24}
+                            height={24}
+                            className="rounded-lg h-[24px] min-w-[24px]"
                           />
                         </li>
                       </ul>
@@ -357,7 +369,7 @@ export default function NftModal({
                       <li className="text-lg text-xs flex items-center">
                         Finish
                         <span className="text-main text-lg mx-2">{`${formatDate(
-                          Number(nftsCopy[currentNftIndex].deadline)
+                          Number(nftsCopy[currentNftIndex].deadline * 1000)
                         )}`}</span>{" "}
                       </li>
                     )}
@@ -389,23 +401,42 @@ export default function NftModal({
                               </span>{" "}
                             </li>
                           )}
-                          {debtGho !== undefined ||
-                            (debtGho !== 0 && (
-                              <li className="text-lg text-xs flex items-center mt-2">
-                                Debt
-                                <span className="text-main text-lg mx-2 flex items-center">
-                                  {(Number(debtGho) / 10 ** 18).toFixed(2)}{" "}
-                                  <Image
-                                    src={GHO.src}
-                                    alt={`Token image`}
-                                    width={24}
-                                    height={24}
-                                    className="rounded-lg h-[24px] min-w-[24px] ml-2"
-                                  />
-                                </span>{" "}
-                              </li>
-                            ))}
+                          {(debtGho !== undefined || Number(debtGho) !== 0) && (
+                            <li className="text-lg text-xs flex items-center mt-2">
+                              Debt
+                              <span className="text-main text-lg mx-2 flex items-center">
+                                {(Number(debtGho) / 10 ** 18).toFixed(2)}{" "}
+                                <Image
+                                  src={GHO.src}
+                                  alt={`Token image`}
+                                  width={24}
+                                  height={24}
+                                  className="rounded-lg h-[24px] min-w-[24px] ml-2"
+                                />
+                              </span>{" "}
+                            </li>
+                          )}
                         </ul>
+
+                        {debtGho !== undefined &&
+                          Number(debtGho) === 0 &&
+                          address?.toLowerCase() ===
+                            nftsCopy[currentNftIndex].user.id && (
+                            <TxButton
+                              address={
+                                nftsCopy[currentNftIndex].slot
+                                  .id as `0x${string}`
+                              }
+                              abi={abiUserSlot}
+                              functionName="completeLoanOwner"
+                              args={[]}
+                              getTxStatus={getStatus}
+                              children={<span>Close Loan</span>}
+                              className="bg-main text-black font-light px-[38px] py-2 rounded-xl hover:bg-secondary flex mx-auto mt-4 col-span-full"
+                              id="completeLoanOwner"
+                            />
+                          )}
+
                         {nftsCopy[currentNftIndex].supplier !== zeroAddress && (
                           <>
                             <div className="grid grid-cols-2 mt-10 gap-[12px]">
@@ -470,59 +501,81 @@ export default function NftModal({
                         )}
                       </div>
                     ) : (
-                      nftsCopy[currentNftIndex].supplier === zeroAddress && (
-                        <div className="mt-10">
-                          {(status.length === 0 ||
-                            (status[0] === "loading" &&
-                              status[1] === "approveToken")) &&
-                            requestToken && (
-                              <TxButton
-                                address={requestToken.contract as `0x${string}`}
-                                abi={erc20ABI}
-                                functionName="approve"
-                                args={[
-                                  nftsCopy[currentNftIndex].slot.id,
-                                  nftsCopy[currentNftIndex].amountRequest,
-                                ]}
-                                getTxStatus={getStatus}
-                                children={
-                                  <span> Approve {requestToken.symbol}</span>
-                                }
-                                className="bg-main text-black font-light px-[34px] py-2 rounded-xl hover:bg-secondary flex items-center justify-center mx-auto min-w-[200px] items-center"
-                                id="approveToken"
-                              />
-                            )}
-                          {(status[1] === "approveToken" &&
-                            status[0] !== "loading") ||
-                          (status[1] === "supplyRequest" &&
-                            status[0] === "loading") ? (
+                      <>
+                        {nftsCopy[currentNftIndex].supplier ===
+                          address?.toLowerCase() &&
+                          Number(nftsCopy[currentNftIndex].deadline) * 1000 <
+                            currentTimestamp && (
                             <TxButton
                               address={
                                 nftsCopy[currentNftIndex].slot
                                   .id as `0x${string}`
                               }
                               abi={abiUserSlot}
-                              functionName="supplyRequest"
+                              functionName="completeLoanSupplier"
                               args={[]}
                               getTxStatus={getStatus}
-                              children={
-                                <span>Supply {requestToken.symbol}</span>
-                              }
-                              className="bg-main text-black font-light px-[34px] py-2 rounded-xl hover:bg-secondary flex mx-auto min-w-[200px] items-center mx-auto text-center flex items-center justify-center mt-4"
-                              id="supplyRequest"
+                              children={<span>Close Loan</span>}
+                              className="bg-main text-black font-light px-[38px] py-2 rounded-xl hover:bg-secondary flex mx-auto mt-4 col-span-full"
+                              id="completeLoanOwner"
                             />
-                          ) : (
-                            requestToken && (
-                              <button
-                                className="flex flex-col rounded-xl border-main border-1 px-[34px] py-2 mx-auto opacity-50 min-w-[200px] items-center mt-4"
-                                disabled
-                              >
-                                Supply {requestToken.symbol}
-                              </button>
-                            )
                           )}
-                        </div>
-                      )
+                        {nftsCopy[currentNftIndex].supplier === zeroAddress && (
+                          <div className="mt-10">
+                            {(status.length === 0 ||
+                              (status[0] === "loading" &&
+                                status[1] === "approveToken")) &&
+                              requestToken && (
+                                <TxButton
+                                  address={
+                                    requestToken.contract as `0x${string}`
+                                  }
+                                  abi={erc20ABI}
+                                  functionName="approve"
+                                  args={[
+                                    nftsCopy[currentNftIndex].slot.id,
+                                    nftsCopy[currentNftIndex].amountRequest,
+                                  ]}
+                                  getTxStatus={getStatus}
+                                  children={
+                                    <span> Approve {requestToken.symbol}</span>
+                                  }
+                                  className="bg-main text-black font-light px-[34px] py-2 rounded-xl hover:bg-secondary flex items-center justify-center mx-auto min-w-[200px] items-center"
+                                  id="approveToken"
+                                />
+                              )}
+                            {(status[1] === "approveToken" &&
+                              status[0] !== "loading") ||
+                            (status[1] === "supplyRequest" &&
+                              status[0] === "loading") ? (
+                              <TxButton
+                                address={
+                                  nftsCopy[currentNftIndex].slot
+                                    .id as `0x${string}`
+                                }
+                                abi={abiUserSlot}
+                                functionName="supplyRequest"
+                                args={[]}
+                                getTxStatus={getStatus}
+                                children={
+                                  <span>Supply {requestToken.symbol}</span>
+                                }
+                                className="bg-main text-black font-light px-[34px] py-2 rounded-xl hover:bg-secondary flex mx-auto min-w-[200px] items-center mx-auto text-center flex items-center justify-center mt-4"
+                                id="supplyRequest"
+                              />
+                            ) : (
+                              requestToken && (
+                                <button
+                                  className="flex flex-col rounded-xl border-main border-1 px-[34px] py-2 mx-auto opacity-50 min-w-[200px] items-center mt-4"
+                                  disabled
+                                >
+                                  Supply {requestToken.symbol}
+                                </button>
+                              )
+                            )}
+                          </div>
+                        )}
+                      </>
                     )}{" "}
                   </div>
                 </>
@@ -561,7 +614,7 @@ export default function NftModal({
                     alt={`${info.name} image`}
                     width={300}
                     height={300}
-                    className={`h-[400px] w-[400px] rounded-xl z-10 ${
+                    className={`h-[500px] w-[500px] rounded-xl z-10 ${
                       !isAnimating && buttonClicked === "previous"
                         ? "animate-transition-initial-next"
                         : ""
@@ -587,7 +640,7 @@ export default function NftModal({
               </div>
             </div>
             {nftsCopy.length > 1 && (
-              <div className="absolute bottom-2 text-white flex  justify-between z-50 grid grid-cols-2 gap-x-[24px]">
+              <div className="absolute bottom-1 text-white flex  justify-between z-50 grid grid-cols-2 gap-x-[24px]">
                 <div className="p-0.5 rounded-full ">
                   <button
                     className="shadow mainBackground p-2 rounded-full rotate-180"

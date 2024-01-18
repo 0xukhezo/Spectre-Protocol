@@ -40,22 +40,26 @@ export default function Navbar() {
             <div className="navbar flex items-center justify-between p-[20px] ">
               <div className="navbar-opacity"></div>
               <div className="flex-shrink-0">
-                <Link href="/">
+                <Link href="/" className="flex items-center">
                   <Image
                     src={Specter.src}
                     alt="Your Company"
-                    width={50}
-                    height={50}
+                    width={80}
+                    height={0}
                     className="logo hidden lg:block"
                   />
 
                   <Image
                     src={Specter.src}
                     alt="Your Company"
-                    width={20}
-                    height={20}
+                    width={50}
+                    height={50}
                     className="logo lg:hidden block"
                   />
+                  <h1 className="text-2xl ml-4 font-light italic font-ibm">
+                    Spectre <br />
+                    Protocol
+                  </h1>
                 </Link>
               </div>
               <div className="flex items-center">
@@ -107,36 +111,15 @@ export default function Navbar() {
             </div>
           </div>
 
-          <Disclosure.Panel className="md:hidden bg-purple-100 flex flex-col justify-between">
+          <Disclosure.Panel className="md:hidden bg-gray-900 flex flex-col justify-between">
             <div className="space-y-1 px-2 pb-3 pt-2">
-              <Disclosure.Button
-                as="a"
-                href={router.route !== "/" ? "/#home" : "#home"}
-                className="block rounded-md bg-gray-900 px-3 py-2 text-base font-medium text-white"
-              >
-                Home
-              </Disclosure.Button>
-              <Disclosure.Button
-                as="a"
-                href={router.route !== "/" ? "/#products" : "#products"}
-                className="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
-              >
-                Products
-              </Disclosure.Button>
-              <Disclosure.Button
-                as="a"
-                href={router.route !== "/" ? "/#why" : "#why"}
-                className="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
-              >
-                Why
-              </Disclosure.Button>
-              <Disclosure.Button
-                as="a"
-                href={router.route !== "/" ? "/#faq" : "#faq"}
-                className="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
-              >
-                FAQ
-              </Disclosure.Button>
+              {navigation.map((link: any) => (
+                <Link href={link.href} key={link.href}>
+                  <Disclosure.Button className="block rounded-md mt-4 px-3 py-2 text-base font-medium text-white">
+                    {link.name}{" "}
+                  </Disclosure.Button>
+                </Link>
+              ))}
             </div>
           </Disclosure.Panel>
 

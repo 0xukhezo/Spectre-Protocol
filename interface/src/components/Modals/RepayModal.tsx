@@ -77,7 +77,7 @@ export default function RepayModal({
       setTxDescription("The transaction was executed correctly");
       setNotificationImage(Success.src);
     }
-    if (status[0] === "success" && status[1] === "approvetOKEN") {
+    if (status[0] === "success" && status[1] === "approveToken") {
       setTimeout(() => {
         setTitle(null);
         setTxDescription(null);

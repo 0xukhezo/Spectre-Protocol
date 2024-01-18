@@ -13,11 +13,11 @@ export default function ProfileLoans() {
   const { isConnected, address } = useAccount();
 
   const { loans, loading } = useFetchLoans(
-    `(where: {user_: {id: "${address?.toLowerCase()}"}})`
+    `(where: {activeLoan: true, user_: {id: "${address?.toLowerCase()}"}})`
   );
 
   const { loans: supplies, loading: loadingSupplies } = useFetchLoans(
-    `(where: {supplier: "${address?.toLowerCase()}"})`
+    `(where: {activeLoan: true, supplier: "${address?.toLowerCase()}"})`
   );
 
   const [connected, setConnected] = useState(false);
@@ -35,6 +35,8 @@ export default function ProfileLoans() {
   useEffect(() => {
     setSuppliesCopy([...supplies]);
   }, [supplies]);
+
+  console.log(loansCopy);
 
   return (
     <main className="pb-10 navbarTextOpacity">

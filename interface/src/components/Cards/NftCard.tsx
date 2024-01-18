@@ -61,7 +61,7 @@ export default function NftCard({
 
     setRequestToken(requestToken[0]);
   }, []);
-
+  console.log(nftInfo);
   return (
     <button
       className="shadow2 flex items-center rounded-xl border-2 border-main hover:border-gray-100 xl:max-h-[400px] max-h-[450px]"

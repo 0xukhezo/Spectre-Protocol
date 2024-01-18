@@ -28,7 +28,7 @@ export default function SlotCard({ slot }: SlotCardProps) {
   return (
     <button
       className={`${
-        slot.loan ? "" : "shadow2 hover:border-gray-100"
+        slot.loan.activeLoan ? "" : "shadow2 hover:border-gray-100"
       } flex items-center rounded-xl border-2 border-main  xl:min-h-[300px] min-h-[350px]`}
       onClick={() => {
         handleUnhover();
@@ -48,18 +48,16 @@ export default function SlotCard({ slot }: SlotCardProps) {
                 alt={`${info.name} image`}
                 width={150}
                 height={150}
-                className={`min-h-[150px] mb-5 rounded-xl ${
+                className={`min-h-[150px] mb-8 rounded-xl ${
                   isHovered ? "float" : ""
                 }`}
               />
-              <div className="mainBackground w-full h-full rounded-b-xl text-white border-t-1 border-t-main relative flex flex-col items-center align-center justify-center">
-                <div className="w-6 h-6 absolute rotate-45 bg-main -top-3 right-[46%]"></div>
-                <h1 className="pb-2 pt-8 text-sm text-main font-medium px-4">
+              <div className="mainBackground w-full h-full rounded-b-xl text-white border-t-1 border-t-main relative flex flex-col items-start ">
+                <div className="w-6 h-6 absolute rotate-45 bg-main -top-3 right-[47.5%]"></div>
+                <h1 className="pb-2 pt-6 text-sm text-main font-medium px-4">
                   {slot.loan.nft.collection.name}
                 </h1>
-                <h1 className="pb-12 text-xl font-semibold px-4">
-                  {info.name}
-                </h1>
+                <h1 className="pb-6 text-xl font-semibold px-4">{info.name}</h1>
               </div>{" "}
             </>
           ) : (
