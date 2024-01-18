@@ -41,7 +41,7 @@ export default function ProfileLoans() {
       <div className="mx-4">
         {!connected ? (
           <div className="h-[700px] flex justify-center items-center flex-col">
-            <h1 className="font-extralight mb-10 text-3xl text-center">
+            <h1 className="font-extralight mb-10 text-5xl text-center">
               You need to be connected to see <br />
               your loans or supplies
             </h1>
@@ -52,7 +52,7 @@ export default function ProfileLoans() {
             <div>
               <h1 className="text-3xl navbarTitle pb-2">Active Loans</h1>{" "}
               <hr className="modalAnimatedLine" />
-              {loadingSupplies ? (
+              {loading ? (
                 <div className="flex items-center justify-center w-full pt-32">
                   <Loader />{" "}
                 </div>
