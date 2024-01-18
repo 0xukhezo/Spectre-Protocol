@@ -56,7 +56,7 @@ export default function Navbar() {
                     height={50}
                     className="logo lg:hidden block"
                   />
-                  <h1 className="text-2xl ml-4 font-light italic font-ibm">
+                  <h1 className="text-2xl ml-4 font-light font-ibm">
                     Spectre <br />
                     Protocol
                   </h1>

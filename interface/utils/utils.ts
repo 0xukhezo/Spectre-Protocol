@@ -35,7 +35,7 @@ export async function fetchUri(url: string) {
       return jsonString;
     }
   } catch (error) {
-    console.log("Error al obtener los datos");
+    console.log("Error");
   }
 }
 

@@ -468,10 +468,10 @@ input::-webkit-inner-spin-button {
 
     0%,
     100% {
-        background-color: #fcfcfc;
+        background-color: #d2c3f6;
     }
 
     50% {
-        background-color: #d2c3f6;
+        background-color: #ac8cfb;
     }
 }

@@ -402,7 +402,7 @@ export default function CreateLoanSection() {
               functionName="approve"
               args={[slotAddress, nft.tokenId]}
               getTxStatus={getStatus}
-              children={<span> Approve {nft.name}</span>}
+              children={<span>Approve {nft.name}</span>}
               className="bg-main text-black font-light px-4 py-6 rounded-xl hover:bg-secondary flex h-1/2 my-auto items-center justify-center mx-4"
               id="approveNft"
             />
@@ -652,7 +652,6 @@ export default function CreateLoanSection() {
               />
             )}
           </div>
-
           {title && image && txDescription && (
             <NotificationsCard
               title={title}

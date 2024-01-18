@@ -24,7 +24,7 @@ export default function SlotCard({ slot }: SlotCardProps) {
   const handleUnhover = () => {
     setIsHovered(false);
   };
-  console.log(slot);
+
   return (
     <button
       className={`${

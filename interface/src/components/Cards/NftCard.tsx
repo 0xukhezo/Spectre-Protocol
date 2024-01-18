@@ -5,6 +5,7 @@ import { useFetchUriInfo } from "@/hooks/useFetchUriInfo";
 import Loader from "../Loader/Loader";
 import { transformUrl } from "../../../utils/utils";
 import GHO from "../../../public/GHO.svg";
+import ETH from "../../../public/ETH.svg";
 import { erc20ABI, useContractRead } from "wagmi";
 import { tokens } from "../../../constants/constants";
 
@@ -61,10 +62,10 @@ export default function NftCard({
 
     setRequestToken(requestToken[0]);
   }, []);
-  console.log(nftInfo);
+
   return (
     <button
-      className="shadow2 flex items-center rounded-xl border-2 border-main hover:border-gray-100 xl:max-h-[400px] max-h-[450px]"
+      className="shadow2 flex items-center rounded-xl border-2 border-main hover:border-gray-100 xl:max-h-[500px] max-h-[450px]"
       onClick={() => {
         setOpenModal(true);
         handleUnhover();
@@ -87,13 +88,17 @@ export default function NftCard({
             }`}
           />
           <div className="mainBackground w-full rounded-b-xl text-white border-t-1 border-t-main relative flex flex-col items-start align-center justify-center h-full py-4">
-            <div className="w-6 h-6 absolute rotate-45 bg-main -top-3 right-[47%]"></div>
-            <h1 className="pb-2 pt-2 text-sm text-main font-medium px-4">
+            <div className="w-6 h-6 absolute rotate-45 bg-main -top-3 right-[47.5%]"></div>
+            <h1 className="pt-2 text-sm text-main font-medium px-4">
               {isPortfolio ? nftInfo.collection : nftInfo.nft.collection.name}
             </h1>
-            <h1 className="pb-4 text-xl font-semibold px-4">{info.name}</h1>
+            <h1 className="py-3 text-xl font-semibold px-4">{info.name}</h1>
             {decimalsTokenRequest !== undefined && (
-              <ul className="grid grid-cols-2 w-full px-4 mt-4">
+              <ul
+                className={`grid ${
+                  isLoan ? "grid-cols-2" : "grid-rows-2"
+                } w-full px-4 gap-[12px] pb-2`}
+              >
                 <>
                   <li className="text-lg flex items-center">
                     Supply
@@ -110,7 +115,7 @@ export default function NftCard({
                       />
                     )}
                   </li>
-                  <li className="text-lg flex items-center">
+                  <li className="text-lg flex items-center mt-2">
                     Rewards
                     <span className="text-main text-lg mx-2">{`${
                       nftInfo.rewards / 10 ** 18
@@ -121,7 +126,7 @@ export default function NftCard({
                       width={24}
                       height={24}
                       className="rounded-lg h-[24px] min-w-[24px]"
-                    />
+                    />{" "}
                   </li>
                 </>
               </ul>

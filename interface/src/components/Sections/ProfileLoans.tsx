@@ -36,8 +36,6 @@ export default function ProfileLoans() {
     setSuppliesCopy([...supplies]);
   }, [supplies]);
 
-  console.log(loansCopy);
-
   return (
     <main className="pb-10 navbarTextOpacity">
       <div className="mx-4">
