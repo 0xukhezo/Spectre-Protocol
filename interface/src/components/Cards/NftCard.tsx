@@ -66,7 +66,7 @@ export default function NftCard({
 
   return (
     <button
-      className="shadow2 flex items-center rounded-xl border-2 border-main hover:border-gray-100 xl:max-h-[500px] max-h-[450px]"
+      className="shadow2 flex items-center rounded-xl border-2 border-main hover:border-gray-100 xl:max-h-[500px] max-h-[450px] navbarTextOpacity"
       onClick={() => {
         setOpenModal(true);
         handleUnhover();
