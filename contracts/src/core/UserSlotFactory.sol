@@ -12,11 +12,11 @@ contract UserSlotFactory is Ownable, IUserSlotFactory {
     address public immutable aavePool;
     address public immutable aaveDataProvider;
     address public immutable ghoToken;
-    address public immutable connector;
+    address public connector;
 
     mapping(address => bool) public slots;
 
-    constructor(address _aavePool, address _aaveDataProvider, address _connector, address _ghoToken)
+    constructor(address _aavePool, address _aaveDataProvider, address _ghoToken)
         Ownable(_msgSender())
     {
         if (_aavePool == address(0)) {
@@ -28,15 +28,11 @@ contract UserSlotFactory is Ownable, IUserSlotFactory {
         if (_ghoToken == address(0)) {
             revert InvalidAddressForConstructorArgument("ghoToken");
         }
-        if (_connector == address(0)) {
-            revert InvalidAddressForConstructorArgument("connector");
-        }
-
+    
         eventEmitter = new EventEmitter(address(this));
         aavePool = _aavePool;
         aaveDataProvider = _aaveDataProvider;
         ghoToken = _ghoToken;
-        connector = _connector;
     }
 
     function createSlot() public {
@@ -48,5 +44,9 @@ contract UserSlotFactory is Ownable, IUserSlotFactory {
 
     function slotExists(address _slotAddress) public view returns (bool) {
         return slots[_slotAddress];
+    }
+
+    function setConnector(address newConnector) public onlyOwner {
+        connector = newConnector;
     }
 }
