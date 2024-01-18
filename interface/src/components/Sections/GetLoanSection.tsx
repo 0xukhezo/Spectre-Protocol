@@ -95,10 +95,11 @@ export default function GetLoanSection() {
                 functionName="createSlot"
                 args={[]}
                 getTxStatus={getStatus}
-                children={<span> + Create Slot</span>}
                 className="bg-main text-black font-light px-4 py-2 rounded-xl max-h-[44px] hover:bg-secondary"
                 id="createSlotFuction"
-              />
+              >
+                <span> + Create Slot</span>
+              </TxButton>
             </div>
             <div className="mt-10">
               <h1 className="text-3xl navbarTitle pb-2">Slots created</h1>{" "}
@@ -126,10 +127,11 @@ export default function GetLoanSection() {
                       functionName="createSlot"
                       args={[]}
                       getTxStatus={getStatus}
-                      children={<span> + Create Slot</span>}
                       className="bg-main text-black font-light px-10 py-3 rounded-xl hover:bg-secondary text-base"
                       id="createSlotFuction"
-                    />
+                    >
+                      <span> + Create Slot</span>
+                    </TxButton>
                   </div>
                 )}
               </div>

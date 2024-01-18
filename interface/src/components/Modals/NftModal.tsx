@@ -431,10 +431,11 @@ export default function NftModal({
                               functionName="completeLoanOwner"
                               args={[]}
                               getTxStatus={getStatus}
-                              children={<span>Close Loan</span>}
                               className="bg-main text-black font-light px-[38px] py-2 rounded-xl hover:bg-secondary flex mx-auto mt-4 col-span-full"
                               id="completeLoanOwner"
-                            />
+                            >
+                              <span>Close Loan</span>
+                            </TxButton>
                           )}
 
                         {nftsCopy[currentNftIndex].supplier !== zeroAddress && (
@@ -491,10 +492,11 @@ export default function NftModal({
                                     functionName="completeLoanOwner"
                                     args={[]}
                                     getTxStatus={getStatus}
-                                    children={<span>Close Loan</span>}
                                     className="bg-main text-black font-light px-[38px] py-2 rounded-xl hover:bg-secondary flex mx-auto mt-4 col-span-full"
                                     id="completeLoanOwner"
-                                  />
+                                  >
+                                    <span>Close Loan</span>
+                                  </TxButton>
                                 )}
                             </div>
                           </>
@@ -515,10 +517,11 @@ export default function NftModal({
                               functionName="completeLoanSupplier"
                               args={[]}
                               getTxStatus={getStatus}
-                              children={<span>Close Loan</span>}
                               className="bg-main text-black font-light px-[38px] py-2 rounded-xl hover:bg-secondary flex mx-auto mt-4 col-span-full"
                               id="completeLoanOwner"
-                            />
+                            >
+                              <span>Close Loan</span>
+                            </TxButton>
                           )}
                         {nftsCopy[currentNftIndex].supplier === zeroAddress && (
                           <div className="mt-10">
@@ -537,12 +540,11 @@ export default function NftModal({
                                     nftsCopy[currentNftIndex].amountRequest,
                                   ]}
                                   getTxStatus={getStatus}
-                                  children={
-                                    <span> Approve {requestToken.symbol}</span>
-                                  }
                                   className="bg-main text-black font-light px-[34px] py-2 rounded-xl hover:bg-secondary flex items-center justify-center mx-auto min-w-[200px] items-center"
                                   id="approveToken"
-                                />
+                                >
+                                  <span>Approve {requestToken.symbol}</span>
+                                </TxButton>
                               )}
                             {(status[1] === "approveToken" &&
                               status[0] !== "loading") ||
@@ -557,12 +559,11 @@ export default function NftModal({
                                 functionName="supplyRequest"
                                 args={[]}
                                 getTxStatus={getStatus}
-                                children={
-                                  <span>Supply {requestToken.symbol}</span>
-                                }
                                 className="bg-main text-black font-light px-[34px] py-2 rounded-xl hover:bg-secondary flex mx-auto min-w-[200px] items-center mx-auto text-center flex items-center justify-center mt-4"
                                 id="supplyRequest"
-                              />
+                              >
+                                <span>Supply {requestToken.symbol}</span>
+                              </TxButton>
                             ) : (
                               requestToken && (
                                 <button

@@ -402,10 +402,11 @@ export default function CreateLoanSection() {
               functionName="approve"
               args={[slotAddress, nft.tokenId]}
               getTxStatus={getStatus}
-              children={<span>Approve {nft.name}</span>}
               className="bg-main text-black font-light px-4 py-6 rounded-xl hover:bg-secondary flex h-1/2 my-auto items-center justify-center mx-4"
               id="approveNft"
-            />
+            >
+              <span>Approve {nft.name}</span>
+            </TxButton>
           ) : (
             <button
               className={`h-1/2 my-auto items-center justify-center border-1 border-main mx-4 flex flex-col px-4 rounded-xl mainBackground opacity-50 py-6 ${
@@ -432,10 +433,11 @@ export default function CreateLoanSection() {
               functionName="approve"
               args={[slotAddress, rewards * 10 ** ghoToken.decimals]}
               getTxStatus={getStatus}
-              children={<span> Approve GHO</span>}
               className="bg-main text-black font-light px-4 py-6 rounded-xl hover:bg-secondary flex h-1/2 my-auto items-center justify-center mx-4"
               id="approveGho"
-            />
+            >
+              <span> Approve GHO</span>
+            </TxButton>
           ) : (
             <button
               className={`h-1/2 my-auto items-center justify-center border-1 border-main mx-4 flex flex-col px-4 rounded-xl mainBackground opacity-50  py-6 ${
@@ -468,10 +470,11 @@ export default function CreateLoanSection() {
                 loanDurationToContrat,
               ]}
               getTxStatus={getStatus}
-              children={<span>Create Loan</span>}
               className="bg-main text-black font-light px-4 py-6 rounded-xl hover:bg-secondary flex h-1/2 my-auto items-center justify-center mx-4"
               id="openRequest"
-            />
+            >
+              <span>Create Loan</span>
+            </TxButton>
           ) : (
             <button
               className="h-1/2 my-auto items-center justify-center border-1 border-main mx-4 flex flex-col px-4 rounded-xl mainBackground opacity-50 py-6"

@@ -290,10 +290,11 @@ export default function RepayModal({
                             amountRepay * 10 ** 18 + 0.001,
                           ]}
                           getTxStatus={getStatus}
-                          children={<span>Approve GHO</span>}
                           className={`bg-main text-black font-light px-[34px] py-2 rounded-xl hover:bg-secondary flex items-center justify-center mx-auto min-w-[200px] items-center`}
                           id="approveToken"
-                        />
+                        >
+                          <span>Approve GHO</span>
+                        </TxButton>
                       ) : (
                         <button
                           className={`flex flex-col rounded-xl border-main border-1 px-[34px] py-2 mx-auto opacity-50 min-w-[200px] items-center mt-4 ${
@@ -323,10 +324,11 @@ export default function RepayModal({
                             loan.slot.id,
                           ]}
                           getTxStatus={getStatus}
-                          children={<span>Repay GHO</span>}
                           className="bg-main text-black font-light px-[34px] py-2 rounded-xl hover:bg-secondary flex mx-auto min-w-[200px] items-center mx-auto text-center flex items-center justify-center mt-4"
                           id="repay"
-                        />
+                        >
+                          <span>Repay GHO</span>
+                        </TxButton>
                       ) : (
                         <button
                           className="flex flex-col rounded-xl border-main border-1 px-[34px] py-2 mx-auto opacity-50 min-w-[200px] items-center mt-4"

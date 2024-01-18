@@ -242,10 +242,11 @@ export default function BorrowModal({
                           loan.slot.id,
                         ]}
                         getTxStatus={getStatus}
-                        children={<span>Borrow GHO</span>}
                         className="bg-main text-black font-light px-10 py-2 rounded-xl hover:bg-secondary flex my-auto items-center justify-center mx-4"
                         id="borrow"
-                      />
+                      >
+                        <span>Borrow GHO</span>
+                      </TxButton>
                     ) : (
                       <button
                         className="my-auto items-center justify-center border-1 border-main mx-4 flex flex-col px-10 rounded-xl mainBackground opacity-50 py-2"
