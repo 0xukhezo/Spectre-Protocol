@@ -213,7 +213,7 @@ contract UserSlot is IUserSlot, Ownable, ERC721Holder {
      *     - lo han liquidado -> por supplier y por owner
      *     - finalizar antes de tiempo -> por owner
      */
-    function completeLoanOwner() external onlyOwner loanActive {
+    function completeLoanOwner() external onlyOwner {
         if (position.loanDeadline < block.timestamp) {
             revert LoanDeadlineExceeded();
         }
@@ -224,7 +224,7 @@ contract UserSlot is IUserSlot, Ownable, ERC721Holder {
 
         (uint256 aTokenBalance,,,,,,,,) = protocolDataProvider.getUserReserveData(position.tokenRequest, address(this));
 
-        if (aTokenBalance < position.amountRequest) {
+        if (_hasSupplier() && aTokenBalance < position.amountRequest) {
             revert InsufficientAvailableCollateral();
         }
 

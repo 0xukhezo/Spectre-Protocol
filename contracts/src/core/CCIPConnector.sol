@@ -15,6 +15,7 @@ import {IUserSlot} from "src/interfaces/IUserSlot.sol";
 import {ICCIPConnector} from "src/interfaces/ICCIPConnector.sol";
 
 contract CCIPConnector is ICCIPConnector, CCIPReceiver, OwnerIsCreator {
+
     using EnumerableMap for EnumerableMap.Bytes32ToUintMap;
     using SafeERC20 for IERC20;
 

@@ -158,6 +158,8 @@ export function handleCompleteLoan(event: CompleteLoanEvent): void {
   loan.completedSuccessfully = event.params.successfull
   loan.activeLoan = false
   loan.amountWithdraw = event.params.amountWithdraw
+
+  loan.save()
   
 }
 
