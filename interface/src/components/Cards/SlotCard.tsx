@@ -6,6 +6,7 @@ import SadSpectre from "../../../public/SadSpectre.svg";
 import { useFetchUriInfo } from "@/hooks/useFetchUriInfo";
 import Loader from "../Loader/Loader";
 import { transformUrl } from "../../../utils/utils";
+import { sepolia, useChainId } from "wagmi";
 
 type SlotCardProps = {
   slot: any;
@@ -16,6 +17,7 @@ export default function SlotCard({ slot }: SlotCardProps) {
     slot.loan ? `${slot.loan.nft.uri}` : ""
   );
   const [isHovered, setIsHovered] = useState(false);
+  const chain = useChainId();
 
   const handleHover = () => {
     setIsHovered(true);
@@ -60,7 +62,7 @@ export default function SlotCard({ slot }: SlotCardProps) {
                 <h1 className="pb-6 text-xl font-semibold px-4">{info.name}</h1>
               </div>{" "}
             </>
-          ) : (
+          ) : chain === sepolia.id ? (
             <Link
               className="w-full h-full flex flex-col justify-center items-center rounded-xl text-3xl"
               href={`/slot/${slot.id}`}
@@ -74,9 +76,20 @@ export default function SlotCard({ slot }: SlotCardProps) {
                 className="min-h-[150px] mb-5 "
               />
             </Link>
+          ) : (
+            <div className="w-full h-full flex flex-col justify-center items-center rounded-xl text-3xl">
+              <h1>Nft missing...</h1>{" "}
+              <Image
+                src={SadSpectre.src}
+                alt="SadSpectre Image"
+                width={200}
+                height={200}
+                className="min-h-[150px] mb-5 "
+              />
+            </div>
           )}
         </div>
-      ) : (
+      ) : chain === sepolia.id ? (
         <Link
           className="w-full h-full flex flex-col justify-center items-center rounded-xl text-3xl"
           href={`/slot/${slot.id}`}
@@ -90,6 +103,17 @@ export default function SlotCard({ slot }: SlotCardProps) {
             className="min-h-[150px] mb-5 "
           />
         </Link>
+      ) : (
+        <div className="w-full h-full flex flex-col justify-center items-center rounded-xl text-3xl">
+          <h1>Nft missing...</h1>{" "}
+          <Image
+            src={SadSpectre.src}
+            alt="SadSpectre Image"
+            width={200}
+            height={200}
+            className="min-h-[150px] mb-5 "
+          />
+        </div>
       )}
     </button>
   );

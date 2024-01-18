@@ -1,6 +1,6 @@
 import React, { ReactElement, useEffect, useState } from "react";
 
-import { useAccount } from "wagmi";
+import { useAccount, useChainId } from "wagmi";
 
 import WalletButton from "../Buttons/WalletButton";
 import SlotCard from "../Cards/SlotCard";
@@ -17,13 +17,16 @@ import Image from "next/image";
 import SadSpectre from "../../../public/SadSpectre.svg";
 import Loader from "../Loader/Loader";
 import router from "next/router";
+import { arbitrumSepolia, sepolia } from "viem/chains";
+import { useSwitchNetwork } from "wagmi";
 
 export default function GetLoanSection() {
   const [connected, setConnected] = useState(false);
   const { isConnected, address } = useAccount();
+  const chain = useChainId();
+  const { switchNetwork } = useSwitchNetwork();
 
   const [status, setStatus] = useState<string[]>([]);
-
   const [title, setTitle] = useState<string | null>(null);
   const [image, setImage] = useState<string | ReactElement | null>(null);
   const [txDescription, setTxDescription] = useState<string | null>(null);
@@ -89,17 +92,26 @@ export default function GetLoanSection() {
                 </span>
                 <InfoSteps steps={getLoanInfoSteps} />
               </div>{" "}
-              <TxButton
-                address={UserSlotFactoryAddress as `0x${string}`}
-                abi={abiUserSlotFactory}
-                functionName="createSlot"
-                args={[]}
-                getTxStatus={getStatus}
-                className="bg-main text-black font-light px-4 py-2 rounded-xl max-h-[44px] hover:bg-secondary"
-                id="createSlotFuction"
-              >
-                <span> + Create Slot</span>
-              </TxButton>
+              {chain === arbitrumSepolia.id ? (
+                <button
+                  className="bg-main text-black font-light px-4 py-2 rounded-xl max-h-[44px] hover:bg-secondary"
+                  onClick={() => switchNetwork?.(sepolia.id)}
+                >
+                  Switch to Sepolia
+                </button>
+              ) : (
+                <TxButton
+                  address={UserSlotFactoryAddress as `0x${string}`}
+                  abi={abiUserSlotFactory}
+                  functionName="createSlot"
+                  args={[]}
+                  getTxStatus={getStatus}
+                  className="bg-main text-black font-light px-4 py-2 rounded-xl max-h-[44px] hover:bg-secondary"
+                  id="createSlotFuction"
+                >
+                  <span> + Create Slot</span>
+                </TxButton>
+              )}
             </div>
             <div className="mt-10">
               <h1 className="text-3xl navbarTitle pb-2">Slots created</h1>{" "}

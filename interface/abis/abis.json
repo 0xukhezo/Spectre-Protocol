@@ -2123,5 +2123,254 @@
         { "name": "account", "type": "address", "internalType": "address" }
       ]
     }
+  ],
+  "abiCCIPConnector": [
+    {
+      "type": "function",
+      "name": "allowlistChain",
+      "inputs": [
+        {
+          "name": "_chainSelector",
+          "type": "uint64",
+          "internalType": "uint64"
+        },
+        { "name": "_allowed", "type": "bool", "internalType": "bool" },
+        {
+          "name": "_contractProtocol",
+          "type": "address",
+          "internalType": "address"
+        }
+      ],
+      "outputs": [],
+      "stateMutability": "nonpayable"
+    },
+    {
+      "type": "function",
+      "name": "retryFailedMessage",
+      "inputs": [
+        { "name": "messageId", "type": "bytes32", "internalType": "bytes32" },
+        {
+          "name": "tokenReceiver",
+          "type": "address",
+          "internalType": "address"
+        }
+      ],
+      "outputs": [],
+      "stateMutability": "nonpayable"
+    },
+    {
+      "type": "function",
+      "name": "sendMessage",
+      "inputs": [
+        {
+          "name": "_chainSelector",
+          "type": "uint64",
+          "internalType": "uint64"
+        },
+        { "name": "_receiver", "type": "address", "internalType": "address" },
+        {
+          "name": "_action",
+          "type": "uint8",
+          "internalType": "enum ICCIPConnector.ActionType"
+        },
+        { "name": "_token", "type": "address", "internalType": "address" },
+        { "name": "_amount", "type": "uint256", "internalType": "uint256" }
+      ],
+      "outputs": [
+        { "name": "messageId", "type": "bytes32", "internalType": "bytes32" }
+      ],
+      "stateMutability": "payable"
+    },
+    {
+      "type": "function",
+      "name": "withdrawToken",
+      "inputs": [
+        {
+          "name": "_beneficiary",
+          "type": "address",
+          "internalType": "address"
+        },
+        { "name": "_token", "type": "address", "internalType": "address" }
+      ],
+      "outputs": [],
+      "stateMutability": "nonpayable"
+    },
+    {
+      "type": "event",
+      "name": "MessageFailed",
+      "inputs": [
+        {
+          "name": "messageId",
+          "type": "bytes32",
+          "indexed": true,
+          "internalType": "bytes32"
+        },
+        {
+          "name": "reason",
+          "type": "bytes",
+          "indexed": false,
+          "internalType": "bytes"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "MessageReceived",
+      "inputs": [
+        {
+          "name": "messageId",
+          "type": "bytes32",
+          "indexed": true,
+          "internalType": "bytes32"
+        },
+        {
+          "name": "chainSelector",
+          "type": "uint64",
+          "indexed": true,
+          "internalType": "uint64"
+        },
+        {
+          "name": "action",
+          "type": "uint8",
+          "indexed": false,
+          "internalType": "enum ICCIPConnector.ActionType"
+        },
+        {
+          "name": "sender",
+          "type": "address",
+          "indexed": false,
+          "internalType": "address"
+        },
+        {
+          "name": "receiver",
+          "type": "address",
+          "indexed": false,
+          "internalType": "address"
+        },
+        {
+          "name": "token",
+          "type": "address",
+          "indexed": false,
+          "internalType": "address"
+        },
+        {
+          "name": "tokenAmount",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "MessageRecovered",
+      "inputs": [
+        {
+          "name": "messageId",
+          "type": "bytes32",
+          "indexed": true,
+          "internalType": "bytes32"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "MessageSent",
+      "inputs": [
+        {
+          "name": "messageId",
+          "type": "bytes32",
+          "indexed": true,
+          "internalType": "bytes32"
+        },
+        {
+          "name": "chainSelector",
+          "type": "uint64",
+          "indexed": true,
+          "internalType": "uint64"
+        },
+        {
+          "name": "receiver",
+          "type": "address",
+          "indexed": false,
+          "internalType": "address"
+        },
+        {
+          "name": "token",
+          "type": "address",
+          "indexed": false,
+          "internalType": "address"
+        },
+        {
+          "name": "tokenAmount",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        },
+        {
+          "name": "feeToken",
+          "type": "address",
+          "indexed": false,
+          "internalType": "address"
+        },
+        {
+          "name": "fees",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "error",
+      "name": "ChainNotAllowlisted",
+      "inputs": [
+        { "name": "chainSelector", "type": "uint64", "internalType": "uint64" }
+      ]
+    },
+    {
+      "type": "error",
+      "name": "ContractProtocolAddressZero",
+      "inputs": [
+        { "name": "chainSelector", "type": "uint64", "internalType": "uint64" }
+      ]
+    },
+    { "type": "error", "name": "ErrorCase", "inputs": [] },
+    {
+      "type": "error",
+      "name": "MessageNotFailed",
+      "inputs": [
+        { "name": "messageId", "type": "bytes32", "internalType": "bytes32" }
+      ]
+    },
+    {
+      "type": "error",
+      "name": "NotEnoughBalance",
+      "inputs": [
+        {
+          "name": "currentBalance",
+          "type": "uint256",
+          "internalType": "uint256"
+        },
+        {
+          "name": "calculatedFees",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ]
+    },
+    {
+      "type": "error",
+      "name": "NotOwnerOfFailedMessage",
+      "inputs": [
+        { "name": "sender", "type": "address", "internalType": "address" }
+      ]
+    },
+    { "type": "error", "name": "NothingToWithdraw", "inputs": [] },
+    { "type": "error", "name": "OnlySelf", "inputs": [] }
   ]
 }

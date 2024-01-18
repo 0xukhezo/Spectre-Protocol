@@ -6,7 +6,7 @@ import Loader from "../Loader/Loader";
 import { transformUrl } from "../../../utils/utils";
 import GHO from "../../../public/GHO.svg";
 import ETH from "../../../public/ETH.svg";
-import { erc20ABI, useContractRead } from "wagmi";
+import { erc20ABI, sepolia, useContractRead } from "wagmi";
 import { tokens } from "../../../constants/constants";
 
 type NftCardProps = {
@@ -41,6 +41,7 @@ export default function NftCard({
     address: nftInfo.tokenRequest as `0x${string}`,
     abi: erc20ABI,
     functionName: "decimals",
+    chainId: sepolia.id,
   });
 
   const getShowMenu = (state: boolean) => {
@@ -72,9 +73,12 @@ export default function NftCard({
       }}
       onMouseEnter={handleHover}
       onMouseLeave={handleUnhover}
+      disabled={loading}
     >
       {loading ? (
-        <Loader />
+        <div className="flex items-center justify-center w-full">
+          <Loader />
+        </div>
       ) : (
         <div className="w-full h-full flex flex-col items-center rounded-xl pt-10">
           <Image

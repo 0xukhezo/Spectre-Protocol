@@ -18,7 +18,7 @@ import Success from "../../../public/Success.svg";
 import Loader from "../Loader/Loader";
 import NotificationsCard from "../Cards/NotificationsCard";
 import { ghoToken } from "../../../constants/constants";
-import { erc20ABI, useContractRead } from "wagmi";
+import { erc20ABI, sepolia, useContractRead } from "wagmi";
 
 type RepayModalProps = {
   getShowMenu: (open: boolean) => void;
@@ -47,6 +47,7 @@ export default function RepayModal({
     abi: erc20ABI,
     functionName: "balanceOf",
     args: [loan.slot.id],
+    chainId: sepolia.id,
   });
 
   const closeModal = () => {
