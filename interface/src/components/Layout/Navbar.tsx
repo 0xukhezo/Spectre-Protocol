@@ -5,7 +5,7 @@ import Image from "next/image";
 // Icons
 import { Disclosure } from "@headlessui/react";
 // Images
-import Specter from "../../../public/Specter.svg";
+import Logo from "../../../public/Logo.png";
 import Burger from "../../../public/Burger.svg";
 import Cross from "../../../public/Cross.svg";
 // Components
@@ -42,24 +42,20 @@ export default function Navbar() {
               <div className="flex-shrink-0">
                 <Link href="/" className="flex items-center">
                   <Image
-                    src={Specter.src}
+                    src={Logo.src}
                     alt="Your Company"
                     width={80}
-                    height={0}
+                    height={80}
                     className="logo hidden lg:block"
                   />
 
                   <Image
-                    src={Specter.src}
+                    src={Logo.src}
                     alt="Your Company"
                     width={50}
                     height={50}
                     className="logo lg:hidden block"
                   />
-                  <h1 className="text-2xl ml-4 font-light font-ibma">
-                    Spectre <br />
-                    Protocol
-                  </h1>
                 </Link>
               </div>
               <div className="flex items-center">
