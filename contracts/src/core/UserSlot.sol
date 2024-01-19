@@ -163,7 +163,6 @@ contract UserSlot is IUserSlot, Ownable, ERC721Holder {
     }
 
     function _isLoanActive() internal view returns (bool) {
-        //return position.activeLoan;
         return position.supplier != address(0);
     }
 
@@ -207,12 +206,7 @@ contract UserSlot is IUserSlot, Ownable, ERC721Holder {
         }
     }
 
-    /**
-     * Cuando se puede finalizar el prestamo
-     *     - ha pasado el tiempo - position.loanDeadline>block.timestamp -> por supplier
-     *     - lo han liquidado -> por supplier y por owner
-     *     - finalizar antes de tiempo -> por owner
-     */
+
     function completeLoanOwner() external onlyOwner {
         if (position.loanDeadline < block.timestamp) {
             revert LoanDeadlineExceeded();

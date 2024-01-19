@@ -129,7 +129,7 @@ contract UserSlotTest is Test {
             uint64 chainSelector
         ) = aliceSlot.position();
 
-        /*assertTrue(
+        assertTrue(
             tokenContract == tokenContractExpected,
             "The token contract address does not match the expected ERC721 address."
         );
@@ -149,7 +149,7 @@ contract UserSlotTest is Test {
 
         assertTrue(
             mockERC721.ownerOf(1) == address(aliceSlot), "The owner of token ID 1 does not match the expected address."
-        );*/
+        );
     }
 
     function test_BobSupplyRequestOnBehalOfAlice() public {
