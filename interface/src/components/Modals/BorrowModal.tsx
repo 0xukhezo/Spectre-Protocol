@@ -196,7 +196,7 @@ export default function BorrowModal({
                                 : "text-green-500"
                             }
                           >
-                            {healthFactor}
+                            33
                           </span>
                         </div>
                       )}

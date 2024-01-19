@@ -194,7 +194,7 @@ export default function RepayModal({
                     <div className="w-full text-start text-lg mb-4">
                       Remaining debt
                     </div>{" "}
-                    <div className="w-full text-end flex flex-col text-lg mb-4">
+                    <div className="w-full text-end flex flex-col mb-4">
                       {amountRepay === undefined || amountRepay === 0 ? (
                         <div className="flex items-center text-end justify-end">
                           <span className="">
@@ -212,9 +212,12 @@ export default function RepayModal({
                           </span>
                           <ArrowLongRightIcon className="h-6 w-6 mx-1 mt-1" />{" "}
                           <span>
-                            {(Number(debtGho) / 10 ** 18 - amountRepay).toFixed(
-                              2
-                            )}{" "}
+                            {
+                              -(
+                                Number(debtGho) / 10 ** 18 -
+                                amountRepay
+                              ).toFixed(0)
+                            }{" "}
                             GHO
                           </span>
                         </div>
@@ -248,7 +251,7 @@ export default function RepayModal({
                                 : "text-green-500"
                             }
                           >
-                            {healthFactor}
+                            33
                           </span>
                           <ArrowLongRightIcon className="h-6 w-6 mx-1 mt-1" />{" "}
                           <span
