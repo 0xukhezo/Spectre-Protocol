@@ -1,3 +1,4 @@
+// Components
 import GetLoanSection from "@/components/Sections/GetLoanSection";
 
 export default function HomePage() {

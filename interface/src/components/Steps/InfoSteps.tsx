@@ -1,3 +1,6 @@
+// React
+import React from "react";
+
 type InfoStepsProps = { steps: any };
 
 export default function InfoSteps({ steps }: InfoStepsProps) {

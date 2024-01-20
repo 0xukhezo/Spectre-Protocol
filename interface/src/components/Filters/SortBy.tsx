@@ -1,4 +1,6 @@
+// React
 import React, { useEffect, useState } from "react";
+// Components
 import SearchBar from "./SearchBar";
 import FilterCard from "../Cards/FilterCard";
 

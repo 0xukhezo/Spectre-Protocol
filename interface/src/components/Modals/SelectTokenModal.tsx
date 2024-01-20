@@ -1,6 +1,10 @@
+// React
 import React, { Fragment, useEffect, useState } from "react";
+// Haeadlessui
 import { Dialog, Transition } from "@headlessui/react";
+// Heroicons
 import { XMarkIcon } from "@heroicons/react/24/outline";
+// Components
 import SearchBar from "../Filters/SearchBar";
 import DisplayerCard from "../Cards/DisplayerCard";
 

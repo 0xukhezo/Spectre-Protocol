@@ -1,12 +1,19 @@
-import Image from "next/image";
+// React
 import React, { useEffect, useState } from "react";
-import NftModal from "../Modals/NftModal";
+// Next
+import Image from "next/image";
+// Hooks
 import { useFetchUriInfo } from "@/hooks/useFetchUriInfo";
+// Components
+import NftModal from "../Modals/NftModal";
 import Loader from "../Loader/Loader";
+// Utils
 import { transformUrl } from "../../../utils/utils";
+// Images
 import GHO from "../../../public/GHO.svg";
-import ETH from "../../../public/ETH.svg";
+// Wagmi
 import { erc20ABI, sepolia, useContractRead } from "wagmi";
+// Constants
 import { tokens } from "../../../constants/constants";
 
 type NftCardProps = {

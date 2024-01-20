@@ -1,4 +1,6 @@
+// React
 import React, { useState } from "react";
+// Components
 import ProfileNfts from "./ProfileNfts";
 import ProfileLoans from "./ProfileLoans";
 import ProfileHistory from "./ProfileHistory";

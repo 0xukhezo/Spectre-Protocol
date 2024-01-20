@@ -1,11 +1,17 @@
-import Image from "next/image";
+// React
 import React, { useState } from "react";
-import Specter from "../../../public/Specter.svg";
+// Next
+import Image from "next/image";
 import Link from "next/link";
+// Images
 import SadSpectre from "../../../public/SadSpectre.svg";
+// Hooks
 import { useFetchUriInfo } from "@/hooks/useFetchUriInfo";
+// Coponents
 import Loader from "../Loader/Loader";
+// Utils
 import { transformUrl } from "../../../utils/utils";
+// Wagmi
 import { sepolia, useChainId } from "wagmi";
 
 type SlotCardProps = {

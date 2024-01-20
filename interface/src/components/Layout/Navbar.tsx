@@ -1,3 +1,5 @@
+// React
+import React, { useEffect } from "react";
 // Next
 import { useRouter } from "next/router";
 import Link from "next/link";
@@ -10,8 +12,8 @@ import Burger from "../../../public/Burger.svg";
 import Cross from "../../../public/Cross.svg";
 // Components
 import WalletButton from "../Buttons/WalletButton";
+// constants
 import { navigatioHeader, navigation } from "../../../constants/constants";
-import { useEffect } from "react";
 
 export default function Navbar() {
   const router = useRouter();

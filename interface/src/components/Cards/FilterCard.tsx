@@ -1,4 +1,6 @@
+// React
 import React, { useEffect, useState } from "react";
+// Heroicons
 import { XMarkIcon } from "@heroicons/react/24/outline";
 
 type FilterCardProps = {

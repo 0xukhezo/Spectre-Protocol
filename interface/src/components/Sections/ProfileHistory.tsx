@@ -1,11 +1,16 @@
-import { useFetchHistoryUser } from "@/hooks/useFetchHistoryUser";
+// React
 import React, { useEffect, useState } from "react";
-
+// Wagmi
 import { useAccount } from "wagmi";
+// Hooks
+import { useFetchHistoryUser } from "@/hooks/useFetchHistoryUser";
+// Components
 import Loader from "../Loader/Loader";
 import HistoryCard from "../Cards/HistoryCard";
 import WalletButton from "../Buttons/WalletButton";
+// Next
 import Image from "next/image";
+// Images
 import SadSpectre from "../../../public/SadSpectre.svg";
 
 export default function ProfileHistory() {

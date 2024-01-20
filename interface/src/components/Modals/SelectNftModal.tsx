@@ -1,9 +1,15 @@
+// React
 import React, { Fragment, useEffect, useState } from "react";
+// Headlessui
 import { Dialog, Transition } from "@headlessui/react";
+// Heroicons
 import { XMarkIcon } from "@heroicons/react/24/outline";
+// Components
 import SearchBar from "../Filters/SearchBar";
 import DisplayerCard from "../Cards/DisplayerCard";
+// Next
 import Image from "next/image";
+// Images
 import SadSpectre from "../../../public/SadSpectre.svg";
 
 type SelectNftModalProps = {

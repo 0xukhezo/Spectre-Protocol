@@ -1,16 +1,24 @@
-import { useFetchUriInfo } from "@/hooks/useFetchUriInfo";
+// React
 import React, { useEffect, useState } from "react";
+// Next
 import Image from "next/image";
+// Utils
 import {
   calculateTimeComponents,
   formatAddress,
   formatDate,
   transformUrl,
 } from "../../../utils/utils";
+// Hooks
+import { useFetchUriInfo } from "@/hooks/useFetchUriInfo";
+// Wagmi
 import { erc20ABI, useContractRead, sepolia } from "wagmi";
+// Images
 import ETH from "../../../public/ETH.svg";
 import GHO from "../../../public/GHO.svg";
+// Constants
 import { tokens } from "../../../constants/constants";
+// Viem
 import { zeroAddress } from "viem";
 
 type HistoryCardProps = {

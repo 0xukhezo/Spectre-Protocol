@@ -1,16 +1,23 @@
+// React
 import React, { useEffect, useState } from "react";
+// Components
 import NftCard from "@/components/Cards/NftCard";
-import SearchBar from "../Filters/SearchBar";
-import Image from "next/image";
-import SadSpectre from "../../../public/SadSpectre.svg";
 import SortBy from "../Filters/SortBy";
+import SearchBar from "../Filters/SearchBar";
+import Loader from "../Loader/Loader";
+// Next
+import Image from "next/image";
+// Images
+import SadSpectre from "../../../public/SadSpectre.svg";
+// Heroicons
 import {
   ChevronDoubleLeftIcon,
   ChevronDoubleRightIcon,
 } from "@heroicons/react/24/outline";
+// Hooks
 import { useFetchLoans } from "@/hooks/useFetchLoans";
+// Wagmi
 import { useAccount } from "wagmi";
-import Loader from "../Loader/Loader";
 
 export default function GiveLoanSection() {
   const { address } = useAccount();

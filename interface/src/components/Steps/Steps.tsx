@@ -1,3 +1,6 @@
+// React
+import React from "react";
+// Heroicons
 import { CheckIcon } from "@heroicons/react/20/solid";
 
 type StepsProps = {

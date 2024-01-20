@@ -1,9 +1,31 @@
+// React
 import React, { Fragment, ReactElement, useEffect, useState } from "react";
+// Headlessui
 import { Dialog, Transition } from "@headlessui/react";
+// Next
 import Image from "next/image";
-import Arrow from "../../../public/Arrow.svg";
+// Components
 import WalletButton from "../Buttons/WalletButton";
-import { erc20ABI, sepolia, useAccount, useChainId } from "wagmi";
+import TxButton from "../Buttons/TxButton";
+import NotificationsCard from "../Cards/NotificationsCard";
+import Loader from "../Loader/Loader";
+import BorrowModal from "./BorrowModal";
+import RepayModal from "./RepayModal";
+// Images
+import Arrow from "../../../public/Arrow.svg";
+import Error from "../../../public/Error.svg";
+import Success from "../../../public/Success.svg";
+import GHO from "../../../public/GHO.svg";
+import ETH from "../../../public/ETH.svg";
+// Wagmi
+import {
+  erc20ABI,
+  sepolia,
+  useAccount,
+  useChainId,
+  useContractRead,
+} from "wagmi";
+// Utils
 import {
   calculateTimeComponents,
   fetchUri,
@@ -11,23 +33,16 @@ import {
   formatDate,
   transformUrl,
 } from "../../../utils/utils";
-import GHO from "../../../public/GHO.svg";
-import ETH from "../../../public/ETH.svg";
+// Abis
 import { abiUserSlot } from "../../../abis/abis.json";
-import Error from "../../../public/Error.svg";
-import Success from "../../../public/Success.svg";
-// Wagmi
-import { useContractRead } from "wagmi";
 import { abiAAVEPool, abiCCIPConnector } from "../../../abis/abis.json";
 import { AAVEPoolAddress } from "../../../abis/contractAddress.json";
+// Constants
 import { tokens } from "../../../constants/constants";
-import TxButton from "../Buttons/TxButton";
-import NotificationsCard from "../Cards/NotificationsCard";
-import Loader from "../Loader/Loader";
+// Hooks
 import { useFetchUriInfo } from "@/hooks/useFetchUriInfo";
+// Viem
 import { zeroAddress } from "viem";
-import BorrowModal from "./BorrowModal";
-import RepayModal from "./RepayModal";
 import { arbitrumSepolia } from "viem/chains";
 
 type NftModalProps = {

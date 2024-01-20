@@ -1,4 +1,6 @@
+// React
 import { useEffect, useState } from "react";
+// Alchemy-SDK
 import { Network, Alchemy } from "alchemy-sdk";
 
 export default function useNFTData(ownerAddr: `0x${string}`) {

@@ -1,23 +1,24 @@
+// React
 import React, { Fragment, ReactElement, useEffect, useState } from "react";
+// Headlessui
 import { Dialog, Transition } from "@headlessui/react";
-import {
-  XMarkIcon,
-  ArrowLongRightIcon,
-  ExclamationCircleIcon,
-} from "@heroicons/react/24/outline";
-import SearchBar from "../Filters/SearchBar";
-import DisplayerCard from "../Cards/DisplayerCard";
+// Heroicons
+import { XMarkIcon, ArrowLongRightIcon } from "@heroicons/react/24/outline";
+// Next
 import Image from "next/image";
-import SadSpectre from "../../../public/SadSpectre.svg";
-import GHO from "../../../public/GHO.svg";
+// Abis
 import { abiAAVEPool } from "../../../abis/abis.json";
 import { AAVEPoolAddress } from "../../../abis/contractAddress.json";
-import TxButton from "../Buttons/TxButton";
+// Images
 import Error from "../../../public/Error.svg";
 import Success from "../../../public/Success.svg";
+import GHO from "../../../public/GHO.svg";
+// Components
+import TxButton from "../Buttons/TxButton";
 import Loader from "../Loader/Loader";
-import NotificationsCard from "../Cards/NotificationsCard";
+// Constants
 import { ghoToken } from "../../../constants/constants";
+// Wagmi
 import { erc20ABI, sepolia, useContractRead } from "wagmi";
 
 type RepayModalProps = {

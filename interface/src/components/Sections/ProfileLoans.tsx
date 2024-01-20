@@ -1,13 +1,17 @@
+// React
 import React, { useEffect, useState } from "react";
-
+// Wagmi
 import { useAccount } from "wagmi";
-
+// Components
 import WalletButton from "../Buttons/WalletButton";
 import NftCard from "../Cards/NftCard";
-import Image from "next/image";
-import SadSpectre from "../../../public/SadSpectre.svg";
-import { useFetchLoans } from "@/hooks/useFetchLoans";
 import Loader from "../Loader/Loader";
+// Next
+import Image from "next/image";
+// Images
+import SadSpectre from "../../../public/SadSpectre.svg";
+// Hooks
+import { useFetchLoans } from "@/hooks/useFetchLoans";
 
 export default function ProfileLoans() {
   const { isConnected, address } = useAccount();

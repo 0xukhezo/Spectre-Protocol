@@ -1,26 +1,35 @@
-import useNFTData from "@/hooks/useNFTData";
+// React
 import React, { ReactElement, useEffect, useState } from "react";
+// Wagmi
 import { erc20ABI, erc721ABI, useAccount } from "wagmi";
+// Components
 import SelectNftModal from "../Modals/SelectNftModal";
-import Image from "next/image";
 import SelectTokenModal from "../Modals/SelectTokenModal";
+import WalletButton from "../Buttons/WalletButton";
+import Steps from "../Steps/Steps";
+import Loader from "../Loader/Loader";
+import NotificationsCard from "../Cards/NotificationsCard";
+import InfoSteps from "../Steps/InfoSteps";
+import TxButton from "../Buttons/TxButton";
+// Next
+import Image from "next/image";
+// Constants
 import {
   initialSteps,
   tokens,
   ghoToken,
   creatSlotSteps,
 } from "../../../constants/constants";
+// Images
 import GHO from "../../../public/GHO.svg";
 import Error from "../../../public/Error.svg";
 import Success from "../../../public/Success.svg";
-import WalletButton from "../Buttons/WalletButton";
-import Steps from "../Steps/Steps";
+// Next
 import { useRouter } from "next/router";
-import TxButton from "../Buttons/TxButton";
+// Abis
 import { abiUserSlot } from "../../../abis/abis.json";
-import Loader from "../Loader/Loader";
-import NotificationsCard from "../Cards/NotificationsCard";
-import InfoSteps from "../Steps/InfoSteps";
+// Hooks
+import useNFTData from "@/hooks/useNFTData";
 
 export default function CreateLoanSection() {
   const { address, isConnected } = useAccount();

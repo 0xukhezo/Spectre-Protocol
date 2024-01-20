@@ -1,24 +1,28 @@
+// React
 import React, { ReactElement, useEffect, useState } from "react";
-
-import { useAccount, useChainId } from "wagmi";
-
+// Wagmi
+import { useAccount, useChainId, useSwitchNetwork } from "wagmi";
+// Componnets
 import WalletButton from "../Buttons/WalletButton";
 import SlotCard from "../Cards/SlotCard";
 import InfoSteps from "../Steps/InfoSteps";
-import { getLoanInfoSteps } from "../../../constants/constants";
 import TxButton from "../Buttons/TxButton";
+import NotificationsCard from "../Cards/NotificationsCard";
+import Loader from "../Loader/Loader";
+// Constants
+import { getLoanInfoSteps } from "../../../constants/constants";
+// Images
 import Error from "../../../public/Error.svg";
 import Success from "../../../public/Success.svg";
+// Abis
 import { abiUserSlotFactory } from "../../../abis/abis.json";
 import { UserSlotFactoryAddress } from "../../../abis/contractAddress.json";
+// Hooks
 import { useFetchSlotsUser } from "@/hooks/useFetchSlotsUser";
-import NotificationsCard from "../Cards/NotificationsCard";
-import Image from "next/image";
-import SadSpectre from "../../../public/SadSpectre.svg";
-import Loader from "../Loader/Loader";
+// Next
 import router from "next/router";
+// Viem
 import { arbitrumSepolia, sepolia } from "viem/chains";
-import { useSwitchNetwork } from "wagmi";
 
 export default function GetLoanSection() {
   const [connected, setConnected] = useState(false);

@@ -1,22 +1,26 @@
+// React
 import React, { Fragment, ReactElement, useEffect, useState } from "react";
+// Headlessui
 import { Dialog, Transition } from "@headlessui/react";
+// Heroicons
 import {
   XMarkIcon,
   ArrowLongRightIcon,
   ExclamationCircleIcon,
 } from "@heroicons/react/24/outline";
-import SearchBar from "../Filters/SearchBar";
-import DisplayerCard from "../Cards/DisplayerCard";
+// Next
 import Image from "next/image";
-import SadSpectre from "../../../public/SadSpectre.svg";
+// Images
 import GHO from "../../../public/GHO.svg";
-import { abiAAVEPool } from "../../../abis/abis.json";
-import { AAVEPoolAddress } from "../../../abis/contractAddress.json";
-import TxButton from "../Buttons/TxButton";
 import Error from "../../../public/Error.svg";
 import Success from "../../../public/Success.svg";
+// Abis
+import { abiAAVEPool } from "../../../abis/abis.json";
+import { AAVEPoolAddress } from "../../../abis/contractAddress.json";
+// Components
+import TxButton from "../Buttons/TxButton";
 import Loader from "../Loader/Loader";
-import NotificationsCard from "../Cards/NotificationsCard";
+// Constants
 import { ghoToken } from "../../../constants/constants";
 
 type BorrowModalProps = {

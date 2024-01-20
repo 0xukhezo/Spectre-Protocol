@@ -1,8 +1,14 @@
+// Styles
 import "@/styles/globals.css";
+// Next
 import type { AppProps } from "next/app";
+// Wagmi
 import { WagmiConfig, createConfig, sepolia } from "wagmi";
+// Connectkit
 import { ConnectKitProvider, getDefaultConfig } from "connectkit";
+// Components
 import Navbar from "@/components/Layout/Navbar";
+// Viem
 import { arbitrumSepolia } from "viem/chains";
 
 const chains = [sepolia, arbitrumSepolia];
