@@ -1,4 +1,6 @@
+// React
 import React from "react";
+// Connect Kit
 import { ConnectKitButton } from "connectkit";
 
 export default function WalletButton() {

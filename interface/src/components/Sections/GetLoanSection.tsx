@@ -87,8 +87,7 @@ export default function GetLoanSection() {
             <div className="mainBackground p-6 rounded-xl flex justify-between text-lg w-full">
               <div className="w-8/12 xl:w-10/12">
                 <span className="text-2xl navbarTitle">
-                  You need to create a slot in order to can have a loan in one
-                  of your NFTs.
+                  You must create a slot in order to borrow against your NFT.
                 </span>
                 <InfoSteps steps={getLoanInfoSteps} />
               </div>{" "}

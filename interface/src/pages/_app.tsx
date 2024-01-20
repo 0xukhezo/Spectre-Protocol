@@ -13,9 +13,10 @@ const config = createConfig(
     walletConnectProjectId:
       process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || "",
     chains,
-    appName: "GHO Minted",
-    appDescription: "NFT vault to mint GHO",
-    appUrl: "https://family.co",
+    appName: "Spectre protocol",
+    appDescription:
+      "Spectre Protocol is a p2p platform for collateralised loans using NFTs. Another user can give you the supply needed to borrow GHO through AAVE 👻, if you have no debt at the end of the loan,the supplier will receive the supply plus the APY earn in AAVE and a GHO reward!🤑",
+    appUrl: "https://github.com/0xukhezo/Spectre-Protocol",
     appIcon: "https://family.co/logo.png",
   })
 );
